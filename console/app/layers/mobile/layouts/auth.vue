@@ -1,7 +1,7 @@
 <template>
   <kPage>
     <main
-      id="auth_layout_mobile"
+
       class="p-6 dark:bg-app-dark-800 flex flex-col"
     >
       <div class="absolute top-10 left-6">

@@ -21,9 +21,9 @@ const hideHeaderAndNav = computed(() => {
         <slot />
       </AppViewport>
 
-      <AppBottonNav v-if="!hideHeaderAndNav" />
+       <AppBottonNav v-if="!hideHeaderAndNav" /> 
 
-      <AppSideNav :mobile-nav-open="mobileNavOpen" />
+        <AppSideNav  />  
     </main>
   </kPage>
 </template>
