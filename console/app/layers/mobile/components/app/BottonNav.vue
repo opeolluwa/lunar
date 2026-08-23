@@ -12,7 +12,7 @@ function isActive(path: string): boolean {
 
 <template>
   <ToolBarWrapper>
-    <div
+    <NuxtLink
       v-for="item in mobileBottomNavRoutes"
       :key="item.path"
       :to="item.path"
@@ -22,13 +22,12 @@ function isActive(path: string): boolean {
           ? 'text-primary-500 dark:text-primary-400'
           : 'text-gray-400 dark:text-gray-500'
       "
-      @click="navigateTo(item.path)"
     >
       <UIcon
         :name="isActive(item.path) ? item.activeIcon : item.icon"
         class="size-5"
       />
       {{ item.name }}
-    </div>
+    </NuxtLink>
   </ToolBarWrapper>
 </template>

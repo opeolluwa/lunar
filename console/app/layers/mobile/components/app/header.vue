@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { primaryRoutes, secondaryRoutes } from "@shared/data/routes";
+import { kNavbar, kNavbarBackLink } from "konsta/vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -12,34 +13,43 @@ const isTopLevel = computed(() => topLevelPaths.includes(route.path));
 </script>
 
 <template>
-  <header
-    id="mobile_app_header"
-    class="absolute top-0 inset-x-0 max-h-20 py-3.5 flex items-center justify-between px-6 z-50 left-0 w-full bg-white dark:bg-app-dark-800 text-gray-400 dark:text-gray-500 border-gray-200 dark:border-gray-800"
+  <kNavbar
+  
+    bg-class="bg-white dark:bg-app-dark-800"
+    class="absolute top-0 inset-x-0 max-h-20 flex items-center justify-between  dark:text-gray-500 border-gray-200 dark:border-gray-800"
   >
-    <UButton
-      v-if="isTopLevel"
-      size="md"
-      color="neutral"
-      variant="ghost"
-      icon="heroicons:bars-3"
-      class="text-gray-400 dark:text-gray-500"
-      aria-label="Open menu"
-      @click="toggleMobileNav()"
-    />
-    <NuxtLink v-else class="inline-flex" @click="router.back()">
-      <UIcon name="lucide:arrow-left" class="size-5" />
-    </NuxtLink>
-
-    <div class="flex items-center gap-1">
+    <template #left>
       <UButton
+        v-if="isTopLevel"
         size="md"
-        class="text-gray-400 dark:text-gray-500"
         color="neutral"
         variant="ghost"
-        icon="heroicons:bell"
-        aria-label="Notifications"
-        @click="navigateTo('/notifications')"
+        icon="heroicons:bars-3"
+        class="text-gray-400 dark:text-gray-500"
+        aria-label="Open menu"
+        @click="toggleMobileNav()"
       />
-    </div>
-  </header>
+      <kNavbarBackLink
+        v-else
+        text="Back"
+        class="text-gray-400 dark:text-gray-500 size-5"
+        @click="() => router.back()"
+        component="div"
+      />
+    </template>
+
+    <template #right>
+      <div class="flex items-center gap-1">
+        <UButton
+          size="md"
+          class="text-gray-400 dark:text-gray-500"
+          color="neutral"
+          variant="ghost"
+          icon="heroicons:bell"
+          aria-label="Notifications"
+          @click="navigateTo('/notifications')"
+        />
+      </div>
+    </template>
+  </kNavbar>
 </template>

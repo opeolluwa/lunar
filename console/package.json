@@ -52,8 +52,6 @@
     "@vueuse/nuxt": "^14.4.0",
     "date-fns": "^2.30.0",
     "dompurify": "^3.4.1",
-    "framework7": "^9.1.2",
-    "framework7-vue": "^9.1.2",
     "graphql": "^16.14.0",
     "graphql-tag": "^2.12.6",
     "highlight.js": "^11.11.1",

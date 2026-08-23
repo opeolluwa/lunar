@@ -1,54 +1,120 @@
-
-
-
-
-
-
-
-
-
 <template>
-<k-page>
-<k-navbar title="My App" />
-
-<k-block strong>
-<p>Here is your Nuxt & Konsta UI app. Let's see what we have here.</p>
-</k-block>
-<k-block-title>Navigation</k-block-title>
-<k-list>
-<k-list-item href="/about/" title="About" />
-<k-list-item href="/form/" title="Form" />
-</k-list>
-
-<k-block strong class="flex space-x-4">
-<k-button>Button 1</k-button>
-<k-button>Button 2</k-button>
-</k-block>
-</k-page>
+  <div>
+    <h1>beginning</h1>
+    quia praesentium maxime pariatur ipsam explicabo maiores. Accusantium, non
+    voluptatem? Sequi nulla provident incidunt eos! Lorem ipsum dolor sit amet
+    consectetur adipisicing elit. Voluptatem hic quos, cupiditate amet fugiat
+    ratione quia praesentium maxime pariatur ipsam explicabo maiores.
+    Accusantium, non voluptatem? Sequi nulla provident incidunt eos! Lorem ipsum
+    dolor sit amet consectetur adipisicing elit. Voluptatem hic quos, cupiditate
+    amet fugiat ratione quia praesentium maxime pariatur ipsam explicabo
+    maiores. Accusantium, non voluptatem? Sequi nulla provident incidunt eos!
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem hic
+    quos, cupiditate amet fugiat ratione quia praesentium maxime pariatur ipsam
+    explicabo maiores. Accusantium, non voluptatem? Sequi nulla provident
+    incidunt eos! Lorem ipsum dolor sit amet consectetur adipisicing elit.
+    Voluptatem hic quos, cupiditate amet fugiat ratione quia praesentium maxime
+    pariatur ipsam explicabo maiores. Accusantium, non voluptatem? Sequi nulla
+    provident incidunt eos! quia praesentium maxime pariatur ipsam explicabo
+    maiores. Accusantium, non voluptatem? Sequi nulla provident incidunt eos!
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem hic
+    quos, cupiditate amet fugiat ratione quia praesentium maxime pariatur ipsam
+    explicabo maiores. Accusantium, non voluptatem? Sequi nulla provident
+    incidunt eos! Lorem ipsum dolor sit amet consectetur adipisicing elit.
+    Voluptatem hic quos, cupiditate amet fugiat ratione quia praesentium maxime
+    pariatur ipsam explicabo maiores. Accusantium, non voluptatem? Sequi nulla
+    provident incidunt eos! Lorem ipsum dolor sit amet consectetur adipisicing
+    elit. Voluptatem hic quos, cupiditate amet fugiat ratione quia praesentium
+    maxime pariatur ipsam explicabo maiores. Accusantium, non voluptatem? Sequi
+    nulla provident incidunt eos! Lorem ipsum dolor sit amet consectetur
+    adipisicing elit. Voluptatem hic quos, cupiditate amet fugiat ratione quia
+    praesentium maxime pariatur ipsam explicabo maiores. Accusantium, non
+    voluptatem? Sequi nulla provident incidunt eos! quia praesentium maxime
+    pariatur ipsam explicabo maiores. Accusantium, non voluptatem? Sequi nulla
+    provident incidunt eos! Lorem ipsum dolor sit amet consectetur adipisicing
+    elit. Voluptatem hic quos, cupiditate amet fugiat ratione quia praesentium
+    maxime pariatur ipsam explicabo maiores. Accusantium, non voluptatem? Sequi
+    nulla provident incidunt eos! Lorem ipsum dolor sit amet consectetur
+    adipisicing elit. Voluptatem hic quos, cupiditate amet fugiat ratione quia
+    praesentium maxime pariatur ipsam explicabo maiores. Accusantium, non
+    voluptatem? Sequi nulla provident incidunt eos! Lorem ipsum dolor sit amet
+    consectetur adipisicing elit. Voluptatem hic quos, cupiditate amet fugiat
+    ratione quia praesentium maxime pariatur ipsam explicabo maiores.
+    Accusantium, non voluptatem? Sequi nulla provident incidunt eos! Lorem ipsum
+    dolor sit amet consectetur adipisicing elit. Voluptatem hic quos, cupiditate
+    amet fugiat ratione quia praesentium maxime pariatur ipsam explicabo
+    maiores. Accusantium, non voluptatem? Sequi nulla provident incidunt eos!
+    quia praesentium maxime pariatur ipsam explicabo maiores. Accusantium, non
+    voluptatem? Sequi nulla provident incidunt eos! Lorem ipsum dolor sit amet
+    consectetur adipisicing elit. Voluptatem hic quos, cupiditate amet fugiat
+    ratione quia praesentium maxime pariatur ipsam explicabo maiores.
+    Accusantium, non voluptatem? Sequi nulla provident incidunt eos! Lorem ipsum
+    dolor sit amet consectetur adipisicing elit. Voluptatem hic quos, cupiditate
+    amet fugiat ratione quia praesentium maxime pariatur ipsam explicabo
+    maiores. Accusantium, non voluptatem? Sequi nulla provident incidunt eos!
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem hic
+    quos, cupiditate amet fugiat ratione quia praesentium maxime pariatur ipsam
+    explicabo maiores. Accusantium, non voluptatem? Sequi nulla provident
+    incidunt eos! Lorem ipsum dolor sit amet consectetur adipisicing elit.
+    Voluptatem hic quos, cupiditate amet fugiat ratione quia praesentium maxime
+    pariatur ipsam explicabo maiores. Accusantium, non voluptatem? Sequi nulla
+    provident incidunt eos! quia praesentium maxime pariatur ipsam explicabo
+    maiores. Accusantium, non voluptatem? Sequi nulla provident incidunt eos!
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem hic
+    quos, cupiditate amet fugiat ratione quia praesentium maxime pariatur ipsam
+    explicabo maiores. Accusantium, non voluptatem? Sequi nulla provident
+    incidunt eos! Lorem ipsum dolor sit amet consectetur adipisicing elit.
+    Voluptatem hic quos, cupiditate amet fugiat ratione quia praesentium maxime
+    pariatur ipsam explicabo maiores. Accusantium, non voluptatem? Sequi nulla
+    provident incidunt eos! Lorem ipsum dolor sit amet consectetur adipisicing
+    elit. Voluptatem hic quos, cupiditate amet fugiat ratione quia praesentium
+    maxime pariatur ipsam explicabo maiores. Accusantium, non voluptatem? Sequi
+    nulla provident incidunt eos! Lorem ipsum dolor sit amet consectetur
+    adipisicing elit. Voluptatem hic quos, cupiditate amet fugiat ratione quia
+    praesentium maxime pariatur ipsam explicabo maiores. Accusantium, non
+    voluptatem? Sequi nulla provident incidunt eos! quia praesentium maxime
+    pariatur ipsam explicabo maiores. Accusantium, non voluptatem? Sequi nulla
+    provident incidunt eos! Lorem ipsum dolor sit amet consectetur adipisicing
+    elit. Voluptatem hic quos, cupiditate amet fugiat ratione quia praesentium
+    maxime pariatur ipsam explicabo maiores. Accusantium, non voluptatem? Sequi
+    nulla provident incidunt eos! Lorem ipsum dolor sit amet consectetur
+    adipisicing elit. Voluptatem hic quos, cupiditate amet fugiat ratione quia
+    praesentium maxime pariatur ipsam explicabo maiores. Accusantium, non
+    voluptatem? Sequi nulla provident incidunt eos! Lorem ipsum dolor sit amet
+    consectetur adipisicing elit. Voluptatem hic quos, cupiditate amet fugiat
+    ratione quia praesentium maxime pariatur ipsam explicabo maiores.
+    Accusantium, non voluptatem? Sequi nulla provident incidunt eos! Lorem ipsum
+    dolor sit amet consectetur adipisicing elit. Voluptatem hic quos, cupiditate
+    amet fugiat ratione quia praesentium maxime pariatur ipsam explicabo
+    maiores. Accusantium, non voluptatem? Sequi nulla provident incidunt eos!
+    quia praesentium maxime pariatur ipsam explicabo maiores. Accusantium, non
+    voluptatem? Sequi nulla provident incidunt eos! Lorem ipsum dolor sit amet
+    consectetur adipisicing elit. Voluptatem hic quos, cupiditate amet fugiat
+    ratione quia praesentium maxime pariatur ipsam explicabo maiores.
+    Accusantium, non voluptatem? Sequi nulla provident incidunt eos! Lorem ipsum
+    dolor sit amet consectetur adipisicing elit. Voluptatem hic quos, cupiditate
+    amet fugiat ratione quia praesentium maxime pariatur ipsam explicabo
+    maiores. Accusantium, non voluptatem? Sequi nulla provident incidunt eos!
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem hic
+    quos, cupiditate amet fugiat ratione quia praesentium maxime pariatur ipsam
+    explicabo maiores. Accusantium, non voluptatem? Sequi nulla provident
+    incidunt eos! Lorem ipsum dolor sit amet consectetur adipisicing elit.
+    Voluptatem hic quos, cupiditate amet fugiat ratione quia praesentium maxime
+    pariatur ipsam explicabo maiores. Accusantium, non voluptatem? Sequi nulla
+    provident incidunt eos! quia praesentium maxime pariatur ipsam explicabo
+    maiores. Accusantium, non voluptatem? Sequi nulla provident incidunt eos!
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatem hic
+    quos, cupiditate amet fugiat ratione quia praesentium maxime pariatur ipsam
+    explicabo maiores. Accusantium, non voluptatem? Sequi nulla provident
+    incidunt eos! Lorem ipsum dolor sit amet consectetur adipisicing elit.
+    Voluptatem hic quos, cupiditate amet fugiat ratione quia praesentium maxime
+    pariatur ipsam explicabo maiores. Accusantium, non voluptatem? Sequi nulla
+    provident incidunt eos! Lorem ipsum dolor sit amet consectetur adipisicing
+    elit. Voluptatem hic quos, cupiditate amet fugiat ratione quia praesentium
+    maxime pariatur ipsam explicabo maiores. Accusantium, non voluptatem? Sequi
+    nulla provident incidunt eos! Lorem ipsum dolor sit amet consectetur
+    adipisicing elit. Voluptatem hic quos, cupiditate amet fugiat ratione quia
+    praesentium maxime pariatur ipsam explicabo maiores. Accusantium, non
+    voluptatem? Sequi nulla provident incidunt eos!
+  </div>
 </template>
-<script>
-// Konsta UI components
-import {
-kPage,
-kNavbar,
-kBlock,
-kButton,
-kList,
-kListItem,
-kLink,
-kBlockTitle,
-} from 'konsta/vue';
-
-export default {
-components: {
-kPage,
-kNavbar,
-kBlock,
-kButton,
-kList,
-kListItem,
-// kLink,
-kBlockTitle,
-},
-};
-</script>

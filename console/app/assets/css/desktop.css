@@ -1,5 +1,6 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
 @import "tailwind-animations";
-@import "konsta/vue/theme.css";
 
 @plugin 'tailwind-scrollbar' {
   nocompatible: true;

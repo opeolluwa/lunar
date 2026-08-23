@@ -7,30 +7,19 @@ export function usePlatform() {
     });
   }
 
-  const isIos = computed(
-    () => platformName.value === "ios",
+  const isIos = computed(() => platformName.value === "ios");
+
+  const isAndroid = computed(() => platformName.value === "android");
+
+  const isMobile = computed(() => isIos.value || isAndroid.value);
+
+  const isDesktop = computed(() =>
+    ["macos", "windows", "linux"].includes(platformName.value),
   );
 
-  const isAndroid = computed(
-    () => platformName.value === "android",
-  );
+  const isWeb = computed(() => platformName.value === "web");
 
-  const isMobile = computed(
-    () => isIos.value || isAndroid.value,
-  );
-
-  const isDesktop = computed(
-    () =>
-      ["macos", "windows", "linux"].includes(platformName.value),
-  );
-
-  const isWeb = computed(
-    () => platformName.value === "web",
-  );
-
-  const framework7Theme = computed(
-    () => isIos.value ? "ios" : "md",
-  );
+  const framework7Theme = computed(() => (isIos.value ? "ios" : "material"));
 
   return {
     platformName,

@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
 @import "tailwind-animations";
+@import "konsta/vue/theme.css";
 
 @plugin 'tailwind-scrollbar' {
   nocompatible: true;
@@ -30,6 +31,11 @@
   --app-dark-800: #04070d;
   --app-dark-900: #020407;
   --app-dark-950: #010203;
+
+  --color-brand-primary: var(--color-primary-500);
+  --color-brand-primary: #007aff;
+  --color-brand-red: #ff0000;
+  --color-brand-green: #00ff00;
 }
 
 @theme {
@@ -70,6 +76,7 @@
   --color-primary-950: var(--app-primary-950);
 
   --color-primary: var(--color-primary-500);
+  --color-brand-primary: var(--color-primary-500);
   --font-ios: "Poppins", sans-serif;
   --font-material: "Poppins", sans-serif;
 }
