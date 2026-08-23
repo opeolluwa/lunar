@@ -14,7 +14,10 @@ function isActive(path: string): boolean {
     return route.path === "/";
   }
 
-  return route.path === path || route.path.startsWith(`${path}/`);
+  return (
+    route.path === path ||
+    route.path.startsWith(`${path}/`)
+  );
 }
 
 function navigate(path: string) {
@@ -26,8 +29,8 @@ function navigate(path: string) {
   <kTabbar
     labels
     icons
-    class="fixed bottom-0 left-0 z-50 w-full"
-     bg-class="bg-white dark:bg-app-dark-800"
+    class="fixed inset-x-0 bottom-0 z-50 w-full pb-[env(safe-area-inset-bottom)]"
+    bg-class="bg-white dark:bg-app-dark-800"
   >
     <kToolbarPane>
       <kTabbarLink

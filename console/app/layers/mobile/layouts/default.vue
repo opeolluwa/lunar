@@ -63,7 +63,7 @@ const hideHeaderAndNav = computed(() => {
 
     <main
       id="default_layout_mobile"
-      class="flex h-dvh flex-col overflow-hidden bg-gray-50 dark:bg-app-dark-800"
+      class="flex h-dvh flex-col overflow-hidden bg-gray-50 pb-20 dark:bg-app-dark-800"
     >
       <AppViewport :hide-header-and-nav="hideHeaderAndNav">
         <slot />
