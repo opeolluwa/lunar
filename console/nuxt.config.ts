@@ -18,18 +18,6 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   ssr: false,
 
-  // app: {
-  //   head: {
-  //     meta: [
-  //       {
-  //         name: "viewport",
-  //         content:
-  //           "width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content",
-  //       },
-  //     ],
-  //   },
-  // },
-
   modules: [
     "@nuxtjs/apollo",
     "@nuxt/eslint",
@@ -48,6 +36,7 @@ export default defineNuxtConfig({
     "./assets/css/main.css",
     "highlight.js/styles/atom-one-dark.css",
     "@domternal/theme",
+    isMobile ? "./assets/css/mobile.css" : "./assets/css/desktop.css",
   ],
 
   colorMode: {
