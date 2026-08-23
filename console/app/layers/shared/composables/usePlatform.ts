@@ -1,23 +1,44 @@
 export function usePlatform() {
   const platformName = useState<string>("platform", () => "web");
 
-  if (typeof window !== "undefined" && window.__TAURI_INTERNALS__) {
+  if (import.meta.client && window.__TAURI_INTERNALS__) {
     import("@tauri-apps/plugin-os").then(({ platform }) => {
       platformName.value = platform();
     });
   }
 
+  const isIos = computed(
+    () => platformName.value === "ios",
+  );
+
+  const isAndroid = computed(
+    () => platformName.value === "android",
+  );
+
+  const isMobile = computed(
+    () => isIos.value || isAndroid.value,
+  );
+
+  const isDesktop = computed(
+    () =>
+      ["macos", "windows", "linux"].includes(platformName.value),
+  );
+
+  const isWeb = computed(
+    () => platformName.value === "web",
+  );
+
+  const framework7Theme = computed(
+    () => isIos.value ? "ios" : "md",
+  );
+
   return {
     platformName,
-    isMobile: computed(
-      () => platformName.value === "android" || platformName.value === "ios",
-    ),
-    isWeb: computed(() => platformName.value === "web"),
-    isDesktop: computed(
-      () =>
-        platformName.value === "macos" ||
-        platformName.value === "windows" ||
-        platformName.value === "linux",
-    ),
+    isIos,
+    isAndroid,
+    isMobile,
+    isWeb,
+    isDesktop,
+    framework7Theme,
   };
 }
