@@ -8,17 +8,7 @@
 }
 
 :root {
-  --app-primary-50: #f0f9ff;
-  --app-primary-100: #e0f2fe;
-  --app-primary-200: #bae6fd;
-  --app-primary-300: #7dd3fc;
-  --app-primary-400: #38bdf8;
-  --app-primary-500: #0ea5e9;
-  --app-primary-600: #0284c7;
-  --app-primary-700: #0369a1;
-  --app-primary-800: #075985;
-  --app-primary-900: #0c4a6e;
-  --app-primary-950: #082f49;
+
 
   --app-dark-50: #e0e6f2;
   --app-dark-100: #b8c4e0;
@@ -31,6 +21,13 @@
   --app-dark-800: #04070d;
   --app-dark-900: #020407;
   --app-dark-950: #010203;
+
+  --k-safe-area-left: 0px;
+  --k-safe-area-right: 0px;
+  --k-safe-area-top: 0px;
+  --k-safe-area-bottom: 0px;
+
+  --color-brand-primary: var(--color-primary-500);
 }
 
 @theme {
@@ -71,7 +68,6 @@
   --color-primary-950: var(--app-primary-950);
 
   --color-primary: var(--color-primary-500);
-  --color-brand-primary: #506f9f;
   --font-ios: "Poppins", sans-serif;
   --font-material: "Poppins", sans-serif;
 }
@@ -224,13 +220,6 @@ h6.notes_heading {
 
 #auth_layout form {
   @apply mt-4;
-}
-
-#auth_layout h2 {
-  @apply text-2xl font-bold text-gray-800 dark:text-white md:mt-4 text-center;
-}
-#auth_layout h2 + p {
-  @apply text-gray-600 dark:text-gray-400  text-center;
 }
 
 #auth_layout h2,

@@ -1,21 +1,17 @@
 <template>
-  <UApp id="lunar_mobile">
-    <NuxtLayout>
-      <NuxtPage />
-    </NuxtLayout>
-  </UApp>
+  <kApp :theme="framework7Theme">
+    <UApp id="lunar_mobile">
+      <NuxtLayout class="safe-areas">
+        <NuxtPage />
+      </NuxtLayout>
+    </UApp>
+  </kApp>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import { kApp } from "konsta/vue";
 
-<style>
-/*.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 200ms ease;
-}
+const { framework7Theme } = usePlatform();
+</script>
 
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}*/
-</style>
+<style></style>

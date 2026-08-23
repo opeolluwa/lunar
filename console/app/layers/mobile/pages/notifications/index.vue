@@ -1,7 +1,71 @@
-<script setup lang="ts"></script>
-
 <template>
-  <div class="flex items-center justify-center h-full">
-    <h1 class="text-lg font-semibold text-gray-500">Notifications</h1>
+  <div>
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis
+    doloremque delectus veritatis soluta praesentium amet similique saepe, quae
+    itaque vel beatae, recusandae molestias perspiciatis quos exercitationem
+    dolorum sapiente nulla tempora? Lorem ipsum dolor sit amet consectetur
+    adipisicing elit. Blanditiis doloremque delectus veritatis soluta
+    praesentium amet similique saepe, quae itaque vel beatae, recusandae
+    molestias perspiciatis quos exercitationem dolorum sapiente nulla tempora?
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis
+    doloremque delectus veritatis soluta praesentium amet similique saepe, quae
+    itaque vel beatae, recusandae molestias perspiciatis quos exercitationem
+    dolorum sapiente nulla tempora? Lorem ipsum dolor sit amet consectetur
+    adipisicing elit. Blanditiis doloremque delectus veritatis soluta
+    praesentium amet similique saepe, quae itaque vel beatae, recusandae
+    molestias perspiciatis quos exercitationem dolorum sapiente nulla tempora?
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis
+    doloremque delectus veritatis soluta praesentium amet similique saepe, quae
+    itaque vel beatae, recusandae molestias perspiciatis quos exercitationem
+    dolorum sapiente nulla tempora? Lorem ipsum dolor sit amet consectetur
+    adipisicing elit. Blanditiis doloremque delectus veritatis soluta
+    praesentium amet similique saepe, quae itaque vel beatae, recusandae
+    molestias perspiciatis quos exercitationem dolorum sapiente nulla tempora?
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis
+    doloremque delectus veritatis soluta praesentium amet similique saepe, quae
+    itaque vel beatae, recusandae molestias perspiciatis quos exercitationem
+    dolorum sapiente nulla tempora? Lorem ipsum dolor sit amet consectetur
+    adipisicing elit. Blanditiis doloremque delectus veritatis soluta
+    praesentium amet similique saepe, quae itaque vel beatae, recusandae
+    molestias perspiciatis quos exercitationem dolorum sapiente nulla tempora?
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis
+    doloremque delectus veritatis soluta praesentium amet similique saepe, quae
+    itaque vel beatae, recusandae molestias perspiciatis quos exercitationem
+    dolorum sapiente nulla tempora? Lorem ipsum dolor sit amet consectetur
+    adipisicing elit. Blanditiis doloremque delectus veritatis soluta
+    praesentium amet similique saepe, quae itaque vel beatae, recusandae
+    molestias perspiciatis quos exercitationem dolorum sapiente nulla tempora?
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis
+    doloremque delectus veritatis soluta praesentium amet similique saepe, quae
+    itaque vel beatae, recusandae molestias perspiciatis quos exercitationem
+    dolorum sapiente nulla tempora? Lorem ipsum dolor sit amet consectetur
+    adipisicing elit. Blanditiis doloremque delectus veritatis soluta
+    praesentium amet similique saepe, quae itaque vel beatae, recusandae
+    molestias perspiciatis quos exercitationem dolorum sapiente nulla tempora?
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis
+    doloremque delectus veritatis soluta praesentium amet similique saepe, quae
+    itaque vel beatae, recusandae molestias perspiciatis quos exercitationem
+    dolorum sapiente nulla tempora? Lorem ipsum dolor sit amet consectetur
+    adipisicing elit. Blanditiis doloremque delectus veritatis soluta
+    praesentium amet similique saepe, quae itaque vel beatae, recusandae
+    molestias perspiciatis quos exercitationem dolorum sapiente nulla tempora?
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis
+    doloremque delectus veritatis soluta praesentium amet similique saepe, quae
+    itaque vel beatae, recusandae molestias perspiciatis quos exercitationem
+    dolorum sapiente nulla tempora? Lorem ipsum dolor sit amet consectetur
+    adipisicing elit. Blanditiis doloremque delectus veritatis soluta
+    praesentium amet similique saepe, quae itaque vel beatae, recusandae
+    molestias perspiciatis quos exercitationem dolorum sapiente nulla tempora?
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis
+    doloremque delectus veritatis soluta praesentium amet similique saepe, quae
+    itaque vel beatae, recusandae molestias perspiciatis quos exercitationem
+    dolorum sapiente nulla tempora? Lorem ipsum dolor sit amet consectetur
+    adipisicing elit. Blanditiis doloremque delectus veritatis soluta
+    praesentium amet similique saepe, quae itaque vel beatae, recusandae
+    molestias perspiciatis quos exercitationem dolorum sapiente nulla tempora?
+    Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis
+    doloremque delectus veritatis soluta praesentium amet similique saepe, quae
+    itaque vel beatae, recusandae molestias perspiciatis quos exercitationem
+    dolorum sapiente nulla tempora?
   </div>
 </template>

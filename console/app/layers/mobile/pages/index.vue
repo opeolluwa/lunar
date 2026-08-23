@@ -5,7 +5,7 @@ definePageMeta({ layout: "default" });
 <template>
   <div class="flex h-full flex-col items-center justify-center">
     <h1 class="text-lg font-semibold">Home</h1>
-    <DevOnly>
+    <!-- <DevOnly> -->
       <NuxtLink
         to="/auth/signup"
         class="text-primary-500 hover:text-primary-600 font-medium"
@@ -19,6 +19,6 @@ definePageMeta({ layout: "default" });
       >
         Welcome back
       </NuxtLink>
-    </DevOnly>
+    <!-- </DevOnly> -->
   </div>
 </template>
