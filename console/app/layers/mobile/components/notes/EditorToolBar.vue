@@ -3,6 +3,7 @@ import { useCurrentEditor, useEditorState } from "@domternal/vue";
 import { getMarkRange, type Command, type Editor } from "@domternal/core";
 import { TextSelection } from "@domternal/pm/state";
 import { emojis } from "@domternal/extension-emoji";
+import ToolBarWrapper from "../app/ToolBarWrapper.vue";
 
 const { editor } = useCurrentEditor();
 
@@ -159,7 +160,8 @@ function normalizeUrl(raw: string) {
 // domternal's command registry lacks `setTextSelection`/`extendMarkRange`,
 // which would silently abort any chain using them. This custom command
 // restores the selection and widens it across an adjacent/existing link.
-const selectAndExtendLink = (from: number, to: number): Command =>
+const selectAndExtendLink =
+  (from: number, to: number): Command =>
   ({ tr, dispatch }) => {
     const size = tr.doc.content.size;
     let start = Math.max(0, Math.min(from, size));
@@ -232,7 +234,10 @@ const emojiGroups = computed(() => {
   const q = emojiQuery.value.trim().toLowerCase();
   const source = q
     ? emojis.filter(
-        (e) => e.name.includes(q) || e.emoji.includes(q) || e.group.toLowerCase().includes(q),
+        (e) =>
+          e.name.includes(q) ||
+          e.emoji.includes(q) ||
+          e.group.toLowerCase().includes(q),
       )
     : emojis;
   const map = new Map<string, typeof emojis>();
@@ -256,9 +261,7 @@ const colorPalette = computed<string[]>(() => {
   const ext = editor.value?.extensionManager.extensions.find(
     (e) => e.name === "textColor",
   );
-  const colors = (
-    ext?.options as { colors?: string[] } | undefined
-  )?.colors;
+  const colors = (ext?.options as { colors?: string[] } | undefined)?.colors;
   return colors ?? [];
 });
 
@@ -395,8 +398,7 @@ const tools = computed<Tool[]>(() => [
     icon: "ri:align-center",
     label: "Align center",
     active: s.value.alignCenter,
-    action: () =>
-      exec((ed) => ed.chain().focus().setTextAlign("center").run()),
+    action: () => exec((ed) => ed.chain().focus().setTextAlign("center").run()),
   },
   {
     kind: "btn",
@@ -499,16 +501,8 @@ const tableOps = computed(() => [
 </script>
 
 <template>
-  <nav
-    class="fixed inset-x-0 z-50 select-none border-t border-gray-200 bg-white dark:border-gray-800 dark:bg-app-dark-900"
-    style="
-      bottom: var(--kb-inset, 0px);
-      padding-bottom: max(
-        0.625rem,
-        calc(env(safe-area-inset-bottom) - var(--kb-inset, 0px))
-      );
-    "
-  >
+  <ToolBarWrapper>
+
     <div
       v-if="s.inTable"
       class="no-scrollbar flex items-center gap-0.5 overflow-x-auto border-b border-gray-100 px-2 pb-1.5 pt-2 dark:border-gray-800"
@@ -527,7 +521,9 @@ const tableOps = computed(() => [
       </button>
     </div>
 
-    <div class="no-scrollbar flex items-center gap-0.5 overflow-x-auto px-2 pt-2">
+    <div
+      class="no-scrollbar flex items-center gap-0.5 overflow-x-auto px-2 pt-2"
+    >
       <template v-for="(tool, i) in tools" :key="i">
         <span
           v-if="tool.kind === 'sep'"
@@ -654,7 +650,9 @@ const tableOps = computed(() => [
                 />
               </button>
             </div>
-            <div class="mt-2 border-t border-gray-100 pt-1.5 dark:border-gray-800">
+            <div
+              class="mt-2 border-t border-gray-100 pt-1.5 dark:border-gray-800"
+            >
               <button
                 type="button"
                 class="flex w-full items-center gap-1.5 rounded-md px-1 py-1 text-xs text-gray-500 transition-colors hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
@@ -694,10 +692,7 @@ const tableOps = computed(() => [
               <div
                 class="mt-2 max-h-52 overflow-y-auto overscroll-contain pr-0.5"
               >
-                <template
-                  v-for="[group, items] in emojiGroups"
-                  :key="group"
-                >
+                <template v-for="[group, items] in emojiGroups" :key="group">
                   <p
                     class="px-1 pb-1 pt-2 text-[10px] font-semibold uppercase tracking-wide text-gray-400 dark:text-gray-500"
                   >
@@ -751,7 +746,7 @@ const tableOps = computed(() => [
         @change="handleImagePick"
       />
     </div>
-  </nav>
+  </ToolBarWrapper>
 </template>
 
 <style scoped>

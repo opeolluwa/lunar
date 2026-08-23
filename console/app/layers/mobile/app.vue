@@ -1,12 +1,17 @@
 <template>
   <UApp id="lunar_mobile">
-    <NuxtLayout>
-      <NuxtPage />
-    </NuxtLayout>
+    <kApp :theme="currentPlatform === 'ios' ? 'ios' : 'material'">
+      <NuxtLayout class="safe-areas">
+        <NuxtPage />
+      </NuxtLayout>
+    </kApp>
   </UApp>
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+import { kApp } from "konsta/vue";
+const currentPlatform = usePlatform();
+</script>
 
 <style>
 /*.fade-enter-active,

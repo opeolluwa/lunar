@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { kPage } from "konsta/vue";
+
 const route = useRoute();
 const { mobileNavOpen } = useMobileNav();
 const hideHeaderAndNav = computed(() => {
@@ -9,17 +11,19 @@ const hideHeaderAndNav = computed(() => {
 </script>
 
 <template>
-  <main
-    id="default_layout_mobile"
-    class="flex h-dvh flex-col overflow-hidden bg-gray-50 dark:bg-app-dark-800"
-  >
-    <AppHeader v-if="!hideHeaderAndNav" />
-    <AppViewport :hide-header-and-nav="hideHeaderAndNav">
-      <slot />
-    </AppViewport>
+  <kPage>
+    <main
+      id="default_layout_mobile"
+      class="flex h-dvh flex-col overflow-hidden bg-gray-50 dark:bg-app-dark-800"
+    >
+      <AppHeader v-if="!hideHeaderAndNav" />
+      <AppViewport :hide-header-and-nav="hideHeaderAndNav">
+        <slot />
+      </AppViewport>
 
-    <AppBottonNav v-if="!hideHeaderAndNav" />
+      <AppBottonNav v-if="!hideHeaderAndNav" />
 
-    <AppSideNav :mobile-nav-open="mobileNavOpen" />
-  </main>
+      <AppSideNav :mobile-nav-open="mobileNavOpen" />
+    </main>
+  </kPage>
 </template>

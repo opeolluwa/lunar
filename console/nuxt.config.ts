@@ -18,17 +18,17 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   ssr: false,
 
-  app: {
-    head: {
-      meta: [
-        {
-          name: "viewport",
-          content:
-            "width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content",
-        },
-      ],
-    },
-  },
+  // app: {
+  //   head: {
+  //     meta: [
+  //       {
+  //         name: "viewport",
+  //         content:
+  //           "width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content",
+  //       },
+  //     ],
+  //   },
+  // },
 
   modules: [
     "@nuxtjs/apollo",

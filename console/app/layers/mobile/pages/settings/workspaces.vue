@@ -335,6 +335,7 @@ const workspaces = computed(() => workspaceStore.workspaces ?? []);
       description="Workspaces allow you to organize your notes, tasks and bookmarks."
       submit-label="Create workspace"
       @created="handleCreated"
+     
     />
 
     <AppFab aria-label="New workspace" @click="showCreateModal = true" />

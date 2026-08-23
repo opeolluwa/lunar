@@ -113,8 +113,8 @@ export const mobileBottomNavRoutes: Route[] = [
   },
   {
     path: "/settings",
-    name: "Account",
-    icon: "ri:user-line",
-    activeIcon: "ri:user-fill",
+    name: "Settings",
+    icon: "ri:settings-3-line",
+    activeIcon: "ri:settings-3-fill",
   },
 ];

@@ -14,7 +14,7 @@ const isTopLevel = computed(() => topLevelPaths.includes(route.path));
 <template>
   <header
     id="mobile_app_header"
-    class="absolute top-0 max-h-20 py-3.5 flex items-center justify-between px-6 z-50 left-0 w-full bg-white dark:bg-app-dark-800"
+    class="absolute top-0 inset-x-0 max-h-20 py-3.5 flex items-center justify-between px-6 z-50 left-0 w-full bg-white dark:bg-app-dark-800 text-gray-400 dark:text-gray-500 border-gray-200 dark:border-gray-800"
   >
     <UButton
       v-if="isTopLevel"
@@ -22,6 +22,7 @@ const isTopLevel = computed(() => topLevelPaths.includes(route.path));
       color="neutral"
       variant="ghost"
       icon="heroicons:bars-3"
+      class="text-gray-400 dark:text-gray-500"
       aria-label="Open menu"
       @click="toggleMobileNav()"
     />
@@ -32,6 +33,7 @@ const isTopLevel = computed(() => topLevelPaths.includes(route.path));
     <div class="flex items-center gap-1">
       <UButton
         size="md"
+        class="text-gray-400 dark:text-gray-500"
         color="neutral"
         variant="ghost"
         icon="heroicons:bell"

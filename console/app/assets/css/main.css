@@ -1,5 +1,10 @@
 @import "tailwindcss";
 @import "@nuxt/ui";
+@import "tailwind-animations";
+@import "konsta/vue/theme.css";
+
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap");
+
 @plugin 'tailwind-scrollbar' {
   nocompatible: true;
 }
@@ -28,6 +33,14 @@
   --app-dark-800: #04070d;
   --app-dark-900: #020407;
   --app-dark-950: #010203;
+
+  --k-safe-area-left: 0px;
+  --k-safe-area-right: 0px;
+  --k-safe-area-top: 0px;
+  --k-safe-area-bottom: 0px;
+
+  --color-brand-primary: var(--color-primary-500);
+  
 }
 
 @theme {
@@ -68,6 +81,8 @@
   --color-primary-950: var(--app-primary-950);
 
   --color-primary: var(--color-primary-500);
+  --font-ios:  "Poppins", sans-serif;
+  --font-material:  "Poppins", sans-serif;
 }
 
 html {
