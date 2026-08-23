@@ -1,43 +1,64 @@
+<script lang="ts" setup>
+import { kNavbar, kNavbarBackLink, kPage } from "konsta/vue";
+
+const route = useRoute();
+const router = useRouter();
+
+const isLoginPage = computed(() => route.path === "/auth/login");
+
+const canGoBack = computed(() => window.history.length > 1);
+
+const showBackButton = computed(() => !isLoginPage.value || canGoBack.value);
+
+function goBack() {
+  if (canGoBack.value) {
+    router.back();
+    return;
+  }
+
+  navigateTo("/auth/login");
+}
+</script>
+
 <template>
   <kPage>
-    <main
-
-      class="p-6 dark:bg-app-dark-800 flex flex-col"
+    <kNavbar
+      transparent
+      bg-class="bg-white dark:bg-app-dark-800"
+      class="absolute inset-x-0 top-0 z-40 flex max-h-20 items-center justify-between border-gray-200 dark:border-gray-800 dark:text-gray-500"
     >
-      <div class="absolute top-10 left-6">
-        <NuxtLink
-          v-if="!isLoginPage || (isLoginPage && canGoBack)"
-          to="/auth/login"
-          class="inline-flex"
-        >
-          <UIcon name="lucide:arrow-left" class="size-5" />
-        </NuxtLink>
-      </div>
+      <template #left>
+        <kNavbarBackLink
+          v-if="showBackButton"
+          component="div"
+          text="Back"
+          class="size-5 text-gray-400 dark:text-gray-500"
+          @click="goBack"
+        />
+      </template>
 
-      <div class="absolute top-10 right-6">
+      <template #right>
         <NuxtLink
           v-if="route.path === '/auth/welcome-back'"
           to="/auth/login"
           class="inline-flex"
         >
           <span
-            class="text-xs text-primary-500 hover:text-primary-600 font-medium whitespace-nowrap"
-            >Not Adeoye?</span
+            class="whitespace-nowrap text-xs font-medium text-primary-500 hover:text-primary-600"
           >
+            Not Adeoye?
+          </span>
         </NuxtLink>
-      </div>
+      </template>
+    </kNavbar>
 
-      <div class="mt-4">
+    <main
+      id="auth_layout_mobile"
+      class="flex min-h-dvh flex-col bg-white p-6  dark:bg-app-dark-800"
+    >
+      <div class="w-full">
         <slot />
       </div>
     </main>
   </kPage>
 </template>
-
-<script lang="ts" setup>
-import { kPage } from "konsta/vue";
-
-const route = useRoute();
-const canGoBack = computed(() => window.history.length > 1);
-const isLoginPage = computed(() => route.path === "/auth/login");
-</script>

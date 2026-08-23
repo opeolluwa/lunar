@@ -3,37 +3,59 @@ import { primaryRoutes, secondaryRoutes } from "@shared/data/routes";
 import { useAuthStore } from "@shared/stores/auth";
 import { useUserPreferenceStore } from "@shared/stores/workspace-preferences";
 
-const mobileNavOpen = defineModel<boolean>("mobileNavOpen", {
-  default: false,
-});
-
 const route = useRoute();
 const colorMode = useColorMode();
+
+const {
+  mobileNavOpen,
+  closeMobileNav,
+} = useMobileNav();
 
 const authStore = useAuthStore();
 const preferenceStore = useUserPreferenceStore();
 
 const isDark = computed({
   get: () => colorMode.value === "dark",
-  set: (v) => (colorMode.preference = v ? "dark" : "light"),
+  set: (value) => {
+    colorMode.preference = value ? "dark" : "light";
+  },
 });
 
 const themeIcon = computed(() =>
-  isDark.value ? "heroicons:sun" : "heroicons:moon",
+  isDark.value
+    ? "heroicons:sun"
+    : "heroicons:moon",
 );
 
-const themeLabel = computed(() => (isDark.value ? "Light mode" : "Dark mode"));
+const themeLabel = computed(() =>
+  isDark.value
+    ? "Light mode"
+    : "Dark mode",
+);
 
 function logout() {
-  mobileNavOpen.value = false;
+  closeMobileNav();
+
   authStore.clearSession();
   authStore.exitGuestMode();
+
   navigateTo("/auth/login");
 }
 
 function isActive(path: string): boolean {
-  if (path === "/") return route.path === "/";
-  return route.path.startsWith(path);
+  if (path === "/") {
+    return route.path === "/";
+  }
+
+  return (
+    route.path === path ||
+    route.path.startsWith(`${path}/`)
+  );
+}
+
+function navigate(path: string) {
+  closeMobileNav();
+  navigateTo(path);
 }
 </script>
 
@@ -44,11 +66,18 @@ function isActive(path: string): boolean {
     :ui="{ content: 'max-w-64' }"
   >
     <template #content>
-      <div class="flex flex-col h-full bg-white dark:bg-app-dark-900">
-        <div class="shrink-0" style="height: env(safe-area-inset-top)" />
-
+      <div
+        class="flex h-full flex-col bg-white dark:bg-app-dark-900"
+      >
+        <!-- Safe area -->
         <div
-          class="flex items-center justify-between px-4 py-4 border-b border-gray-200 dark:border-gray-800 shrink-0"
+          class="shrink-0"
+          style="height: env(safe-area-inset-top)"
+        />
+
+        <!-- User header -->
+        <div
+          class="flex shrink-0 items-center justify-between border-b border-gray-200 px-4 py-4 dark:border-gray-800"
         >
           <UUser
             :name="preferenceStore.fullName"
@@ -56,77 +85,106 @@ function isActive(path: string): boolean {
             :avatar="{ icon: 'i-lucide-user' }"
             class="min-w-0 flex-1 truncate"
           />
+
           <UButton
             size="sm"
             color="neutral"
             variant="ghost"
             icon="heroicons:x-mark"
             aria-label="Close menu"
-            @click="mobileNavOpen = false"
+            @click="closeMobileNav"
           />
         </div>
 
+        <!-- Primary navigation -->
         <nav
-          class="flex flex-col gap-0.5 px-2 py-2 flex-1 overflow-y-auto scrollbar-config"
+          class="scrollbar-config flex flex-1 flex-col gap-0.5 overflow-y-auto px-2 py-2"
         >
           <NuxtLink
-            v-for="r in primaryRoutes"
-            :key="r.name"
-            :to="r.path"
-            class="flex items-center gap-3 py-2 px-3 text-sm cursor-pointer rounded-lg transition-colors"
+            v-for="item in primaryRoutes"
+            :key="item.name"
+            :to="item.path"
+            class="flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors"
             :class="
-              isActive(r.path)
-                ? 'bg-primary-50 dark:bg-primary-950 text-primary-700 dark:text-primary-300 font-medium'
-                : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'
+              isActive(item.path)
+                ? 'bg-primary-50 font-medium text-primary-700 dark:bg-primary-950 dark:text-primary-300'
+                : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800'
             "
-            @click="mobileNavOpen = false"
+            @click="closeMobileNav"
           >
             <UIcon
-              :name="isActive(r.path) ? r.activeIcon : r.icon"
+              :name="
+                isActive(item.path)
+                  ? item.activeIcon || item.icon
+                  : item.icon
+              "
               class="size-4 shrink-0"
             />
-            {{ r.name }}
+
+            <span class="truncate">
+              {{ item.name }}
+            </span>
           </NuxtLink>
         </nav>
 
-        <div class="flex flex-col gap-0.5 px-2 pb-4 shrink-0">
+        <!-- Bottom actions -->
+        <div
+          class="flex shrink-0 flex-col gap-0.5 px-2 pb-4"
+        >
           <USeparator class="mx-1 mb-2" />
 
+          <!-- Theme -->
           <button
-            class="flex items-center gap-3 py-2 px-3 text-sm cursor-pointer rounded-lg transition-colors text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 w-full"
+            type="button"
+            class="flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2 text-sm text-gray-600 transition-colors hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
             @click="isDark = !isDark"
           >
-            <UIcon :name="themeIcon" class="size-4 shrink-0" />
+            <UIcon
+              :name="themeIcon"
+              class="size-4 shrink-0"
+            />
+
             {{ themeLabel }}
           </button>
 
+          <!-- Secondary routes -->
           <NuxtLink
-            v-for="r in secondaryRoutes"
-            :key="r.name"
-            :to="r.path"
-            class="flex items-center gap-3 py-2 px-3 text-sm cursor-pointer rounded-lg transition-colors"
+            v-for="item in secondaryRoutes"
+            :key="item.name"
+            :to="item.path"
+            class="flex cursor-pointer items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors"
             :class="
-              isActive(r.path)
-                ? 'bg-primary-50 dark:bg-primary-950 text-primary-700 dark:text-primary-300 font-medium'
-                : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'
+              isActive(item.path)
+                ? 'bg-primary-50 font-medium text-primary-700 dark:bg-primary-950 dark:text-primary-300'
+                : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800'
             "
-            @click="mobileNavOpen = false"
+            @click="closeMobileNav"
           >
             <UIcon
-              :name="isActive(r.path) ? r.activeIcon : r.icon"
+              :name="
+                isActive(item.path)
+                  ? item.activeIcon || item.icon
+                  : item.icon
+              "
               class="size-4 shrink-0"
             />
-            {{ r.name }}
+
+            <span class="truncate">
+              {{ item.name }}
+            </span>
           </NuxtLink>
 
+          <!-- Logout -->
           <button
-            class="flex items-center gap-3 py-2 px-3 text-sm cursor-pointer rounded-lg transition-colors text-red-500 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40 w-full"
+            type="button"
+            class="flex w-full cursor-pointer items-center gap-3 rounded-lg px-3 py-2 text-sm text-red-500 transition-colors hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/40"
             @click="logout"
           >
             <UIcon
               name="heroicons:arrow-right-start-on-rectangle"
               class="size-4 shrink-0"
             />
+
             Logout
           </button>
         </div>
