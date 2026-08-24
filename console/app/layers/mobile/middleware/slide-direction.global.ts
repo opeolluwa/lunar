@@ -15,4 +15,5 @@ export default defineNuxtRouteMiddleware((to, from) => {
   isBack = false;
 
   to.meta.pageTransition = { name };
+  to.meta.layoutTransition = { name };
 });

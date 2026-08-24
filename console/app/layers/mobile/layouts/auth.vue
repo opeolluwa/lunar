@@ -52,7 +52,7 @@ function goBack() {
 
     <main
       id="auth_layout_mobile"
-      class="flex h-dvh flex-col overflow-hidden bg-white dark:bg-app-dark-800"
+      class="flex h-dvh flex-col overflow-hidden bg-gray-50 dark:bg-app-dark-800"
     >
       <div
         class="w-full min-h-0 flex-1 overflow-y-auto overscroll-contain p-6"

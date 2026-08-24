@@ -96,7 +96,7 @@ async function handleSubmit() {
   <div class="flex flex-col flex-1">
     <AppPageHeader :title="title" :description="description" />
 
-    <form class="flex flex-col gap-4" @submit.prevent="handleSubmit">
+    <form @submit.prevent="handleSubmit">
       <div>
         <AppNumberInput
           v-model="otp"
