@@ -36,7 +36,7 @@ export default defineNuxtConfig({
     "./assets/css/main.css",
     "highlight.js/styles/atom-one-dark.css",
     "@domternal/theme",
-    // isMobile ? "./assets/css/mobile.css" : "./assets/css/desktop.css",
+    isMobile ? "./assets/css/mobile.css" : "./assets/css/desktop.css",
   ],
 
   colorMode: {

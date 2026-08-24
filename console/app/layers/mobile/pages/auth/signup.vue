@@ -52,7 +52,7 @@ async function handleSubmit() {
       description="Get started in a few seconds."
     />
 
-    <form class="flex flex-col gap-4" @submit.prevent="handleSubmit">
+    <form @submit.prevent="handleSubmit">
       <AppInput
         v-model="form.email"
         type="email"

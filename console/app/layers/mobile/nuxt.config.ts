@@ -13,10 +13,14 @@ export default defineNuxtConfig({
   },
 
   app: {
-    // pageTransition: {
-    //      name: "fade",
-    //      mode: "out-in",
-    //    },
+    pageTransition: {
+      name: "slide-left",
+      mode: "out-in",
+    },
+    layoutTransition: {
+      name: "slide-left",
+      mode: "out-in",
+    },
     head: {
       meta: [
         {

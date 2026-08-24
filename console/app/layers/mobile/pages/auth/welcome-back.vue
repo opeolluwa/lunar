@@ -56,7 +56,7 @@ async function handleSubmit() {
       title="Welcome back, Adeoye"
       description="Enter your password to continue."
     />
-    <form class="flex flex-col mt-4" @submit.prevent="handleSubmit">
+    <form @submit.prevent="handleSubmit">
       <div>
         <AppInput
           v-model="password"

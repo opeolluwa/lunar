@@ -4,6 +4,8 @@ import { kNavbar, kNavbarBackLink, kPage } from "konsta/vue";
 const route = useRoute();
 const router = useRouter();
 
+const kbInset = useKeyboardInset();
+
 const isLoginPage = computed(() => route.path === "/auth/login");
 
 const canGoBack = computed(() => window.history.length > 1);
@@ -22,11 +24,7 @@ function goBack() {
 
 <template>
   <kPage>
-    <kNavbar
-      transparent
-      bg-class="bg-white dark:bg-app-dark-800"
-      class="absolute inset-x-0 top-0 z-40 flex max-h-20 items-center justify-between border-gray-200 dark:border-gray-800 dark:text-gray-500"
-    >
+    <kNavbar transparent bg-class="bg-white dark:bg-app-dark-800" class="px">
       <template #left>
         <kNavbarBackLink
           v-if="showBackButton"
@@ -54,9 +52,12 @@ function goBack() {
 
     <main
       id="auth_layout_mobile"
-      class="flex min-h-dvh flex-col bg-white p-6  dark:bg-app-dark-800"
+      class="flex h-dvh flex-col overflow-hidden bg-gray-50 dark:bg-app-dark-800"
     >
-      <div class="w-full">
+      <div
+        class="w-full min-h-0 flex-1 overflow-y-auto overscroll-contain p-6"
+        :style="kbInset > 0 ? { paddingBottom: `${kbInset}px` } : undefined"
+      >
         <slot />
       </div>
     </main>

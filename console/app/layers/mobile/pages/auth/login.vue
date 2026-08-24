@@ -52,7 +52,7 @@ async function handleSubmit() {
       description="Sign in to your Lunar account to continue."
     />
 
-    <form class="flex flex-col mt-4" @submit.prevent="handleSubmit">
+    <form @submit.prevent="handleSubmit">
       <AppInput
         v-model="form.email"
         type="email"

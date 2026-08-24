@@ -23,10 +23,7 @@ const hideHeaderAndNav = computed(() => {
 
 <template>
   <kPage>
-    <kNavbar
-      bg-class="bg-white dark:bg-app-dark-800"
-      class="absolute inset-x-0 top-0 z-40 flex max-h-20 items-center justify-between border-gray-200 dark:border-gray-800 dark:text-gray-500"
-    >
+    <kNavbar bg-class="bg-white dark:bg-app-dark-800" class="px-3">
       <template #left>
         <UButton
           v-if="isTopLevel"
@@ -63,7 +60,7 @@ const hideHeaderAndNav = computed(() => {
 
     <main
       id="default_layout_mobile"
-      class="flex h-dvh flex-col overflow-hidden bg-gray-50 pb-20 dark:bg-app-dark-800"
+      class="flex h-dvh flex-col overflow-hidden bg-gray-50 dark:bg-app-dark-800"
     >
       <AppViewport :hide-header-and-nav="hideHeaderAndNav">
         <slot />

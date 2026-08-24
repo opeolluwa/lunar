@@ -1,254 +1,61 @@
-@import "tailwindcss";
-@import "@nuxt/ui";
-@import "tailwind-animations";
-@import "konsta/vue/theme.css";
-
-@plugin 'tailwind-scrollbar' {
-  nocompatible: true;
-}
+@reference "./main.css";
 
 :root {
-
-
-  --app-dark-50: #e0e6f2;
-  --app-dark-100: #b8c4e0;
-  --app-dark-200: #8a9dc6;
-  --app-dark-300: #5e7aab;
-  --app-dark-400: #375990;
-  --app-dark-500: #0d1220;
-  --app-dark-600: #0a0f1c;
-  --app-dark-700: #070b14;
-  --app-dark-800: #04070d;
-  --app-dark-900: #020407;
-  --app-dark-950: #010203;
-
   --k-safe-area-left: 0px;
   --k-safe-area-right: 0px;
   --k-safe-area-top: 0px;
   --k-safe-area-bottom: 0px;
-
-  --color-brand-primary: var(--color-primary-500);
 }
 
-@theme {
-  --color-surface-50: #f3f5f6;
-  --color-surface-100: #e7eaed;
-  --color-surface-200: #cfd4dd;
-  --color-surface-300: #abb7c9;
-  --color-surface-400: #7c92b5;
-  --color-surface-500: #506f9f;
-  --color-surface-600: #385584;
-  --color-surface-700: #273f67;
-  --color-surface-800: #1a2d4c;
-  --color-surface-900: #111f35;
-  --color-surface-950: #0a121f;
-
-  --color-app-dark-50: var(--app-dark-50);
-  --color-app-dark-100: var(--app-dark-100);
-  --color-app-dark-200: var(--app-dark-200);
-  --color-app-dark-300: var(--app-dark-300);
-  --color-app-dark-400: var(--app-dark-400);
-  --color-app-dark-500: var(--app-dark-500);
-  --color-app-dark-600: var(--app-dark-600);
-  --color-app-dark-700: var(--app-dark-700);
-  --color-app-dark-800: var(--app-dark-800);
-  --color-app-dark-900: var(--app-dark-900);
-  --color-app-dark-950: var(--app-dark-950);
-
-  --color-primary-50: var(--app-primary-50);
-  --color-primary-100: var(--app-primary-100);
-  --color-primary-200: var(--app-primary-200);
-  --color-primary-300: var(--app-primary-300);
-  --color-primary-400: var(--app-primary-400);
-  --color-primary-500: var(--app-primary-500);
-  --color-primary-600: var(--app-primary-600);
-  --color-primary-700: var(--app-primary-700);
-  --color-primary-800: var(--app-primary-800);
-  --color-primary-900: var(--app-primary-900);
-  --color-primary-950: var(--app-primary-950);
-
-  --color-primary: var(--color-primary-500);
-  --font-ios: "Poppins", sans-serif;
-  --font-material: "Poppins", sans-serif;
+.k-page {
+  overflow-x: clip;
 }
 
-html {
-  font-size: var(--font-size-base, 15px);
+.slide-left-enter-active,
+.slide-left-leave-active,
+.slide-right-enter-active,
+.slide-right-leave-active {
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-body {
-  font-family: "Poppins", sans-serif;
-  height: 100%;
-  overflow: hidden;
-  overscroll-behavior: none;
-  border: none !important;
+.slide-left-enter-from {
+  transform: translateX(100%);
 }
 
-@layer base {
-  body {
-    @apply bg-white text-gray-900 dark:bg-app-dark-800 dark:text-white;
+.slide-left-leave-to {
+  transform: translateX(-25%);
+}
+
+.slide-right-enter-from {
+  transform: translateX(-25%);
+}
+
+.slide-right-leave-to {
+  transform: translateX(100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .slide-left-enter-active,
+  .slide-left-leave-active,
+  .slide-right-enter-active,
+  .slide-right-leave-active {
+    transition: none;
   }
 }
 
-* {
-  user-select: none;
-}
-
-.dark {
-  --color-gray-900: var(--app-dark-900);
-  --color-gray-800: var(--app-dark-800);
-  --color-gray-700: var(--app-dark-700);
-  --color-gray-600: var(--app-dark-600);
-}
-
-.almond_input_box {
-  @apply w-full bg-white dark:bg-gray-800 rounded-lg px-4 py-2.5 text-sm text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-700 outline-none focus:ring-2 focus:ring-primary-300 dark:focus:ring-primary-600 focus:border-transparent placeholder-gray-400 dark:placeholder-gray-500;
-}
-
-.titlebar {
-  @apply fixed top-0 left-0 right-0 h-14 border-b rounded-t-xl border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 items-center p-2;
-}
-
-.scrollbar-config {
-  @apply scrollbar-thumb-rounded-full scrollbar-w-[0.25px] scrollbar-corner-primary-400 scrollbar-h-20 scrollbar-track-rounded-full scrollbar-thin scrollbar-thumb-primary-600 scrollbar-track-transparent;
-}
-
-.scrollbar-config-dark {
-  @apply scrollbar-thumb-rounded-full scrollbar-w-[0.25px] scrollbar-corner-gray-900 scrollbar-h-20 scrollbar-track-rounded-full scrollbar-thin scrollbar-thumb-gray-900 scrollbar-track-transparent;
-}
-
-#wild_almonds_app {
-  @apply mt-14 rounded-b-xl overflow-hidden bg-gray-50 dark:bg-app-dark-800 ring-1 ring-gray-200/80 dark:ring-white/10;
-}
-
-/* Custom primary color */
-
-/* Custom editor appearance */
-.dm-editor {
-  --dm-editor-bg: transparent;
-  --dm-editor-border-radius: 0;
-  --dm-editor-shadow: none;
-  --dm-editor-border: none;
-  --dm-border-color: #cccccc;
-  --dm-code-surface: transparent;
-}
-
-.dark .dm-editor {
-  --dm-border-color: var(--color-surface-700);
-}
-
-.notes-editor .dm-editor .ProseMirror {
-  padding-top: 0;
-  min-height: 25vh;
-  /*background: transparent;*/
-}
-
-/* Custom toolbar */
-.dm-toolbar {
-  --dm-toolbar-bg: transparent;
-  --dm-button-size: 2.25rem;
-}
-
-h1.notes_heading {
-  @apply text-4xl font-bold;
-}
-
-h2.notes_heading {
-  @apply text-3xl font-bold;
-}
-
-h3.notes_heading {
-  @apply text-2xl font-semibold;
-}
-
-h4.notes_heading {
-  @apply text-xl font-semibold;
-}
-
-h5.notes_heading {
-  @apply text-lg font-medium;
-}
-
-h6.notes_heading {
-  @apply text-base font-medium;
-}
-
-.note_list_unordered {
-  list-style-type: disc;
-  padding-left: 1.5rem;
-  margin: 0.5rem 0;
-}
-
-.note_list_unordered .note_list_unordered {
-  list-style-type: circle;
-}
-
-.note_list_unordered .note_list_unordered .note_list_unordered {
-  list-style-type: square;
-}
-
-.note_list_ordered {
-  list-style-type: decimal;
-  padding-left: 1.5rem;
-  margin: 0.5rem 0;
-}
-
-.note_list_ordered .note_list_ordered {
-  list-style-type: lower-alpha;
-}
-
-.note_list_ordered .note_list_ordered .note_list_ordered {
-  list-style-type: lower-roman;
-}
-
-.notes_list_item {
-  margin: 0.2rem 0;
-  line-height: 1.6;
-}
-
-.dm-floating-menu {
-  height: 12rem;
-}
-
-.scrollbar-config {
-  @apply scrollbar-thumb-rounded-full scrollbar-w-[0.25px] scrollbar-corner-primary-400 scrollbar-h-20 scrollbar-track-rounded-full scrollbar-thin scrollbar-thumb-primary-600 scrollbar-track-transparent;
-}
-
-.scrollbar-config-dark {
-  @apply scrollbar-thumb-rounded-full scrollbar-w-[0.25px] scrollbar-corner-gray-900 scrollbar-h-20 scrollbar-track-rounded-full scrollbar-thin scrollbar-thumb-gray-900 scrollbar-track-transparent;
-}
-
-#auth_layout form {
-  @apply mt-4;
-}
-
-#auth_layout h2,
-#auth_layout_mobile h2 {
-  @apply text-2xl font-bold text-gray-800 dark:text-white md:mt-4 text-center;
-}
-#auth_layout h2 + p {
-  @apply text-gray-600 dark:text-gray-400  text-center;
-}
-
-#auth_layout_mobile button,
-#auth_layout_mobile button {
-  @apply text-center first-letter:uppercase justify-center items-center;
-}
-
 #auth_layout_mobile {
-  @apply mt-24;
+  @apply bg-gray-50 dark:bg-app-dark-800;
 }
 
 #auth_layout_mobile form {
-  @apply gap-6 mt-8;
+  @apply flex flex-col gap-y-6 mt-8;
+}
+
+#auth_layout_mobile button {
+  @apply text-center first-letter:uppercase justify-center items-center;
 }
 
 #auth_layout_mobile h2,
 #auth_layout_mobile p {
   @apply text-left;
-}
-
-#auth_layout_mobile,
-#default_layout_mobile {
-  @apply bg-gray-50 dark:bg-app-dark-800;
 }
