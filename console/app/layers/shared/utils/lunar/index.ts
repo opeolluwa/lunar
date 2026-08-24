@@ -8,7 +8,7 @@ import { ReminderRepository } from "./repositories/reminder";
 import { NotificationRepository } from "./repositories/notifications";
 import { RecycleBinRepository } from "./repositories/recycle_bin";
 import { WorkspaceRepository } from "./repositories/workspace";
-import { WorkspacePreferenceRepository } from "./repositories/workspace_preferences";
+import { WorkspaceProfileRepository } from "./repositories/workspace_profiles";
 import { UserPreferencesRepository } from "./repositories/user_preferences";
 import { SyncQueueRepository } from "./repositories/sync_queue";
 
@@ -22,7 +22,7 @@ export interface LunarConsoleApi {
   notifications: NotificationRepository;
   recycleBin: RecycleBinRepository;
   workspaces: WorkspaceRepository;
-  workspacePreferences: WorkspacePreferenceRepository;
+  workspaceProfiles: WorkspaceProfileRepository;
   userPreferences: UserPreferencesRepository;
   syncQueue: SyncQueueRepository;
 }
@@ -40,7 +40,7 @@ export async function createLunarConsoleApi(): Promise<LunarConsoleApi> {
     notifications: new NotificationRepository(),
     recycleBin: new RecycleBinRepository(),
     workspaces: new WorkspaceRepository(),
-    workspacePreferences: new WorkspacePreferenceRepository(),
+    workspaceProfiles: new WorkspaceProfileRepository(),
     userPreferences: new UserPreferencesRepository(),
     syncQueue: new SyncQueueRepository(),
   };
@@ -59,9 +59,9 @@ export type {
   UpdateWorkspace,
 } from "./repositories/workspace";
 export type {
-  CreateUserPreference,
-  UpdateUserPreference,
-} from "./repositories/workspace_preferences";
+  CreateWorkspaceProfile,
+  UpdateWorkspaceProfile,
+} from "./repositories/workspace_profiles";
 export type {
   CreateUserPreferences,
   UpdateUserPreferences,
