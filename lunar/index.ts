@@ -15,7 +15,8 @@ export type { SnippetsInterface as Snippets } from "./bindings/SnippetsInterface
 export type { SyncQueueInterface as SyncQueue } from "./bindings/SyncQueueInterface";
 export type { TodoInterface as Todo } from "./bindings/TodoInterface";
 export type { UserPreferencesInterface as UserPreferences } from "./bindings/UserPreferencesInterface";
-export type { WorkspacePreferencesInterface as WorkspacePreferences } from "./bindings/WorkspacePreferencesInterface";
+export type { WorkspaceMembersInterface as WorkspaceMembers } from "./bindings/WorkspaceMembersInterface";
+export type { WorkspaceProfilesInterface as WorkspaceProfiles } from "./bindings/WorkspaceProfilesInterface";
 export type { WorkspacesInterface as Workspaces } from "./bindings/WorkspacesInterface";
 
 export type { CreateBookmark } from "./bindings/bookmark";
@@ -25,9 +26,9 @@ export type { CreateRecycleBinEntry } from "./bindings/recycle_bin";
 export type { CreateReminder } from "./bindings/reminder";
 export type { CreateSnippet } from "./bindings/snippets";
 export type { CreateTodo } from "./bindings/todo";
-export type { CreateUserPreference } from "./bindings/workspace_preferences";
 export type { CreateUserPreferences } from "./bindings/user_preferences";
 export type { CreateWorkspace } from "./bindings/workspace";
+export type { CreateWorkspaceProfile } from "./bindings/workspace_profiles";
 export type { RequestMeta } from "./bindings/meta";
 export type { Snippet } from "./bindings/snippets";
 export type { SyncQueueEntry } from "./bindings/sync_queue";
@@ -37,6 +38,6 @@ export type { UpdateNote } from "./bindings/notes";
 export type { UpdateReminder } from "./bindings/reminder";
 export type { UpdateSnippet } from "./bindings/snippets";
 export type { UpdateTodo } from "./bindings/todo";
-export type { UpdateUserPreference } from "./bindings/workspace_preferences";
 export type { UpdateUserPreferences } from "./bindings/user_preferences";
 export type { UpdateWorkspace } from "./bindings/workspace";
+export type { UpdateWorkspaceProfile } from "./bindings/workspace_profiles";

@@ -21,5 +21,23 @@
   "bugs": {
     "url": "https://github.com/opeolluwa/almonds/issues"
   },
-  "homepage": "https://github.com/opeolluwa/almonds#readme"
+  "homepage": "https://github.com/opeolluwa/almonds#readme",
+  "exports": {
+    ".": {
+      "types": "./index.ts"
+    },
+    "./index": {
+      "types": "./index.ts"
+    },
+    "./bindings": {
+      "types": "./bindings/index.ts"
+    },
+    "./pkg": "./pkg/lunar.js",
+    "./pkg/*": "./pkg/*"
+  },
+  "files": [
+    "index.ts",
+    "bindings",
+    "pkg"
+  ]
 }

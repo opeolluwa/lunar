@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { kFab } from "konsta/vue";
 import { useNoteStore } from "@shared/stores/notes";
 import { onBeforeRouteLeave } from "vue-router";
 import EditorToolBar from "@mobile/components/notes/EditorToolBar.vue";
@@ -20,14 +21,18 @@ const content = ref("");
 const submitting = ref(false);
 const saved = ref(false);
 const error = ref<string | null>(null);
+const loadedId = ref<string | undefined>(undefined);
 
 watch(
   original,
   (note) => {
-    if (note && !saved.value) {
-      title.value = note.title === "Untitled" ? "" : note.title;
-      content.value = note.content;
-    }
+    if (!note || loadedId.value === note.identifier) return;
+    loadedId.value = note.identifier;
+    saved.value = false;
+    error.value = null;
+    submitting.value = false;
+    title.value = note.title === "Untitled" ? "" : note.title;
+    content.value = note.content;
   },
   { immediate: true },
 );
@@ -146,7 +151,7 @@ onMounted(async () => {
     <template v-else-if="original">
       <NoteTitleInput v-model="title" :disabled="submitting" />
 
-      <NotesEditor ref="notesEditor" v-model="content">
+      <NotesEditor :key="id" ref="notesEditor" v-model="content">
         <template #toolbar>
           <EditorToolBar />
         </template>
@@ -154,15 +159,25 @@ onMounted(async () => {
 
       <p v-if="error" class="text-xs text-red-500 mt-4">{{ error }}</p>
 
-      <AppFab
-        icon="ri:save-line"
-        style="
-          bottom: calc(
-            var(--kb-inset, 0px) + env(safe-area-inset-bottom) + 4.5rem
-          );
+      <kFab
+        component="button"
+        aria-label="Save note"
+        class="absolute right-7 z-[60] md:hidden"
+        :style="
+          'bottom: calc(var(--kb-inset, 0px) + env(safe-area-inset-bottom) + 4.5rem);'
         "
+        :colors="{
+          bgIos: 'bg-primary-500 dark:bg-primary-600',
+          bgMaterial: 'bg-primary-500 dark:bg-primary-600',
+          textIos: 'text-white',
+          textMaterial: 'text-white',
+        }"
         @click="handleSave"
-      />
+      >
+        <template #icon>
+          <UIcon name="ri:save-line" class="size-6" />
+        </template>
+      </kFab>
     </template>
   </div>
 </template>

@@ -106,6 +106,15 @@ async function handleEmptyBin() {
   }
 }
 
+async function handleRestore(identifier: string) {
+  try {
+    await recycleBinStore.restoreEntry(identifier);
+    notify({ type: "success", message: "Item restored" });
+  } catch {
+    notify({ type: "error", message: "Failed to restore item" });
+  }
+}
+
 onMounted(async () => {
   await recycleBinStore.fetchEntries();
 });
@@ -218,6 +227,14 @@ onUnmounted(() => clearSearch());
               Deleted {{ formatDeletedAt(entry.deletedAt) }}
             </p>
           </div>
+
+          <button
+            class="p-2 rounded-md text-gray-400 hover:text-primary-500 hover:bg-primary-50 dark:hover:bg-primary-950 transition-colors shrink-0"
+            aria-label="Restore item"
+            @click="handleRestore(entry.identifier)"
+          >
+            <UIcon name="heroicons:arrow-uturn-left" class="size-4" />
+          </button>
 
           <button
             class="p-2 rounded-md text-gray-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950 transition-colors shrink-0"

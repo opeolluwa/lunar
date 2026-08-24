@@ -2,8 +2,8 @@ use std::sync::Arc;
 
 use async_trait::async_trait;
 use sea_orm::{
-    ActiveModelTrait, ActiveValue::Set, ColumnTrait, DatabaseConnection, EntityTrait,
-    IntoActiveModel, QueryFilter, QueryOrder, QuerySelect,
+    ActiveModelBehavior, ActiveModelTrait, ActiveValue::Set, ColumnTrait, DatabaseConnection,
+    EntityTrait, IntoActiveModel, QueryFilter, QueryOrder, QuerySelect,
 };
 use uuid::Uuid;
 use wasm_bindgen::prelude::*;
@@ -12,7 +12,7 @@ use crate::types::EntitySyncResult;
 use crate::entities::sea_orm_active_enums::ItemType;
 use crate::{
     adapters::{meta::RequestMeta, recycle_bin::CreateRecycleBinEntry},
-    entities::{recycle_bin, sync_queue},
+    entities::{bookmark, notes, recycle_bin, reminder, snippets, sync_queue, todo},
     error::LunarError,
     utils::{extract_req_meta, js_err, mock_connection, to_js},
 };
@@ -54,6 +54,12 @@ pub trait RecycleBinRepositoryExt {
     -> Result<(), LunarError>;
 
     async fn purge_all(&self, meta: &Option<RequestMeta>) -> Result<(), LunarError>;
+
+    async fn restore(
+        &self,
+        identifier: &Uuid,
+        meta: &Option<RequestMeta>,
+    ) -> Result<(), LunarError>;
 
     async fn extract_unsynced(&self) -> Result<Vec<recycle_bin::Model>, LunarError>;
 
@@ -163,6 +169,70 @@ impl RecycleBinRepositoryExt for RecycleBinRepository {
         Ok(())
     }
 
+    async fn restore(
+        &self,
+        identifier: &Uuid,
+        meta: &Option<RequestMeta>,
+    ) -> Result<(), LunarError> {
+        let meta = extract_req_meta(meta)?;
+
+        let entry = recycle_bin::Entity::find()
+            .filter(recycle_bin::Column::Identifier.eq(*identifier))
+            .filter(recycle_bin::Column::WorkspaceIdentifier.eq(meta.workspace_identifier))
+            .one(self.conn.as_ref())
+            .await
+            .map_err(|err| LunarError::DbOperationError(err.to_string()))?
+            .ok_or_else(|| {
+                LunarError::DbOperationError("recycle bin entry not found".to_string())
+            })?;
+
+        match entry.item_type {
+            ItemType::Note => {
+                Self::restore_payload::<notes::Model, notes::ActiveModel>(
+                    &entry.payload,
+                    self.conn.as_ref(),
+                )
+                .await?
+            }
+            ItemType::Todo => {
+                Self::restore_payload::<todo::Model, todo::ActiveModel>(
+                    &entry.payload,
+                    self.conn.as_ref(),
+                )
+                .await?
+            }
+            ItemType::Bookmark => {
+                Self::restore_payload::<bookmark::Model, bookmark::ActiveModel>(
+                    &entry.payload,
+                    self.conn.as_ref(),
+                )
+                .await?
+            }
+            ItemType::Snippet => {
+                Self::restore_payload::<snippets::Model, snippets::ActiveModel>(
+                    &entry.payload,
+                    self.conn.as_ref(),
+                )
+                .await?
+            }
+            ItemType::Reminder => {
+                Self::restore_payload::<reminder::Model, reminder::ActiveModel>(
+                    &entry.payload,
+                    self.conn.as_ref(),
+                )
+                .await?
+            }
+        }
+
+        recycle_bin::Entity::delete_many()
+            .filter(recycle_bin::Column::Identifier.eq(*identifier))
+            .filter(recycle_bin::Column::WorkspaceIdentifier.eq(meta.workspace_identifier))
+            .exec(self.conn.as_ref())
+            .await
+            .map_err(|err| LunarError::DbOperationError(err.to_string()))?;
+        Ok(())
+    }
+
     async fn extract_unsynced(&self) -> Result<Vec<recycle_bin::Model>, LunarError> {
         let queue_entries = sync_queue::Entity::find()
             .filter(sync_queue::Column::TableName.eq("recycle_bin"))
@@ -250,6 +320,28 @@ impl RecycleBinRepositoryExt for RecycleBinRepository {
     }
 }
 
+impl RecycleBinRepository {
+    async fn restore_payload<M, A>(
+        payload: &str,
+        conn: &DatabaseConnection,
+    ) -> Result<(), LunarError>
+    where
+        M: IntoActiveModel<A> + serde::de::DeserializeOwned,
+        A: ActiveModelBehavior + Send,
+        <A::Entity as EntityTrait>::Model: IntoActiveModel<A>,
+    {
+        let model: M = serde_json::from_str(payload)
+            .map_err(|err| LunarError::DbOperationError(err.to_string()))?;
+
+        model
+            .into_active_model()
+            .insert(conn)
+            .await
+            .map_err(|err| LunarError::DbOperationError(err.to_string()))?;
+        Ok(())
+    }
+}
+
 #[wasm_bindgen]
 impl RecycleBinRepository {
     #[wasm_bindgen(constructor)]
@@ -306,6 +398,14 @@ impl RecycleBinRepository {
     pub async fn purge_all_js(&self, meta: JsValue) -> Result<JsValue, JsValue> {
         let meta: Option<RequestMeta> = serde_wasm_bindgen::from_value(meta).map_err(js_err)?;
         <Self as RecycleBinRepositoryExt>::purge_all(self, &meta).await?;
+        Ok(JsValue::UNDEFINED)
+    }
+
+    #[wasm_bindgen(js_name = "restore")]
+    pub async fn restore_js(&self, identifier: &str, meta: JsValue) -> Result<JsValue, JsValue> {
+        let id = Uuid::parse_str(identifier).map_err(js_err)?;
+        let meta: Option<RequestMeta> = serde_wasm_bindgen::from_value(meta).map_err(js_err)?;
+        <Self as RecycleBinRepositoryExt>::restore(self, &id, &meta).await?;
         Ok(JsValue::UNDEFINED)
     }
 }

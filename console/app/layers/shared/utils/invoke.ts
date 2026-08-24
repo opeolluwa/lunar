@@ -8,8 +8,8 @@ import type {
   CreateReminder,
   CreateSnippet,
   CreateTodo,
-  CreateUserPreference,
   CreateWorkspace,
+  CreateWorkspaceProfile,
   LunarConsoleApi,
   RequestMeta,
   UpdateBookmark,
@@ -17,8 +17,8 @@ import type {
   UpdateReminder,
   UpdateSnippet,
   UpdateTodo,
-  UpdateUserPreference,
   UpdateWorkspace,
+  UpdateWorkspaceProfile,
 } from "~/utils/lunar";
 
 type InvokeArgs = Record<string, unknown>;
@@ -75,16 +75,16 @@ const COMMANDS: Record<string, CommandHandler> = {
       asString(a, "password"),
     ),
 
-  get_workspace_preference: (api, a) => api.workspacePreferences.get(asMeta(a)),
-  create_workspace_preference: (api, a) =>
-    api.workspacePreferences.create(
-      a.preference as CreateUserPreference,
+  get_workspace_profile: (api, a) => api.workspaceProfiles.get(asMeta(a)),
+  create_workspace_profile: (api, a) =>
+    api.workspaceProfiles.create(
+      a.profile as CreateWorkspaceProfile,
       asMeta(a),
     ),
-  update_workspace_preference: (api, a) =>
-    api.workspacePreferences.update(
+  update_workspace_profile: (api, a) =>
+    api.workspaceProfiles.update(
       asString(a, "identifier"),
-      a.preference as UpdateUserPreference,
+      a.profile as UpdateWorkspaceProfile,
       asMeta(a),
     ),
 
@@ -201,11 +201,13 @@ const COMMANDS: Record<string, CommandHandler> = {
     api.recycleBin.purge(asString(a, "identifier"), asMeta(a)),
   purge_all_recycle_bin_entries: (api, a) =>
     api.recycleBin.purge_all(asMeta(a)),
+  restore_recycle_bin_entry: (api, a) =>
+    api.recycleBin.restore(asString(a, "identifier"), asMeta(a)),
 };
 
 const UNSYNCED = new Set([
   "get_unsynced_workspaces",
-  "get_unsynced_workspace_preferences",
+  "get_unsynced_workspace_profiles",
   "get_unsynced_notes",
   "get_unsynced_todos",
   "get_unsynced_bookmarks",
@@ -216,7 +218,7 @@ const UNSYNCED = new Set([
 
 const CLEAR_SYNCED = new Set([
   "clear_synced_workspaces",
-  "clear_synced_workspace_preferences",
+  "clear_synced_workspace_profiles",
   "clear_synced_notes",
   "clear_synced_todos",
   "clear_synced_bookmarks",

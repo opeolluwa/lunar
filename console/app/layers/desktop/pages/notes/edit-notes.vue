@@ -18,14 +18,18 @@ const content = ref("");
 const submitting = ref(false);
 const saved = ref(false);
 const error = ref<string | null>(null);
+const loadedId = ref<string | undefined>(undefined);
 
 watch(
   original,
   (note) => {
-    if (note && !saved.value) {
-      title.value = note.title === "Untitled" ? "" : note.title;
-      content.value = note.content;
-    }
+    if (!note || loadedId.value === note.identifier) return;
+    loadedId.value = note.identifier;
+    saved.value = false;
+    error.value = null;
+    submitting.value = false;
+    title.value = note.title === "Untitled" ? "" : note.title;
+    content.value = note.content;
   },
   { immediate: true },
 );
@@ -151,7 +155,7 @@ onMounted(async () => {
       <div v-else-if="original">
         <div class="mx-auto pb-20">
           <!-- Editor -->
-          <NotesEditor ref="notesEditor" v-model="content" />
+          <NotesEditor :key="id" ref="notesEditor" v-model="content" />
 
           <p v-if="error" class="text-xs text-red-500 mt-4">{{ error }}</p>
         </div>

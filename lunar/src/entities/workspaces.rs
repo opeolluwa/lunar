@@ -37,8 +37,8 @@ pub enum Relation {
     Snippets,
     #[sea_orm(has_many = "super::todo::Entity")]
     Todo,
-    #[sea_orm(has_many = "super::workspace_preferences::Entity")]
-    WorkspacePreferences,
+    #[sea_orm(has_many = "super::workspace_profiles::Entity")]
+    WorkspaceProfiles,
 }
 
 impl Related<super::bookmark::Entity> for Entity {
@@ -83,9 +83,9 @@ impl Related<super::todo::Entity> for Entity {
     }
 }
 
-impl Related<super::workspace_preferences::Entity> for Entity {
+impl Related<super::workspace_profiles::Entity> for Entity {
     fn to() -> RelationDef {
-        Relation::WorkspacePreferences.def()
+        Relation::WorkspaceProfiles.def()
     }
 }
 
@@ -107,6 +107,6 @@ pub enum RelatedEntity {
     Snippets,
     #[sea_orm(entity = "super::todo::Entity")]
     Todo,
-    #[sea_orm(entity = "super::workspace_preferences::Entity")]
-    WorkspacePreferences,
+    #[sea_orm(entity = "super::workspace_profiles::Entity")]
+    WorkspaceProfiles,
 }

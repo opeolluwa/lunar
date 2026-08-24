@@ -2,8 +2,8 @@ use std::sync::Arc;
 
 use lunar::{
     entities,
-    repositories::workspace_preferences::{
-        WorkspacePreferenceRepository, WorkspacePreferenceRepositoryExt,
+    repositories::workspace_profiles::{
+        WorkspaceProfileRepository, WorkspaceProfileRepositoryExt,
     },
     sync_engine::EntitySyncResult,
 };
@@ -29,9 +29,9 @@ impl SyncUserPreference {
         input: Vec<SyncWorkspacePreferenceInput>,
     ) -> async_graphql::Result<Vec<EntitySyncResult>> {
         let db = extract_db_conn(ctx)?;
-        let repo = WorkspacePreferenceRepository::new(Arc::new(db.clone()));
+        let repo = WorkspaceProfileRepository::new(Arc::new(db.clone()));
 
-        let models: Vec<entities::workspace_preferences::Model> = input
+        let models: Vec<entities::workspace_profiles::Model> = input
             .into_iter()
             .map(|item| item.try_into())
             .collect::<Result<_, _>>()?;

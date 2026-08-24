@@ -29,6 +29,11 @@ pub fn verify_password(password: &str, hash: &str) -> Result<bool, argon2::passw
 #[serde(rename_all = "camelCase")]
 #[ts(export, export_to = "workspace.ts")]
 pub struct CreateWorkspace {
+    /// Pre-existing identifier to reuse (e.g. a workspace joined through an
+    /// invitation). When omitted a new UUID is generated.
+    #[serde(default)]
+    #[ts(optional)]
+    pub identifier: Option<Uuid>,
     pub name: String,
     pub description: String,
 }
@@ -36,7 +41,7 @@ pub struct CreateWorkspace {
 impl From<CreateWorkspace> for entities::workspaces::ActiveModel {
     fn from(val: CreateWorkspace) -> Self {
         ActiveModel {
-            identifier: Set(Uuid::new_v4()),
+            identifier: Set(val.identifier.unwrap_or_else(Uuid::new_v4)),
             name: Set(val.name),
             description: Set(val.description),
             is_default: Set(false),

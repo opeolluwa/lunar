@@ -3,6 +3,18 @@ import { BaseRepository, type RequestMeta } from "../base";
 
 export type { CreateRecycleBinEntry };
 
+const SOURCE_TABLES: Record<ItemType, string> = {
+  note: "notes",
+  todo: "todo",
+  bookmark: "bookmark",
+  snippet: "snippets",
+  reminder: "reminder",
+};
+
+function snakeize(key: string): string {
+  return key.replace(/([a-z0-9])([A-Z])/g, "$1_$2").toLowerCase();
+}
+
 export class RecycleBinRepository extends BaseRepository {
   async store(
     payload: CreateRecycleBinEntry,
@@ -68,5 +80,40 @@ export class RecycleBinRepository extends BaseRepository {
     await this.run(`DELETE FROM recycle_bin WHERE workspace_identifier = $1`, [
       m.workspaceIdentifier,
     ]);
+  }
+
+  async restore(identifier: string, meta?: RequestMeta): Promise<void> {
+    const m = this.requireMeta(meta);
+    const entry = await this.find_by_id(identifier, m);
+    if (!entry) throw new Error("recycle bin entry not found");
+
+    const table = SOURCE_TABLES[entry.itemType];
+    if (!table) throw new Error(`unsupported item type: ${entry.itemType}`);
+
+    // `find_by_id` runs through `toCamelRow`, so the payload may already be
+    // a parsed object rather than the raw JSON string that was stored.
+    const raw =
+      typeof entry.payload === "string"
+        ? entry.payload
+        : JSON.stringify(entry.payload);
+    const record = JSON.parse(raw) as Record<string, unknown>;
+
+    const columns: string[] = [];
+    const params: unknown[] = [];
+    for (const [key, value] of Object.entries(record)) {
+      columns.push(snakeize(key));
+      params.push(
+        value !== null && typeof value === "object"
+          ? JSON.stringify(value)
+          : value,
+      );
+    }
+    const placeholders = columns.map((_, i) => `$${i + 1}`).join(", ");
+    await this.run(
+      `INSERT INTO "${table}" (${columns.join(", ")}) VALUES (${placeholders})`,
+      params,
+    );
+
+    await this.purge(identifier, m);
   }
 }

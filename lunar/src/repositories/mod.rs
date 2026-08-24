@@ -10,4 +10,4 @@ pub mod todo;
 pub mod user_preferences;
 pub mod workspace;
 pub mod workspace_manager;
-pub mod workspace_preferences;
+pub mod workspace_profiles;

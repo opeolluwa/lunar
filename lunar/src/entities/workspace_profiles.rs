@@ -4,7 +4,7 @@ use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, PartialEq, Eq, DeriveEntityModel, Serialize, Deserialize)]
-#[sea_orm(table_name = "workspace_preferences")]
+#[sea_orm(table_name = "workspace_profiles")]
 #[serde(rename_all = "camelCase")]
 #[lunar_macros::ts_rs_export_sea_orm_entity_name]
 pub struct Model {
@@ -12,6 +12,7 @@ pub struct Model {
     pub identifier: Uuid,
     pub first_name: String,
     pub last_name: String,
+    pub profile_picture: Option<String>,
     pub created_at: DateTimeWithTimeZone,
     pub updated_at: DateTimeWithTimeZone,
     pub workspace_identifier: Option<Uuid>,

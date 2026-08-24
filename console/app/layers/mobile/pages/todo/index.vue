@@ -1,8 +1,23 @@
 <script setup lang="ts">
+import { kFab } from "konsta/vue";
 import { useTodoStore } from "@shared/stores/todo";
 import EmptyState from "@shared/components/app/EmptyState.vue";
 
 const todoStore = useTodoStore();
+const { notify } = useAppNotification();
+
+const showCreatePopup = ref(false);
+
+const fabColors = {
+  bgIos: "bg-primary-500 dark:bg-primary-600",
+  bgMaterial: "bg-primary-500 dark:bg-primary-600",
+  textIos: "text-white",
+  textMaterial: "text-white",
+};
+
+function handleCreated() {
+  notify({ message: "Task created", type: "success" });
+}
 </script>
 
 <template>
@@ -12,7 +27,16 @@ const todoStore = useTodoStore();
       v-if="todoStore.todos.length !== 0"
       class="fixed bottom-20 right-5 z-40"
     >
-      <AppFab aria-label="Add task" @click="navigateTo('/todo/create-todo')" />
+      <kFab
+        component="button"
+        aria-label="Add task"
+        :colors="fabColors"
+        @click="showCreatePopup = true"
+      >
+        <template #icon>
+          <UIcon name="heroicons:plus" class="size-6" />
+        </template>
+      </kFab>
     </div>
 
     <!-- Loading -->
@@ -30,8 +54,14 @@ const todoStore = useTodoStore();
         description="Create your first task to get started."
         icon="ri:calendar-todo-line"
         action-label="create task"
-        @action="navigateTo('/todo/create-todo')"
+        @action="showCreatePopup = true"
       />
     </div>
+
+    <!-- Create task popup -->
+    <TodoCreatePopup
+      v-model:open="showCreatePopup"
+      @created="handleCreated"
+    />
   </div>
 </template>

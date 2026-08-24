@@ -3,6 +3,7 @@
     :type="type"
     :color="color"
     :loading="loading"
+    :variant="variant"
     :size="size"
     :disabled="disabled || loading"
     class="w-full py-3 bg-primary-500 text-center hover:bg-primary-600 cursor-pointer text-white font-medium disabled:opacity-50"
@@ -44,6 +45,11 @@ defineProps({
   size: {
     type: String as PropType<"xs" | "sm" | "md" | "lg" | "xl">,
     default: "lg",
+  },
+  variant: {
+    type:
+      "link" | "solid" | "outline" | "soft" | "subtle" | "ghost" | undefined,
+    default: "solid",
   },
 });
 </script>

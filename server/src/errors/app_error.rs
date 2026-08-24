@@ -14,6 +14,12 @@ pub enum AppError {
     #[error("{0}")]
     OperationFailed(String),
 
+    #[error("{0}")]
+    Forbidden(String),
+
+    #[error("{0}")]
+    NotFound(String),
+
     #[error("Invalid authentication token")]
     InvalidToken,
 
@@ -40,6 +46,9 @@ impl AppError {
     pub fn status_code(&self) -> StatusCode {
         match self {
             AppError::InvalidToken => StatusCode::UNAUTHORIZED,
+
+            AppError::Forbidden(_) => StatusCode::FORBIDDEN,
+            AppError::NotFound(_) => StatusCode::NOT_FOUND,
 
             AppError::GraphQLError(_) => StatusCode::BAD_REQUEST,
             AppError::OperationFailed(_) => StatusCode::BAD_REQUEST,

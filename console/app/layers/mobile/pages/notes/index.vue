@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { kFab } from "konsta/vue";
 import EmptyState from "@shared/components/app/EmptyState.vue";
 import {
   NOTE_SORT_OPTIONS,
@@ -39,10 +40,22 @@ const filteredNotes = computed(() => {
   <div>
     <!-- Create note FAB -->
     <div v-if="!noteStore.loading && filteredNotes.length > 0">
-      <AppFab
+      <kFab
+        component="button"
         aria-label="Add note"
+        class="absolute bottom-24 right-7 z-[60] md:hidden"
+        :colors="{
+          bgIos: 'bg-primary-500 dark:bg-primary-600',
+          bgMaterial: 'bg-primary-500 dark:bg-primary-600',
+          textIos: 'text-white',
+          textMaterial: 'text-white',
+        }"
         @click="navigateTo('/notes/create-notes')"
-      />
+      >
+        <template #icon>
+          <UIcon name="heroicons:plus" class="size-6" />
+        </template>
+      </kFab>
     </div>
 
     <!-- Loading -->

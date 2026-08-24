@@ -8,9 +8,10 @@ use crate::{
     adapters::{
         authentication::SetNewPasswordRequest, jwt::Claims, profile::UploadProfilePictureRequest,
         request::AuthenticatedRequest, users::PartialUserProfile,
+        workspace_member::AccountWorkspaceResponse,
     },
     entities::users,
-    errors::service_error::ServiceError,
+    errors::{app_error::AppError, service_error::ServiceError},
     response::{ApiResponse, ApiResponseBuilder},
     states::AppState,
 };
@@ -82,5 +83,22 @@ pub async fn update_profile(
     Ok(ApiResponseBuilder::new()
         .data(updated_profile)
         .message("profile updated successfully")
+        .build())
+}
+
+/// All workspaces connected to the authenticated account.
+pub async fn list_account_workspaces(
+    State(state): State<Arc<AppState>>,
+    claims: Claims,
+) -> Result<ApiResponse<Vec<AccountWorkspaceResponse>>, AppError> {
+    let workspaces = state
+        .services
+        .workspace_member_service
+        .list_workspaces_for_account(&claims.email)
+        .await?;
+
+    Ok(ApiResponseBuilder::new()
+        .data(workspaces)
+        .message("Account workspaces fetched successfully")
         .build())
 }
