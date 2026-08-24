@@ -13,11 +13,7 @@ const isTopLevel = computed(() => topLevelPaths.includes(route.path));
 </script>
 
 <template>
-  <kNavbar
-  
-    bg-class="bg-white dark:bg-app-dark-800"
-    class="absolute top-0 inset-x-0 max-h-20 flex items-center justify-between  dark:text-gray-500 border-gray-200 dark:border-gray-800"
-  >
+  <kNavbar bg-class="bg-white dark:bg-app-dark-800" inner-class="px-6 bg-red-500">
     <template #left>
       <UButton
         v-if="isTopLevel"
