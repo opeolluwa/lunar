@@ -4,18 +4,19 @@ use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, PartialEq, Eq, DeriveEntityModel, Serialize, Deserialize)]
-#[sea_orm(table_name = "workspace_profiles")]
+#[sea_orm(table_name = "workspace_members")]
 #[serde(rename_all = "camelCase")]
-#[lunar_macros::ts_rs_export_sea_orm_entity_name]
 pub struct Model {
     #[sea_orm(primary_key, auto_increment = false)]
     pub identifier: Uuid,
-    pub first_name: String,
-    pub last_name: String,
+    #[sea_orm(unique_key = "idx_workspace_members_workspace_email")]
+    pub member_email: String,
+    pub role: String,
+    pub user_identifier: Option<Uuid>,
     pub created_at: DateTimeWithTimeZone,
     pub updated_at: DateTimeWithTimeZone,
-    pub workspace_identifier: Option<Uuid>,
-    pub profile_picture: Option<String>,
+    #[sea_orm(unique_key = "idx_workspace_members_workspace_email")]
+    pub workspace_identifier: Uuid,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
@@ -37,9 +38,3 @@ impl Related<super::workspaces::Entity> for Entity {
 }
 
 impl ActiveModelBehavior for ActiveModel {}
-
-#[derive(Copy, Clone, Debug, EnumIter, DeriveRelatedEntity)]
-pub enum RelatedEntity {
-    #[sea_orm(entity = "super::workspaces::Entity")]
-    Workspaces,
-}

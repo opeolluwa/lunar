@@ -53,12 +53,12 @@ impl MigrationTrait for Migration {
                     )
                     .col(ColumnDef::new(Invitation::ExpiresAt).timestamp().not_null())
                     .col(ColumnDef::new(Invitation::CreatedAt).timestamp().not_null())
-                    .foreign_key(
-                        ForeignKey::create()
-                            .from(Invitation::Table, Invitation::WorkspaceIdentifier)
-                            .to("workspaces", "identifier")
-                            .on_delete(ForeignKeyAction::Cascade),
-                    )
+                    // .foreign_key(
+                    //     ForeignKey::create()
+                    //         .from(Invitation::Table, Invitation::WorkspaceIdentifier)
+                    //         .to("workspaces", "identifier")
+                    //         .on_delete(ForeignKeyAction::Cascade),
+                    // )
                     .to_owned(),
             )
             .await

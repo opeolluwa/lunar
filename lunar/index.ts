@@ -15,6 +15,7 @@ export type { SnippetsInterface as Snippets } from "./bindings/SnippetsInterface
 export type { SyncQueueInterface as SyncQueue } from "./bindings/SyncQueueInterface";
 export type { TodoInterface as Todo } from "./bindings/TodoInterface";
 export type { UserPreferencesInterface as UserPreferences } from "./bindings/UserPreferencesInterface";
+export type { UsersInterface as Users } from "./bindings/UsersInterface";
 export type { WorkspaceMembersInterface as WorkspaceMembers } from "./bindings/WorkspaceMembersInterface";
 export type { WorkspaceProfilesInterface as WorkspaceProfiles } from "./bindings/WorkspaceProfilesInterface";
 export type { WorkspacesInterface as Workspaces } from "./bindings/WorkspacesInterface";

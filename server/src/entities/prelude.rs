@@ -2,6 +2,7 @@
 
 pub use super::countries::Entity as Countries;
 pub use super::invitation::Entity as Invitation;
+pub use super::notifications::Entity as Notifications;
 pub use super::one_time_passwords::Entity as OneTimePasswords;
-pub use super::revoked_tokens::Entity as RevokedTokens;
+pub use super::orchard_migrations::Entity as OrchardMigrations;
 pub use super::users::Entity as Users;

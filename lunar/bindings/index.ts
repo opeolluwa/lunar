@@ -37,6 +37,7 @@ export type { UpdateUserPreferences } from "./user_preferences";
 export type { UpdateWorkspace } from "./workspace";
 export type { UpdateWorkspaceProfile } from "./workspace_profiles";
 export type { UserPreferencesInterface } from "./UserPreferencesInterface";
+export type { UsersInterface } from "./UsersInterface";
 export type { WorkspaceMembersInterface } from "./WorkspaceMembersInterface";
 export type { WorkspaceProfilesInterface } from "./WorkspaceProfilesInterface";
 export type { WorkspacesInterface } from "./WorkspacesInterface";
