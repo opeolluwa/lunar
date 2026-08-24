@@ -12,8 +12,9 @@ use seaography::{
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    errors::app_error::AppError, types::bookmark::SyncBookmarkInput,
-    utils::context::extract_db_conn,
+    errors::app_error::AppError,
+    types::bookmark::SyncBookmarkInput,
+    utils::context::{ensure_workspace_access, extract_db_conn},
 };
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -26,6 +27,12 @@ impl SyncBookmark {
         ctx: &Context<'_>,
         input: Vec<SyncBookmarkInput>,
     ) -> async_graphql::Result<Vec<EntitySyncResult>> {
+        ensure_workspace_access(
+            ctx,
+            input.iter().filter_map(|item| item.workspace_identifier).collect(),
+        )
+        .await?;
+
         let db = extract_db_conn(ctx)?;
         let repo = BookmarkRepository::new(Arc::new(db.clone()));
 

@@ -12,8 +12,9 @@ use seaography::{
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    errors::app_error::AppError, types::reminder::SyncReminderInput,
-    utils::context::extract_db_conn,
+    errors::app_error::AppError,
+    types::reminder::SyncReminderInput,
+    utils::context::{ensure_workspace_access, extract_db_conn},
 };
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -26,6 +27,12 @@ impl SyncReminder {
         ctx: &Context<'_>,
         input: Vec<SyncReminderInput>,
     ) -> async_graphql::Result<Vec<EntitySyncResult>> {
+        ensure_workspace_access(
+            ctx,
+            input.iter().filter_map(|item| item.workspace_identifier).collect(),
+        )
+        .await?;
+
         let db = extract_db_conn(ctx)?;
         let repo = ReminderRepository::new(Arc::new(db.clone()));
 

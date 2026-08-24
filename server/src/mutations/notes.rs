@@ -12,7 +12,9 @@ use seaography::{
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    errors::app_error::AppError, types::note::SyncNoteInput, utils::context::extract_db_conn,
+    errors::app_error::AppError,
+    types::note::SyncNoteInput,
+    utils::context::{ensure_workspace_access, extract_db_conn},
 };
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -25,6 +27,12 @@ impl SyncNote {
         ctx: &Context<'_>,
         input: Vec<SyncNoteInput>,
     ) -> async_graphql::Result<Vec<EntitySyncResult>> {
+        ensure_workspace_access(
+            ctx,
+            input.iter().filter_map(|item| item.workspace_identifier).collect(),
+        )
+        .await?;
+
         let db = extract_db_conn(ctx)?;
         let repo = NotesRepository::new(Arc::new(db.clone()));
 

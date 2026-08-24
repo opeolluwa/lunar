@@ -9,4 +9,4 @@ pub mod sync_queue;
 pub mod todo;
 pub mod user_preferences;
 pub mod workspace;
-pub mod workspace_preferences;
+pub mod workspace_profiles;

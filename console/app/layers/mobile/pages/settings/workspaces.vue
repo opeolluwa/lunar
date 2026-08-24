@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { kFab } from "konsta/vue";
 import { useWorkspacesStore } from "@shared/stores/workspaces";
 
 const { notify } = useAppNotification();
@@ -337,6 +338,21 @@ const workspaces = computed(() => workspaceStore.workspaces ?? []);
       @created="handleCreated"
     />
 
-    <AppFab aria-label="New workspace" @click="showCreateModal = true" />
+    <kFab
+      component="button"
+      aria-label="New workspace"
+      class="absolute bottom-24 right-7 z-[60] md:hidden"
+      :colors="{
+        bgIos: 'bg-primary-500 dark:bg-primary-600',
+        bgMaterial: 'bg-primary-500 dark:bg-primary-600',
+        textIos: 'text-white',
+        textMaterial: 'text-white',
+      }"
+      @click="showCreateModal = true"
+    >
+      <template #icon>
+        <UIcon name="heroicons:plus" class="size-6" />
+      </template>
+    </kFab>
   </div>
 </template>

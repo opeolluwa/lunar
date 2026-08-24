@@ -31,12 +31,27 @@ pub(crate) trait InvitationRepositoryTrait {
         email: &str,
     ) -> Result<Option<invitation::Model>, DatabaseError>;
 
+    async fn find_by_token(&self, token: &str) -> Result<Option<invitation::Model>, DatabaseError>;
+
+    async fn find_by_identifier(
+        &self,
+        identifier: Uuid,
+    ) -> Result<Option<invitation::Model>, DatabaseError>;
+
     async fn create(
         &self,
         workspace_identifier: Uuid,
         req: &InviteWorkspaceMemberRequest,
         token: &str,
     ) -> Result<invitation::Model, DatabaseError>;
+
+    async fn update_status(
+        &self,
+        invitation: invitation::Model,
+        status: &str,
+    ) -> Result<invitation::Model, DatabaseError>;
+
+    async fn delete(&self, identifier: Uuid) -> Result<bool, DatabaseError>;
 }
 
 impl InvitationRepositoryTrait for InvitationRepository {
@@ -51,6 +66,45 @@ impl InvitationRepositoryTrait for InvitationRepository {
             .one(self.db_conn.as_ref())
             .await
             .map_err(DatabaseError::from)
+    }
+
+    async fn find_by_token(&self, token: &str) -> Result<Option<invitation::Model>, DatabaseError> {
+        InvitationEntity::find()
+            .filter(invitation::Column::Token.eq(token))
+            .one(self.db_conn.as_ref())
+            .await
+            .map_err(DatabaseError::from)
+    }
+
+    async fn find_by_identifier(
+        &self,
+        identifier: Uuid,
+    ) -> Result<Option<invitation::Model>, DatabaseError> {
+        InvitationEntity::find_by_id(identifier)
+            .one(self.db_conn.as_ref())
+            .await
+            .map_err(DatabaseError::from)
+    }
+
+    async fn update_status(
+        &self,
+        invitation: invitation::Model,
+        status: &str,
+    ) -> Result<invitation::Model, DatabaseError> {
+        let mut active: invitation::ActiveModel = invitation.into();
+        active.status = Set(status.to_owned());
+        active
+            .update(self.db_conn.as_ref())
+            .await
+            .map_err(DatabaseError::from)
+    }
+
+    async fn delete(&self, identifier: Uuid) -> Result<bool, DatabaseError> {
+        let result = InvitationEntity::delete_by_id(identifier)
+            .exec(self.db_conn.as_ref())
+            .await
+            .map_err(DatabaseError::from)?;
+        Ok(result.rows_affected > 0)
     }
 
     async fn create(

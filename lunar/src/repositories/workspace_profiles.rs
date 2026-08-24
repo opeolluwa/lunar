@@ -18,52 +18,52 @@ use crate::repositories::{
 use crate::{
     adapters::{
         meta::RequestMeta,
-        workspace_preferences::{CreateUserPreference, UpdateUserPreference},
+        workspace_profiles::{CreateWorkspaceProfile, UpdateWorkspaceProfile},
     },
-    entities::{workspace_preferences, sync_queue},
+    entities::{workspace_profiles, sync_queue},
     error::LunarError,
     utils::{extract_req_meta, js_err, mock_connection, to_js},
 };
 
 #[wasm_bindgen]
-pub struct WorkspacePreferenceRepository {
+pub struct WorkspaceProfileRepository {
     conn: Arc<DatabaseConnection>,
     workspace_repository: WorkspaceRepository,
 }
 
 #[async_trait]
-pub trait WorkspacePreferenceRepositoryExt {
+pub trait WorkspaceProfileRepositoryExt {
     fn new(conn: Arc<DatabaseConnection>) -> Self;
 
     async fn create(
         &self,
-        payload: &CreateUserPreference,
+        payload: &CreateWorkspaceProfile,
         meta: &Option<RequestMeta>,
-    ) -> Result<workspace_preferences::Model, LunarError>;
+    ) -> Result<workspace_profiles::Model, LunarError>;
 
     async fn get(
         &self,
         meta: &Option<RequestMeta>,
-    ) -> Result<Option<workspace_preferences::Model>, LunarError>;
+    ) -> Result<Option<workspace_profiles::Model>, LunarError>;
 
     async fn update(
         &self,
         identifier: &Uuid,
-        payload: &UpdateUserPreference,
+        payload: &UpdateWorkspaceProfile,
         meta: &Option<RequestMeta>,
-    ) -> Result<workspace_preferences::Model, LunarError>;
+    ) -> Result<workspace_profiles::Model, LunarError>;
 
-    async fn extract_unsynced(&self) -> Result<Vec<workspace_preferences::Model>, LunarError>;
+    async fn extract_unsynced(&self) -> Result<Vec<workspace_profiles::Model>, LunarError>;
 
     async fn clear_synced(&self, identifiers: Vec<String>) -> Result<(), LunarError>;
     async fn upsert_many(
         &self,
-        models: Vec<workspace_preferences::Model>,
+        models: Vec<workspace_profiles::Model>,
     ) -> Result<Vec<EntitySyncResult>, LunarError>;
 }
 
 #[async_trait]
-impl WorkspacePreferenceRepositoryExt for WorkspacePreferenceRepository {
+impl WorkspaceProfileRepositoryExt for WorkspaceProfileRepository {
     fn new(conn: Arc<DatabaseConnection>) -> Self {
         Self {
             conn: conn.clone(),
@@ -73,10 +73,10 @@ impl WorkspacePreferenceRepositoryExt for WorkspacePreferenceRepository {
 
     async fn create(
         &self,
-        payload: &CreateUserPreference,
+        payload: &CreateWorkspaceProfile,
         meta: &Option<RequestMeta>,
-    ) -> Result<workspace_preferences::Model, LunarError> {
-        let mut active_model: workspace_preferences::ActiveModel = payload.to_owned().into();
+    ) -> Result<workspace_profiles::Model, LunarError> {
+        let mut active_model: workspace_profiles::ActiveModel = payload.to_owned().into();
 
         if let Some(meta) = meta {
             active_model.workspace_identifier = Set(Some(meta.workspace_identifier));
@@ -95,12 +95,12 @@ impl WorkspacePreferenceRepositoryExt for WorkspacePreferenceRepository {
     async fn get(
         &self,
         meta: &Option<RequestMeta>,
-    ) -> Result<Option<workspace_preferences::Model>, LunarError> {
+    ) -> Result<Option<workspace_profiles::Model>, LunarError> {
         let meta = extract_req_meta(meta)?;
 
-        workspace_preferences::Entity::find()
+        workspace_profiles::Entity::find()
             .filter(
-                workspace_preferences::Column::WorkspaceIdentifier.eq(meta.workspace_identifier),
+                workspace_profiles::Column::WorkspaceIdentifier.eq(meta.workspace_identifier),
             )
             .one(self.conn.as_ref())
             .await
@@ -110,21 +110,21 @@ impl WorkspacePreferenceRepositoryExt for WorkspacePreferenceRepository {
     async fn update(
         &self,
         identifier: &Uuid,
-        payload: &UpdateUserPreference,
+        payload: &UpdateWorkspaceProfile,
         meta: &Option<RequestMeta>,
-    ) -> Result<workspace_preferences::Model, LunarError> {
+    ) -> Result<workspace_profiles::Model, LunarError> {
         let meta = extract_req_meta(meta)?;
 
-        let model = workspace_preferences::Entity::find()
-            .filter(workspace_preferences::Column::Identifier.eq(*identifier))
+        let model = workspace_profiles::Entity::find()
+            .filter(workspace_profiles::Column::Identifier.eq(*identifier))
             .filter(
-                workspace_preferences::Column::WorkspaceIdentifier.eq(meta.workspace_identifier),
+                workspace_profiles::Column::WorkspaceIdentifier.eq(meta.workspace_identifier),
             )
             .one(self.conn.as_ref())
             .await
             .map_err(|err| LunarError::DbOperationError(err.to_string()))?
             .ok_or_else(|| {
-                LunarError::DbOperationError("user preference not found".to_string())
+                LunarError::DbOperationError("workspace profile not found".to_string())
             })?;
 
         let mut active_model = model.into_active_model();
@@ -135,6 +135,9 @@ impl WorkspacePreferenceRepositoryExt for WorkspacePreferenceRepository {
         if let Some(last_name) = &payload.last_name {
             active_model.last_name = Set(last_name.clone());
         }
+        if let Some(profile_picture) = &payload.profile_picture {
+            active_model.profile_picture = Set(Some(profile_picture.clone()));
+        }
 
         active_model.updated_at = Set(Utc::now().fixed_offset());
 
@@ -144,9 +147,9 @@ impl WorkspacePreferenceRepositoryExt for WorkspacePreferenceRepository {
             .map_err(|err| LunarError::DbOperationError(err.to_string()))
     }
 
-    async fn extract_unsynced(&self) -> Result<Vec<workspace_preferences::Model>, LunarError> {
+    async fn extract_unsynced(&self) -> Result<Vec<workspace_profiles::Model>, LunarError> {
         let queue_entries = sync_queue::Entity::find()
-            .filter(sync_queue::Column::TableName.eq("workspace_preferences"))
+            .filter(sync_queue::Column::TableName.eq("workspace_profiles"))
             .limit(25)
             .all(self.conn.as_ref())
             .await
@@ -164,8 +167,8 @@ impl WorkspacePreferenceRepositoryExt for WorkspacePreferenceRepository {
             return Ok(Vec::new());
         }
 
-        workspace_preferences::Entity::find()
-            .filter(workspace_preferences::Column::Identifier.is_in(identifiers))
+        workspace_profiles::Entity::find()
+            .filter(workspace_profiles::Column::Identifier.is_in(identifiers))
             .all(self.conn.as_ref())
             .await
             .map_err(|err| LunarError::DbOperationError(err.to_string()))
@@ -173,7 +176,7 @@ impl WorkspacePreferenceRepositoryExt for WorkspacePreferenceRepository {
 
     async fn clear_synced(&self, identifiers: Vec<String>) -> Result<(), LunarError> {
         sync_queue::Entity::delete_many()
-            .filter(sync_queue::Column::TableName.eq("workspace_preferences"))
+            .filter(sync_queue::Column::TableName.eq("workspace_profiles"))
             .filter(sync_queue::Column::RecordIdentifier.is_in(identifiers))
             .exec(self.conn.as_ref())
             .await
@@ -182,7 +185,7 @@ impl WorkspacePreferenceRepositoryExt for WorkspacePreferenceRepository {
     }
     async fn upsert_many(
         &self,
-        models: Vec<workspace_preferences::Model>,
+        models: Vec<workspace_profiles::Model>,
     ) -> Result<Vec<EntitySyncResult>, LunarError> {
         let mut sync_results: Vec<EntitySyncResult> = Vec::new();
         for chunk in models.chunks(20) {
@@ -194,9 +197,9 @@ impl WorkspacePreferenceRepositoryExt for WorkspacePreferenceRepository {
                     async move {
                         let identifier = model.identifier.to_string();
                         let op_result: Result<(), LunarError> = async {
-                            let exists = workspace_preferences::Entity::find()
+                            let exists = workspace_profiles::Entity::find()
                                 .filter(
-                                    workspace_preferences::Column::Identifier.eq(model.identifier),
+                                    workspace_profiles::Column::Identifier.eq(model.identifier),
                                 )
                                 .one(conn.as_ref())
                                 .await
@@ -234,7 +237,7 @@ impl WorkspacePreferenceRepositoryExt for WorkspacePreferenceRepository {
 }
 
 #[async_trait::async_trait]
-impl TransferRecord for WorkspacePreferenceRepository {
+impl TransferRecord for WorkspaceProfileRepository {
     async fn transfer_record(
         &self,
         record_identifier: &Uuid,
@@ -270,8 +273,8 @@ impl TransferRecord for WorkspacePreferenceRepository {
             return Err(LunarError::BookmarkNotFound(record_identifier.to_string()));
         }
 
-        let Some(record) = workspace_preferences::Entity::find()
-            .filter(workspace_preferences::Column::Identifier.eq(*record_identifier))
+        let Some(record) = workspace_profiles::Entity::find()
+            .filter(workspace_profiles::Column::Identifier.eq(*record_identifier))
             .one(self.conn.as_ref())
             .await
             .map_err(|err| LunarError::DbOperationError(err.to_string()))?
@@ -294,15 +297,15 @@ impl TransferRecord for WorkspacePreferenceRepository {
 }
 
 #[async_trait::async_trait]
-impl RecordExistInWorkspace for WorkspacePreferenceRepository {
+impl RecordExistInWorkspace for WorkspaceProfileRepository {
     async fn record_exists_in_workspace(
         &self,
         record_identifier: &Uuid,
         workspace_identifier: &Uuid,
     ) -> Result<bool, LunarError> {
-        let record = workspace_preferences::Entity::find()
-            .filter(workspace_preferences::Column::Identifier.eq(*record_identifier))
-            .filter(workspace_preferences::Column::WorkspaceIdentifier.eq(*workspace_identifier))
+        let record = workspace_profiles::Entity::find()
+            .filter(workspace_profiles::Column::Identifier.eq(*record_identifier))
+            .filter(workspace_profiles::Column::WorkspaceIdentifier.eq(*workspace_identifier))
             .one(self.conn.as_ref())
             .await
             .map_err(|err| LunarError::DbOperationError(err.to_string()))?;
@@ -312,7 +315,7 @@ impl RecordExistInWorkspace for WorkspacePreferenceRepository {
 }
 
 #[async_trait::async_trait]
-impl DuplicateRecord for WorkspacePreferenceRepository {
+impl DuplicateRecord for WorkspaceProfileRepository {
     async fn duplicate_record(
         &self,
         record_identifier: &Uuid,
@@ -341,10 +344,10 @@ impl DuplicateRecord for WorkspacePreferenceRepository {
             ));
         }
 
-        let Some(record) = workspace_preferences::Entity::find()
-            .filter(workspace_preferences::Column::Identifier.eq(*record_identifier))
+        let Some(record) = workspace_profiles::Entity::find()
+            .filter(workspace_profiles::Column::Identifier.eq(*record_identifier))
             .filter(
-                workspace_preferences::Column::WorkspaceIdentifier
+                workspace_profiles::Column::WorkspaceIdentifier
                     .eq(*previous_workspace_identifier),
             )
             .one(self.conn.as_ref())
@@ -371,7 +374,7 @@ impl DuplicateRecord for WorkspacePreferenceRepository {
 }
 
 #[wasm_bindgen]
-impl WorkspacePreferenceRepository {
+impl WorkspaceProfileRepository {
     #[wasm_bindgen(constructor)]
     pub fn new_wasm() -> Self {
         Self::new(mock_connection())
@@ -379,10 +382,10 @@ impl WorkspacePreferenceRepository {
 
     #[wasm_bindgen(js_name = "create")]
     pub async fn create_js(&self, payload: JsValue, meta: JsValue) -> Result<JsValue, JsValue> {
-        let payload: CreateUserPreference =
+        let payload: CreateWorkspaceProfile =
             serde_wasm_bindgen::from_value(payload).map_err(js_err)?;
         let meta: Option<RequestMeta> = serde_wasm_bindgen::from_value(meta).map_err(js_err)?;
-        let model = <Self as WorkspacePreferenceRepositoryExt>::create(self, &payload, &meta)
+        let model = <Self as WorkspaceProfileRepositoryExt>::create(self, &payload, &meta)
             .await?;
         to_js(&model)
     }
@@ -390,7 +393,7 @@ impl WorkspacePreferenceRepository {
     #[wasm_bindgen(js_name = "get")]
     pub async fn get_js(&self, meta: JsValue) -> Result<JsValue, JsValue> {
         let meta: Option<RequestMeta> = serde_wasm_bindgen::from_value(meta).map_err(js_err)?;
-        let model = <Self as WorkspacePreferenceRepositoryExt>::get(self, &meta).await?;
+        let model = <Self as WorkspaceProfileRepositoryExt>::get(self, &meta).await?;
         to_js(&model)
     }
 
@@ -402,11 +405,11 @@ impl WorkspacePreferenceRepository {
         meta: JsValue,
     ) -> Result<JsValue, JsValue> {
         let id = Uuid::parse_str(identifier).map_err(js_err)?;
-        let payload: UpdateUserPreference =
+        let payload: UpdateWorkspaceProfile =
             serde_wasm_bindgen::from_value(payload).map_err(js_err)?;
         let meta: Option<RequestMeta> = serde_wasm_bindgen::from_value(meta).map_err(js_err)?;
         let model =
-            <Self as WorkspacePreferenceRepositoryExt>::update(self, &id, &payload, &meta).await?;
+            <Self as WorkspaceProfileRepositoryExt>::update(self, &id, &payload, &meta).await?;
         to_js(&model)
     }
 

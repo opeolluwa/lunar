@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { kPage, kNavbar, kPopup, kBlock, kButton } from "konsta/vue";
+import { kPage, kNavbar, kPopup, kBlock } from "konsta/vue";
 import { useUserPreferenceStore } from "@shared/stores/workspace-preferences";
 import { useWorkspacesStore } from "@shared/stores/workspaces";
 import type { Workspace } from "@shared/stores/workspaces";
+import AppButton from "@shared/components/app/Button.vue";
 
 withDefaults(
   defineProps<{
@@ -48,9 +49,7 @@ function requestClose() {
 
 function validate(): boolean {
   errors.name = form.name.trim() ? "" : "Name is required";
-  errors.description = form.description.trim()
-    ? ""
-    : "Description is required";
+  errors.description = form.description.trim() ? "" : "Description is required";
   return !errors.name && !errors.description;
 }
 
@@ -81,9 +80,13 @@ async function handleSubmit() {
 </script>
 
 <template>
-  <k-popup :opened="open" @backdropclick="requestClose">
-    <k-page>
-      <k-navbar :title="title">
+  <kPopup :opened="open" @backdropclick="requestClose">
+    <kPage>
+      <kNavbar
+        :title="title"
+        bg-class="bg-white dark:bg-app-dark-800"
+        class="px-3"
+      >
         <template #right>
           <UButton
             size="md"
@@ -96,9 +99,9 @@ async function handleSubmit() {
             @click="requestClose"
           />
         </template>
-      </k-navbar>
+      </kNavbar>
 
-      <k-block strong inset class="space-y-4">
+      <kBlock strong inset class="space-y-4">
         <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
           {{ description }}
         </p>
@@ -111,9 +114,12 @@ async function handleSubmit() {
             type="text"
             name="workspace-name"
             placeholder="Lunar"
-            :error="errors.name"
             :disabled="loading"
           />
+          <p v-if="errors.name" class="-mt-3 text-xs text-red-500">
+            {{ errors.name }}
+          </p>
+
           <AppInput
             v-model="form.description"
             label="Description"
@@ -121,29 +127,38 @@ async function handleSubmit() {
             type="text"
             name="workspace-description"
             placeholder="Organize files and tasks"
-            :error="errors.description"
             :disabled="loading"
           />
+          <p v-if="errors.description" class="-mt-3 text-xs text-red-500">
+            {{ errors.description }}
+          </p>
 
           <p v-if="submitError" class="text-sm text-red-500">
             {{ submitError }}
           </p>
 
-          <div class="flex gap-2 pt-2 rtl:space-x-reverse">
-            <k-button
-              rounded
-              class="w-full"
+          <div class="flex gap-2 pt-2">
+            <AppButton
+              type="button"
+              variant="outline"
+              size="sm"
+              class="flex-1 justify-center"
               :disabled="loading"
               @click="requestClose"
             >
               Cancel
-            </k-button>
-            <k-button rounded class="w-full" @click="handleSubmit">
-              {{ loading ? "Creating…" : submitLabel }}
-            </k-button>
+            </AppButton>
+            <AppButton
+              type="submit"
+              size="sm"
+              class="flex-1"
+              :loading="loading"
+            >
+              {{ submitLabel }}
+            </AppButton>
           </div>
         </form>
-      </k-block>
-    </k-page>
-  </k-popup>
+      </kBlock>
+    </kPage>
+  </kPopup>
 </template>

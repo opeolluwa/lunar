@@ -17,14 +17,15 @@ pub struct SyncWorkspacePreferenceInput {
     pub workspace_identifier: Option<Uuid>,
 }
 
-impl TryFrom<SyncWorkspacePreferenceInput> for entities::workspace_preferences::Model {
+impl TryFrom<SyncWorkspacePreferenceInput> for entities::workspace_profiles::Model {
     type Error = async_graphql::Error;
 
     fn try_from(val: SyncWorkspacePreferenceInput) -> Result<Self, Self::Error> {
-        Ok(entities::workspace_preferences::Model {
+        Ok(entities::workspace_profiles::Model {
             identifier: val.identifier,
             first_name: val.first_name,
             last_name: val.last_name,
+            profile_picture: None,
             created_at: val
                 .created_at
                 .parse()

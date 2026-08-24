@@ -8,7 +8,7 @@ use lunar::{
         sync_queue::SyncQueueRepositoryExt, todo::TodoRepository,
         user_preferences::UserPreferencesRepository,
         user_preferences::UserPreferencesRepositoryExt, workspace::WorkspaceRepository,
-        workspace_preferences::WorkspacePreferenceRepository,
+        workspace_profiles::WorkspaceProfileRepository,
     },
     sea_orm::DatabaseConnection,
 };
@@ -23,7 +23,7 @@ pub struct AppState {
     pub sync_queue_repository: SyncQueueRepository,
     pub todo_repository: TodoRepository,
     pub user_preference_repository: UserPreferencesRepository,
-    pub workspace_preference_repository: WorkspacePreferenceRepository,
+    pub workspace_profile_repository: WorkspaceProfileRepository,
     pub workspace_repository: WorkspaceRepository,
 }
 
@@ -39,7 +39,7 @@ impl AppState {
         let todo_repository = TodoRepository::new(conn.clone());
         let user_preference_repository = UserPreferencesRepository::new(conn.clone());
         let workspace_repository = WorkspaceRepository::new(conn.clone());
-        let workspace_preference_repository = WorkspacePreferenceRepository::new(conn.clone());
+        let workspace_profile_repository = WorkspaceProfileRepository::new(conn.clone());
 
         AppState {
             bookmark_repository,
@@ -52,7 +52,7 @@ impl AppState {
             todo_repository,
             user_preference_repository,
             workspace_repository,
-            workspace_preference_repository,
+            workspace_profile_repository,
         }
     }
 }

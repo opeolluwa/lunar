@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { kFab } from "konsta/vue";
 import { useNoteStore } from "@shared/stores/notes";
 import { onBeforeRouteLeave } from "vue-router";
 import EditorToolBar from "@mobile/components/notes/EditorToolBar.vue";
@@ -158,15 +159,25 @@ onMounted(async () => {
 
       <p v-if="error" class="text-xs text-red-500 mt-4">{{ error }}</p>
 
-      <AppFab
-        icon="ri:save-line"
-        style="
-          bottom: calc(
-            var(--kb-inset, 0px) + env(safe-area-inset-bottom) + 4.5rem
-          );
+      <kFab
+        component="button"
+        aria-label="Save note"
+        class="absolute right-7 z-[60] md:hidden"
+        :style="
+          'bottom: calc(var(--kb-inset, 0px) + env(safe-area-inset-bottom) + 4.5rem);'
         "
+        :colors="{
+          bgIos: 'bg-primary-500 dark:bg-primary-600',
+          bgMaterial: 'bg-primary-500 dark:bg-primary-600',
+          textIos: 'text-white',
+          textMaterial: 'text-white',
+        }"
         @click="handleSave"
-      />
+      >
+        <template #icon>
+          <UIcon name="ri:save-line" class="size-6" />
+        </template>
+      </kFab>
     </template>
   </div>
 </template>

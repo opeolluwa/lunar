@@ -10,13 +10,13 @@ use crate::errors::app_error::AppError;
 use crate::repositories::{
     base::Repository, country::CountryRepository, invitation::InvitationRepository,
     notification::NotificationRepository, revoked_tokens::TokenBlacklistRepository,
-    user::UserRepository,
+    user::UserRepository, workspace_member::WorkspaceMemberRepository,
 };
 use crate::services::{
     authentication_service::AuthenticationService, country_service::CountryService,
     invitation_service::InvitationService, mailer::smtp::SmtpEmailSender,
-    notification_service::NotificationService, otp_service::OtpService,
-    root_service::RootService, user_service::UserService,
+    notification_service::NotificationService, otp_service::OtpService, root_service::RootService,
+    user_service::UserService, workspace_member_service::WorkspaceMemberService,
 };
 
 #[derive(Clone)]
@@ -27,6 +27,7 @@ pub struct Repositories {
     pub country: CountryRepository,
     pub notification: NotificationRepository,
     pub invitation: InvitationRepository,
+    pub workspace_member: WorkspaceMemberRepository,
 }
 
 #[derive(Clone)]
@@ -42,6 +43,7 @@ pub struct ServicesState {
     pub country_service: CountryService,
     pub notification_service: NotificationService,
     pub invitation_service: InvitationService,
+    pub workspace_member_service: WorkspaceMemberService,
 }
 
 #[derive(Clone)]
@@ -65,6 +67,7 @@ impl Repositories {
             country: CountryRepository::init(db),
             notification: NotificationRepository::init(db),
             invitation: InvitationRepository::init(db),
+            workspace_member: WorkspaceMemberRepository::init(db),
         }
     }
 }
@@ -85,7 +88,12 @@ impl Contracts {
 }
 
 impl ServicesState {
-    pub fn new(repos: Repositories, contracts: Contracts) -> Self {
+    pub fn new(
+        db_conn: &Arc<DatabaseConnection>,
+        repos: Repositories,
+        contracts: Contracts,
+    ) -> Self {
+        let member_service = WorkspaceMemberService::new(repos.workspace_member.clone());
         Self {
             user_service: UserService::new(repos.user.clone()),
             auth_service: AuthenticationService::new(
@@ -97,7 +105,12 @@ impl ServicesState {
             root_service: RootService::init(),
             country_service: CountryService::new(repos.country),
             notification_service: NotificationService::new(repos.notification),
-            invitation_service: InvitationService::new(repos.invitation),
+            workspace_member_service: member_service.clone(),
+            invitation_service: InvitationService::new(
+                db_conn.clone(),
+                repos.invitation,
+                member_service,
+            ),
         }
     }
 }
@@ -144,7 +157,7 @@ impl AppState {
         let db = Arc::new(db.clone());
         let contracts = Contracts::new(&app_config)?;
         let repositories = Repositories::new(&db);
-        let services = ServicesState::new(repositories, contracts);
+        let services = ServicesState::new(&db, repositories, contracts);
 
         Ok(Self {
             services,

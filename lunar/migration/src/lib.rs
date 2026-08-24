@@ -31,6 +31,7 @@ mod m20260527_171026_remove_email_from_workspace_preference;
 mod m20260528_132342_notification;
 mod m20260528_200000_add_workspace_and_is_read_to_notifications;
 mod m20260824_000000_create_workspace_members;
+mod m20260824_100000_rename_workspace_preference_to_workspace_profile;
 
 pub use sea_orm_migration::prelude::*;
 pub mod exporter;
@@ -77,6 +78,7 @@ impl MigratorTrait for Migrator {
             Box::new(m20260528_132342_notification::Migration),
             Box::new(m20260528_200000_add_workspace_and_is_read_to_notifications::Migration),
             Box::new(m20260824_000000_create_workspace_members::Migration),
+            Box::new(m20260824_100000_rename_workspace_preference_to_workspace_profile::Migration),
         ]
     }
 }

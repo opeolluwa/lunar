@@ -9,3 +9,4 @@ pub mod profile;
 pub mod repository;
 pub mod request;
 pub mod users;
+pub mod workspace_member;
