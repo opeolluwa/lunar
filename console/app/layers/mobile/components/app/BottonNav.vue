@@ -30,7 +30,7 @@ function navigate(path: string) {
     <kTabbar
       labels
       icons
-      class="[&_.k-link]:w-auto [&_.k-link]:min-w-0 [&_.k-link]:flex-1 [&_.k-tabbar-link-label]:max-w-full [&_.k-tabbar-link-label]:truncate material:[&_.k-tabbar-link-icon]:w-12"
+      class="[&_.k-link]:w-auto [&_.k-link]:min-w-0 [&_.k-link]:flex-1 [&_.k-link>span]:gap-0 [&_.k-tabbar-link-icon]:h-7 material:[&_.k-tabbar-link-icon]:w-12"
       bg-class="bg-white dark:bg-app-dark-800"
     >
       <kToolbarPane>
