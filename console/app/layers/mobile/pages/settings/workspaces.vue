@@ -328,14 +328,13 @@ const workspaces = computed(() => workspaceStore.workspaces ?? []);
       </template>
     </UModal>
 
-    <!-- Create workspace modal -->
-    <WorkspaceCreateModal
+    <!-- Create workspace popup -->
+    <WorkspaceCreatePopup
       v-model:open="showCreateModal"
       title="New workspace"
       description="Workspaces allow you to organize your notes, tasks and bookmarks."
       submit-label="Create workspace"
       @created="handleCreated"
-     
     />
 
     <AppFab aria-label="New workspace" @click="showCreateModal = true" />
