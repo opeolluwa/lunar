@@ -23,7 +23,7 @@ const hideHeaderAndNav = computed(() => {
 
 <template>
   <kPage>
-    <kNavbar bg-class="bg-white dark:bg-app-dark-800" class="px">
+    <kNavbar bg-class="bg-white dark:bg-app-dark-800" class="px-3">
       <template #left>
         <UButton
           v-if="isTopLevel"
