@@ -60,7 +60,21 @@ export default defineNuxtConfig({
   vite: {
     clearScreen: false,
     envPrefix: ["VITE_", "TAURI_"],
-    server: { strictPort: true },
+    server: {
+      strictPort: true,
+      proxy: {
+        "/sync": "http://localhost:80007",
+        "/segments": "http://localhost:8000",
+        "/blobs": "http://localhost:8000",
+        "/realtime": { target: "ws://localhost:8000", ws: true },
+      },
+    },
+    worker: {
+      // The sync worker is an ES module (it imports @syncular/client, which
+      // code-splits). Vite's default worker format is iife, which rejects
+      // module imports at build time.
+      format: "es",
+    },
     optimizeDeps: {
       include: [
         "@nuxt/ui > prosemirror-state",
@@ -72,7 +86,7 @@ export default defineNuxtConfig({
       ],
       // PGlite ships its own wasm + FS assets; pre-bundling it breaks
       // `new PGlite("idb://lunar")` in dev ("Invalid FS bundle size").
-      exclude: ["@electric-sql/pglite"],
+      exclude: ["@electric-sql/pglite", "@sqlite.org/sqlite-wasm"],
     },
   },
 

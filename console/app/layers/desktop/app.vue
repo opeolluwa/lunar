@@ -7,6 +7,7 @@ import { useAlarmScheduler } from "@shared/composables/useAlarmScheduler";
 import { useWorkspaceSetup } from "@shared/composables/useWorkspaceSetup";
 import { useWorkspacesStore } from "@shared/stores/workspaces";
 import "@domternal/theme";
+import { startSyncWorker } from "@syncular/client/worker";
 const { init: initFontSize } = useFontSize();
 const { init: initDarkTheme } = useDarkTheme();
 const { setupRequired, checkSetup, initializing } = useUserSetup();
@@ -19,14 +20,13 @@ const {
 useAlarmScheduler();
 const authenticated = ref(true);
 
-const route = useRoute();
-const isAuthRoute = computed(() => route.path.startsWith("/auth"));
 const showWorkspaceLock = ref(false);
 
 onMounted(async () => {
   try {
     initFontSize();
     initDarkTheme();
+    startSyncWorker();
     await checkSetup();
     await checkWorkspaceSetup();
 

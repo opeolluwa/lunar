@@ -10,8 +10,11 @@
 
 <script lang="ts" setup>
 import { kApp } from "konsta/vue";
-
+import { startSyncWorker } from "@syncular/client/worker";
 const { framework7Theme } = usePlatform();
+onMounted(() => {
+  startSyncWorker();
+});
 </script>
 
 <style></style>

@@ -14,7 +14,8 @@
     "tauri": "tauri",
     "lint": "eslint .",
     "format": "prettier --write \"app/**/*.{js,jsx,ts,tsx,vue,html,css,scss,json,md}\"",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "syncular":""
   },
   "dependencies": {
     "@apollo/client": "^3.14.1",
@@ -40,6 +41,8 @@
     "@nuxtjs/google-fonts": "^3.2.0",
     "@nuxtjs/i18n": "^10.2.3",
     "@pinia/nuxt": "^0.11.3",
+    "@syncular/react": "^0.15.48",
+    "@syncular/tauri": "^0.15.48",
     "@tauri-apps/plugin-clipboard-manager": "^2.3.2",
     "@tauri-apps/plugin-notification": "^2.3.3",
     "@tauri-apps/plugin-opener": "^2.5.3",
@@ -78,6 +81,7 @@
     "@iconify-json/lucide": "^1.2.98",
     "@iconify-json/ri": "^1.2.10",
     "@nuxtjs/apollo": "^5.0.0-alpha.16",
+    "@syncular/typegen": "^0.15.48",
     "@tauri-apps/api": "2.11.1",
     "@tauri-apps/cli": "2.11.4",
     "@types/lodash": "^4.17.23",

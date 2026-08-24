@@ -200,7 +200,6 @@ useEventListener("keydown", (e: KeyboardEvent) => {
       class="flex-1 min-w-0 flex items-center md:max-w-sm md:mx-auto md:relative"
     >
       <div
-        v-if="!hideAuthGated"
         class="flex items-center gap-2 h-9 px-3 w-full rounded-md transition-colors bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 focus-within:border-primary-400 dark:focus-within:border-primary-500"
       >
         <UIcon
@@ -287,11 +286,7 @@ useEventListener("keydown", (e: KeyboardEvent) => {
           <UUser
             size="sm"
             class="cursor-pointer"
-            :avatar="
-              authStore.isGuest || !authStore.isAuthenticated
-                ? { icon: 'heroicons:user' }
-                : { src: 'https://i.pravatar.cc/150?u=john-doe' }
-            "
+            :avatar="{ src: 'https://i.pravatar.cc/150?u=john-doe' }"
           />
         </UDropdownMenu>
       </div>
