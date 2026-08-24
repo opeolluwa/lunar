@@ -201,6 +201,8 @@ const COMMANDS: Record<string, CommandHandler> = {
     api.recycleBin.purge(asString(a, "identifier"), asMeta(a)),
   purge_all_recycle_bin_entries: (api, a) =>
     api.recycleBin.purge_all(asMeta(a)),
+  restore_recycle_bin_entry: (api, a) =>
+    api.recycleBin.restore(asString(a, "identifier"), asMeta(a)),
 };
 
 const UNSYNCED = new Set([

@@ -70,6 +70,15 @@ async function handlePurge(identifier: string) {
   }
 }
 
+async function handleRestore(identifier: string) {
+  try {
+    await recycleBinStore.restoreEntry(identifier);
+    notify({ type: "success", message: "Item restored" });
+  } catch {
+    notify({ type: "error", message: "Failed to restore item" });
+  }
+}
+
 async function handlePurgeAll() {
   if (!confirmPurgeAll.value) {
     confirmPurgeAll.value = true;
@@ -223,6 +232,14 @@ onUnmounted(() => {
               Deleted {{ formatDeletedAt(entry.deletedAt) }}
             </p>
           </div>
+
+          <button
+            class="p-1.5 rounded-md text-gray-400 hover:text-primary-500 hover:bg-primary-50 dark:hover:bg-primary-950 transition-colors shrink-0"
+            title="Restore item"
+            @click="handleRestore(entry.identifier)"
+          >
+            <UIcon name="heroicons:arrow-uturn-left" class="size-4" />
+          </button>
 
           <button
             class="p-1.5 rounded-md text-gray-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950 transition-colors shrink-0"

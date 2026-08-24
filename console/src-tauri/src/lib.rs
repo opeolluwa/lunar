@@ -154,6 +154,7 @@ pub async fn run() {
             commands::recycle_bin::clear_synced_recycle_bin,
             commands::recycle_bin::purge_all_recycle_bin_entries,
             commands::recycle_bin::purge_recycle_bin_entry,
+            commands::recycle_bin::restore_recycle_bin_entry,
             commands::snippets::create_snippet,
             commands::snippets::delete_snippet,
             commands::snippets::duplicate_snippet,

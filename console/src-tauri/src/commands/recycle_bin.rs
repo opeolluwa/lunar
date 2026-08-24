@@ -85,6 +85,19 @@ pub async fn purge_all_recycle_bin_entries(
 }
 
 #[tauri::command]
+pub async fn restore_recycle_bin_entry(
+    state: State<'_, AppState>,
+    identifier: Uuid,
+    meta: Option<RequestMeta>,
+) -> Result<(), AppError> {
+    state
+        .recycle_bin_repository
+        .restore(&identifier, &meta)
+        .await
+        .map_err(Into::into)
+}
+
+#[tauri::command]
 pub async fn get_unsynced_recycle_bin(
     state: State<'_, AppState>,
 ) -> Result<Vec<recycle_bin::Model>, AppError> {

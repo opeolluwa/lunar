@@ -20,14 +20,18 @@ const content = ref("");
 const submitting = ref(false);
 const saved = ref(false);
 const error = ref<string | null>(null);
+const loadedId = ref<string | undefined>(undefined);
 
 watch(
   original,
   (note) => {
-    if (note && !saved.value) {
-      title.value = note.title === "Untitled" ? "" : note.title;
-      content.value = note.content;
-    }
+    if (!note || loadedId.value === note.identifier) return;
+    loadedId.value = note.identifier;
+    saved.value = false;
+    error.value = null;
+    submitting.value = false;
+    title.value = note.title === "Untitled" ? "" : note.title;
+    content.value = note.content;
   },
   { immediate: true },
 );
@@ -146,7 +150,7 @@ onMounted(async () => {
     <template v-else-if="original">
       <NoteTitleInput v-model="title" :disabled="submitting" />
 
-      <NotesEditor ref="notesEditor" v-model="content">
+      <NotesEditor :key="id" ref="notesEditor" v-model="content">
         <template #toolbar>
           <EditorToolBar />
         </template>

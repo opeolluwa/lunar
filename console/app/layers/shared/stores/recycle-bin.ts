@@ -82,6 +82,15 @@ export const useRecycleBinStore = defineStore("recycle_bin_store", {
       this.entries = [];
     },
 
+    async restoreEntry(identifier: string) {
+      await invoke("restore_recycle_bin_entry", {
+        identifier,
+        meta: await getWorkspaceMeta(),
+      });
+
+      this.entries = this.entries.filter((e) => e.identifier !== identifier);
+    },
+
     async fetchUnsynced() {
       try {
         const recycleBin = await invoke<RecycleBinEntry[]>(
