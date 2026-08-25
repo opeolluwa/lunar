@@ -2,7 +2,6 @@
 definePageMeta({ name: "Settings" });
 
 const routes = [
-
   {
     label: "Profile",
     description: "Name, email & avatar",
@@ -16,12 +15,6 @@ const routes = [
     to: "/settings/appearance",
   },
   {
-    label: "Locale",
-    description: "Language & region",
-    icon: "heroicons:language",
-    to: "/settings/locale",
-  },
-  {
     label: "Workspaces",
     description: "Create, secure & manage workspaces",
     icon: "heroicons:briefcase",
@@ -33,12 +26,6 @@ const routes = [
     icon: "heroicons:cloud-arrow-up",
     to: "/settings/backup",
   },
-  {
-    label: "AI & Ollama",
-    description: "AI assistants & local models",
-    icon: "heroicons:cpu-chip",
-    to: "/settings/ai",
-  },
 
   {
     label: "Notifications",
@@ -47,7 +34,7 @@ const routes = [
     to: "/settings/notifications",
   },
   {
-    label: "Alarm",
+    label: "Reminders",
     description: "Sounds, repeat & vibration",
     icon: "heroicons:bell-alert",
     to: "/settings/alarm",

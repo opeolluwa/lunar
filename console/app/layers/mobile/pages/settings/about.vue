@@ -1,19 +1,16 @@
 <script setup lang="ts">
-import { platform } from "@tauri-apps/plugin-os";
 import { getName, getVersion, getTauriVersion } from "@tauri-apps/api/app";
 
 definePageMeta({ name: "About" });
 
 const tauriVersion = await getTauriVersion();
 const appVersion = await getVersion();
-const currentPlatform = platform();
 const appName = await getName();
 
 const info = [
   { label: "Version", value: appVersion, mono: true },
   { label: "Build", value: tauriVersion, mono: true },
   { label: "License", value: "MIT", mono: false },
-  { label: "Platform", value: currentPlatform, mono: false },
 ];
 </script>
 
