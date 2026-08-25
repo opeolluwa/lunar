@@ -124,7 +124,7 @@ const controls = computed(() => [
             icon: props.isSecured
               ? "heroicons:lock-open"
               : "heroicons:lock-closed",
-            class: "text-amber-500 dark:text-amber-400",
+            class: "text-gray-700 dark:text-gray-300",
             onSelect: () => emit("toggleSecuredRecord"),
           },
         ]
@@ -136,7 +136,7 @@ const controls = computed(() => [
           {
             label: "Edit",
             icon: "heroicons:pencil-square",
-            class: "text-amber-500 dark:text-amber-400 font-medium",
+            class: "text-gray-700 dark:text-gray-300 font-medium",
             onSelect: () => emit("editRecord"),
           },
         ]
