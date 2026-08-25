@@ -7,7 +7,6 @@ import {
   type NoteSort,
 } from "@shared/utils/sorting";
 import { useNoteStore } from "@shared/stores/notes";
-import NotesCard from "@shared/components/notes/notes-card.vue";
 const noteStore = useNoteStore();
 const { searchQuery, clearSearch } = useAppSearch();
 const sortBy = ref<NoteSort>("date-newest");

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { kFab } from "konsta/vue";
 import { useBookmarkStore } from "@shared/stores/bookmarks";
+import { safeOpenUrl as openUrl } from "@shared/utils/safe-open-url";
+import BookmarkCard from "@shared/components/bookmark/card.vue";
 import EmptyState from "@shared/components/app/EmptyState.vue";
 
 definePageMeta({ name: "Bookmarks" });
@@ -16,6 +18,10 @@ const fabColors = {
   textIos: "text-white",
   textMaterial: "text-white",
 };
+
+onMounted(() => {
+  bookmarkStore.fetchBookmarks();
+});
 
 function handleCreated() {
   notify({ message: "Bookmark created", type: "success" });
@@ -61,15 +67,15 @@ function handleCreated() {
     </div>
 
     <!-- Bookmark list -->
-    <!-- <div v-else class="flex flex-col gap-3">
+    <div v-else class="flex flex-col gap-3">
       <BookmarkCard
-        v-for="bookmark in filtered"
+        v-for="bookmark in bookmarkStore.bookmarks"
         :key="bookmark.identifier"
         :bookmark="bookmark"
-        @delete="bookmarkStore.deleteBookmark"
-        @preview="openUrl(bookmark.url)"
+        @delete="(id) => bookmarkStore.deleteBookmark(id)"
+        @preview="(bm) => openUrl(bm.url)"
       />
-    </div> -->
+    </div>
 
     <!-- Create bookmark popup -->
     <BookmarkCreatePopup

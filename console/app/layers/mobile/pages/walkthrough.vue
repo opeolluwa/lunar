@@ -41,15 +41,12 @@ function next() {
 </script>
 
 <template>
-  <div
-    class="h-dvh flex flex-col justify-between px-6 pt-12 pb-[env(safe-area-inset-bottom)]"
-  >
+  <div class="h-dvh flex flex-col">
     <UCarousel
       v-slot="{ item }"
       v-model="currentSlide"
       :items="slides"
       :ui="{ item: 'basis-full' }"
-      dots
       class="w-full flex-1 flex items-center"
     >
       <div class="flex flex-col items-center text-center gap-6 px-4">
@@ -69,18 +66,36 @@ function next() {
       </div>
     </UCarousel>
 
-    <div class="flex flex-col gap-3 w-full">
-      <AppButton @click="next">
-        {{ isLastSlide ? "Get started" : "Next" }}
-      </AppButton>
+    <div class="flex justify-center gap-2 pb-12">
       <button
+        v-for="(_, index) in slides"
+        :key="index"
+        type="button"
+        class="size-4 rounded-full transition-colors"
+        :class="
+          currentSlide === index
+            ? 'bg-primary-500'
+            : 'bg-gray-300 dark:bg-gray-600'
+        "
+        @click="currentSlide = index"
+      />
+    </div>
+
+    <div class="flex justify-between gap-3 px-6 pb-12 w-full">
+      <UButton
         v-if="!isLastSlide"
         type="button"
+        color="neutral"
+        variant="outline"
         class="text-sm text-gray-400 dark:text-gray-500 text-center"
         @click="complete"
       >
         Skip
-      </button>
+      </UButton>
+
+      <UButton @click="next">
+        {{ isLastSlide ? "Get started" : "Next" }}
+      </UButton>
     </div>
   </div>
 </template>
