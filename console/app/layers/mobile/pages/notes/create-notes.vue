@@ -85,7 +85,7 @@ onBeforeRouteLeave(async () => {
     <kFab
       component="button"
       aria-label="Save note"
-      class="absolute right-7 z-[60] md:hidden"
+      class="absolute right-7 md:hidden"
       :style="
         'bottom: calc(var(--kb-inset, 0px) + env(safe-area-inset-bottom) + 4.5rem);'
       "

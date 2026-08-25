@@ -62,42 +62,22 @@ function formatDate(iso: string) {
     <div
       class="opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity flex items-center gap-1"
     >
-      <button
-        class="text-gray-400 hover:text-primary-500 transition-colors"
-        @click="emit('toggleHidden', workspace.identifier)"
-      >
-        <UIcon
-          :name="workspace.isHidden ? 'heroicons:eye' : 'heroicons:eye-slash'"
-          class="size-4"
-        />
-      </button>
-      <button
-        class="text-gray-400 hover:text-amber-500 transition-colors"
-        @click="emit('toggleSecured', workspace.identifier)"
-      >
-        <UIcon
-          :name="
-            workspace.isSecured
-              ? 'heroicons:lock-closed'
-              : 'heroicons:lock-open'
-          "
-          class="size-4"
-        />
-      </button>
-      <button
-        v-if="!workspace.isDefault"
-        class="text-gray-400 hover:text-primary-500 transition-colors"
-        @click="emit('setDefault', workspace.identifier)"
-      >
-        <UIcon name="heroicons:star" class="size-4" />
-      </button>
       <MetaControls
         item-name="workspace"
         :show-edit="true"
         :show-duplicate="false"
         :show-transfer="false"
+        :show-set-default="true"
+        :is-default="workspace.isDefault"
+        :show-toggle-hidden="true"
+        :is-hidden="workspace.isHidden"
+        :show-toggle-secured="true"
+        :is-secured="workspace.isSecured"
         @edit-record="emit('edit', workspace.identifier)"
         @delete-record="emit('delete', workspace.identifier)"
+        @set-default-record="emit('setDefault', workspace.identifier)"
+        @toggle-hidden-record="emit('toggleHidden', workspace.identifier)"
+        @toggle-secured-record="emit('toggleSecured', workspace.identifier)"
       />
     </div>
   </div>

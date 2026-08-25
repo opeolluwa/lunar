@@ -21,6 +21,9 @@ const emit = defineEmits([
   "duplicateRecord",
   "editRecord",
   "deleteRecord",
+  "setDefaultRecord",
+  "toggleHiddenRecord",
+  "toggleSecuredRecord",
 ]);
 const props = defineProps({
   itemName: {
@@ -39,6 +42,30 @@ const props = defineProps({
   showTransfer: {
     type: Boolean,
     default: true,
+  },
+  showSetDefault: {
+    type: Boolean,
+    default: false,
+  },
+  isDefault: {
+    type: Boolean,
+    default: false,
+  },
+  showToggleHidden: {
+    type: Boolean,
+    default: false,
+  },
+  isHidden: {
+    type: Boolean,
+    default: false,
+  },
+  showToggleSecured: {
+    type: Boolean,
+    default: false,
+  },
+  isSecured: {
+    type: Boolean,
+    default: false,
   },
 });
 
@@ -65,6 +92,40 @@ const controls = computed(() => [
             onSelect: () => {
               showTransferModal.value = true;
             },
+          },
+        ]
+      : []),
+  ],
+  [
+    ...(props.showSetDefault && !props.isDefault
+      ? [
+          {
+            label: "Set as default",
+            icon: "heroicons:star",
+            class: "text-primary-500 dark:text-primary-400 font-medium",
+            onSelect: () => emit("setDefaultRecord"),
+          },
+        ]
+      : []),
+    ...(props.showToggleHidden
+      ? [
+          {
+            label: props.isHidden ? "Show workspace" : "Hide workspace",
+            icon: props.isHidden ? "heroicons:eye" : "heroicons:eye-slash",
+            class: "text-gray-700 dark:text-gray-300",
+            onSelect: () => emit("toggleHiddenRecord"),
+          },
+        ]
+      : []),
+    ...(props.showToggleSecured
+      ? [
+          {
+            label: props.isSecured ? "Remove password" : "Secure workspace",
+            icon: props.isSecured
+              ? "heroicons:lock-open"
+              : "heroicons:lock-closed",
+            class: "text-amber-500 dark:text-amber-400",
+            onSelect: () => emit("toggleSecuredRecord"),
           },
         ]
       : []),

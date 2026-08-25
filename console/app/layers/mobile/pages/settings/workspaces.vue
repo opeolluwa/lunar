@@ -202,7 +202,7 @@ const workspaces = computed(() => workspaceStore.workspaces ?? []);
       v-if="!showCreateModal"
       component="button"
       aria-label="New workspace"
-      class="absolute bottom-24 right-7 z-[60] md:hidden"
+      class="absolute bottom-24 right-7 md:hidden"
       :colors="{
         bgIos: 'bg-primary-500 dark:bg-primary-600',
         bgMaterial: 'bg-primary-500 dark:bg-primary-600',
