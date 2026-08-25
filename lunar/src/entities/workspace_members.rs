@@ -10,11 +10,13 @@ use serde::{Deserialize, Serialize};
 pub struct Model {
     #[sea_orm(primary_key, auto_increment = false)]
     pub identifier: Uuid,
+    #[sea_orm(unique_key = "idx_workspace_members_workspace_email")]
     pub member_email: String,
     pub role: String,
     pub user_identifier: Option<Uuid>,
     pub created_at: DateTimeWithTimeZone,
     pub updated_at: DateTimeWithTimeZone,
+    #[sea_orm(unique_key = "idx_workspace_members_workspace_email")]
     pub workspace_identifier: Uuid,
 }
 

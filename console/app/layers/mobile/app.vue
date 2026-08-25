@@ -1,20 +1,23 @@
 <template>
-  <kApp :theme="framework7Theme">
-    <UApp id="lunar_mobile">
-      <NuxtLayout class="safe-areas">
-        <NuxtPage />
+  <UApp id="lunar_mobile">
+     <kApp :theme="framework7Theme"> 
+      <NuxtLayout>
+        <NuxtPage :key="$route.fullPath" />
       </NuxtLayout>
-    </UApp>
-  </kApp>
+    </kApp>
+  </UApp>
 </template>
 
 <script lang="ts" setup>
 import { kApp } from "konsta/vue";
-import { startSyncWorker } from "@syncular/client/worker";
 const { framework7Theme } = usePlatform();
-onMounted(() => {
-  startSyncWorker();
-});
+
+const walkthroughSeen = useLocalStorage("walkthroughSeen", false);
+const route = useRoute();
+
+if (!walkthroughSeen.value && route.path !== "/walkthrough") {
+  navigateTo("/walkthrough");
+}
 </script>
 
 <style></style>

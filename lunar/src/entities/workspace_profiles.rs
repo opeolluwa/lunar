@@ -12,10 +12,10 @@ pub struct Model {
     pub identifier: Uuid,
     pub first_name: String,
     pub last_name: String,
-    pub profile_picture: Option<String>,
     pub created_at: DateTimeWithTimeZone,
     pub updated_at: DateTimeWithTimeZone,
     pub workspace_identifier: Option<Uuid>,
+    pub profile_picture: Option<String>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

@@ -3,6 +3,8 @@ import { kFab } from "konsta/vue";
 import { useTodoStore } from "@shared/stores/todo";
 import EmptyState from "@shared/components/app/EmptyState.vue";
 
+definePageMeta({ name: "Tasks" });
+
 const todoStore = useTodoStore();
 const { notify } = useAppNotification();
 
@@ -15,6 +17,10 @@ const fabColors = {
   textMaterial: "text-white",
 };
 
+onMounted(() => {
+  todoStore.fetchTodos();
+});
+
 function handleCreated() {
   notify({ message: "Task created", type: "success" });
 }
@@ -25,7 +31,7 @@ function handleCreated() {
     <!-- Create task FAB -->
     <div
       v-if="todoStore.todos.length !== 0"
-      class="fixed bottom-20 right-5 z-40"
+      class="fixed bottom-20 right-5"
     >
       <kFab
         component="button"
@@ -55,6 +61,17 @@ function handleCreated() {
         icon="ri:calendar-todo-line"
         action-label="create task"
         @action="showCreatePopup = true"
+      />
+    </div>
+
+    <!-- Todo list -->
+    <div v-else class="flex flex-col gap-2">
+      <TodoCard
+        v-for="todo in todoStore.todos"
+        :key="todo.identifier"
+        :todo="todo"
+        @toggle="(id, done) => todoStore.toggleDone(id, done)"
+        @delete="(id) => todoStore.deleteTodo(id)"
       />
     </div>
 

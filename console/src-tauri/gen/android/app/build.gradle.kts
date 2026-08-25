@@ -24,20 +24,6 @@ android {
         versionCode = tauriProperties.getProperty("tauri.android.versionCode", "1").toInt()
         versionName = tauriProperties.getProperty("tauri.android.versionName", "1.0")
     }
-    signingConfigs {
-        create("release") {
-            val propsFile = rootProject.file("../keystore.properties")
-            require(propsFile.exists()) {
-                "Release signing config not found at ${propsFile.path}. " +
-                    "Create it with keys: keyAlias, keyPassword, storePassword, storeFile"
-            }
-            val p = Properties().apply { propsFile.inputStream().use { load(it) } }
-            keyAlias = p["keyAlias"] as String
-            keyPassword = p["keyPassword"] as String
-            storeFile = file(p["storeFile"] as String)
-            storePassword = p["storePassword"] as String
-        }
-    }
     buildTypes {
         getByName("debug") {
             manifestPlaceholders["usesCleartextTraffic"] = "true"
@@ -51,8 +37,12 @@ android {
             }
         }
         getByName("release") {
-            isMinifyEnabled = false
-            signingConfig = signingConfigs.getByName("release")
+            isMinifyEnabled = true
+            proguardFiles(
+                *fileTree(".") { include("**/*.pro") }
+                    .plus(getDefaultProguardFile("proguard-android-optimize.txt"))
+                    .toList().toTypedArray()
+            )
         }
     }
     kotlinOptions {

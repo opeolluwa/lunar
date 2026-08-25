@@ -11,10 +11,12 @@ use crate::{
         repository::DatabaseInsertResult,
         users::PartialUserProfile,
     },
-    entities::users,
     errors::database_error::DatabaseError,
     repositories::base::Repository,
 };
+
+
+use lunar::entities::users;
 
 #[derive(Clone)]
 pub struct UserRepository {

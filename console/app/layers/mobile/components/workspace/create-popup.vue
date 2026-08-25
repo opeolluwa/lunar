@@ -3,7 +3,6 @@ import { kPage, kNavbar, kPopup, kBlock } from "konsta/vue";
 import { useUserPreferenceStore } from "@shared/stores/workspace-preferences";
 import { useWorkspacesStore } from "@shared/stores/workspaces";
 import type { Workspace } from "@shared/stores/workspaces";
-import AppButton from "@shared/components/app/Button.vue";
 
 withDefaults(
   defineProps<{
@@ -16,7 +15,7 @@ withDefaults(
     title: "New Workspace",
     description:
       "Workspaces allow you to organize your notes, tasks and bookmarks.",
-    submitLabel: "Create workspace",
+    submitLabel: "Submit",
   },
 );
 
@@ -81,19 +80,17 @@ async function handleSubmit() {
 
 <template>
   <kPopup :opened="open" @backdropclick="requestClose">
-    <kPage>
-      <kNavbar
-        :title="title"
-        bg-class="bg-white dark:bg-app-dark-800"
-        class="px-3"
-      >
+    <kPage class="bg-gray-50 dark:bg-app-dark-800">
+      <kNavbar bg-class="bg-white dark:bg-app-dark-800" class="px-3">
+        <template #title>
+          <AppPageTitle>{{ title }}</AppPageTitle>
+        </template>
         <template #right>
           <UButton
             size="md"
             color="neutral"
             variant="ghost"
             icon="heroicons:x-mark"
-            class="text-gray-400 dark:text-gray-500"
             aria-label="Close"
             :disabled="loading"
             @click="requestClose"
@@ -101,8 +98,8 @@ async function handleSubmit() {
         </template>
       </kNavbar>
 
-      <kBlock strong inset class="space-y-4">
-        <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
+      <kBlock inset class="mx-3 mt-6">
+        <p class="mb-4 mt-3 text-sm text-gray-500 dark:text-gray-400">
           {{ description }}
         </p>
 
@@ -110,7 +107,6 @@ async function handleSubmit() {
           <AppInput
             v-model="form.name"
             label="Name"
-            hint="required"
             type="text"
             name="workspace-name"
             placeholder="Lunar"
@@ -123,8 +119,8 @@ async function handleSubmit() {
           <AppInput
             v-model="form.description"
             label="Description"
-            hint="required"
             type="text"
+            size="sm"
             name="workspace-description"
             placeholder="Organize files and tasks"
             :disabled="loading"
@@ -137,25 +133,19 @@ async function handleSubmit() {
             {{ submitError }}
           </p>
 
-          <div class="flex gap-2 pt-2">
-            <AppButton
-              type="button"
+          <div class="flex gap-2 pt-2 justify-between">
+            <UButton
+              color="error"
               variant="outline"
-              size="sm"
-              class="flex-1 justify-center"
               :disabled="loading"
+              class=""
               @click="requestClose"
+              >Cancel</UButton
             >
-              Cancel
-            </AppButton>
-            <AppButton
-              type="submit"
-              size="sm"
-              class="flex-1"
-              :loading="loading"
-            >
+
+            <UButton type="submit" :loading="loading">
               {{ submitLabel }}
-            </AppButton>
+            </UButton>
           </div>
         </form>
       </kBlock>

@@ -1,15 +1,6 @@
--- Add migration script here
--- Add migration script here
--- Create table
-CREATE TABLE IF NOT EXISTS countries (
-    identifier CHAR(26) PRIMARY KEY,
-    currency_code VARCHAR(10) NOT NULL,
-    currency VARCHAR(100) NOT NULL,
-    country VARCHAR(100) NOT NULL,
-    flag TEXT
-);
+
 -- Insert seed data
-INSERT INTO countries (
+INSERT INTO country (
         identifier,
         currency_code,
         currency,

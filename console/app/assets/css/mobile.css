@@ -15,7 +15,7 @@
 .slide-left-leave-active,
 .slide-right-enter-active,
 .slide-right-leave-active {
-  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.2s linear;
 }
 
 .slide-left-enter-from {
@@ -41,10 +41,6 @@
   .slide-right-leave-active {
     transition: none;
   }
-}
-
-#auth_layout_mobile {
-  @apply bg-gray-50 dark:bg-app-dark-800;
 }
 
 #auth_layout_mobile form {

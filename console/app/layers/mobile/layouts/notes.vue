@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { primaryRoutes, secondaryRoutes } from "@shared/data/routes";
-import { kPage, kNavbar, kNavbarBackLink } from "konsta/vue";
+import { kPage, kNavbar } from "konsta/vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -19,18 +19,21 @@ const showEditorToolBar = computed(() => {
 const editorHeaderTitle = computed(() =>
   route.path.includes("/create-notes") ? "New note" : "Edit notes",
 );
+
+const pageTitle = computed(() => route.meta.name);
+useHead({ title: () => pageTitle.value as string });
 </script>
 
 <template>
   <kPage>
     <main
       id="default_layout_mobile"
-      class="flex h-dvh flex-col overflow-hidden bg-gray-50 dark:bg-app-dark-800"
+      class="flex h-dvh flex-col overflow-hidden"
     >
       <kNavbar
         v-if="!showEditorToolBar"
         bg-class="bg-white dark:bg-app-dark-800"
-        class="absolute inset-x-0 top-0 z-40 flex max-h-20 items-center justify-between px-6 border-gray-200 dark:border-gray-800 dark:text-gray-500"
+        class="shrink-0 px-2"
       >
         <template #left>
           <UButton
@@ -39,32 +42,21 @@ const editorHeaderTitle = computed(() =>
             color="neutral"
             variant="ghost"
             icon="heroicons:bars-3"
-            class="text-gray-400 dark:text-gray-500"
             aria-label="Open menu"
             @click="toggleMobileNav()"
           />
 
-          <kNavbarBackLink
+          <button
             v-else
-            text="Back"
-            component="div"
-            class="size-5 text-gray-400 dark:text-gray-500"
+            class="inline-flex items-center"
             @click="router.back()"
-          />
+          >
+            <UIcon name="lucide:arrow-left" class="size-5" />
+          </button>
         </template>
 
         <template #right>
-          <div class="flex items-center gap-1">
-            <UButton
-              size="md"
-              class="text-gray-400 dark:text-gray-500"
-              color="neutral"
-              variant="ghost"
-              icon="heroicons:bell"
-              aria-label="Notifications"
-              @click="navigateTo('/notifications')"
-            />
-          </div>
+          <AppHeaderRightPartial />
         </template>
       </kNavbar>
 
@@ -73,7 +65,7 @@ const editorHeaderTitle = computed(() =>
         :center-title="false"
         title-class="truncate text-sm font-medium"
         bg-class="bg-white dark:bg-app-dark-800"
-        class="absolute inset-x-0 top-0 z-40 flex max-h-20 items-center justify-between px-6 border-gray-200 dark:border-gray-800 dark:text-gray-500"
+        class="shrink-0 px-2"
       >
         <template #left>
           <NuxtLink class="inline-flex" @click="router.back()">

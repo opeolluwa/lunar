@@ -32,6 +32,14 @@ mod m20260528_132342_notification;
 mod m20260528_200000_add_workspace_and_is_read_to_notifications;
 mod m20260824_000000_create_workspace_members;
 mod m20260824_100000_rename_workspace_preference_to_workspace_profile;
+mod m20260824_210059_link_user_to_workspaces;
+mod m20260824_210439_create_user_table;
+mod m20260824_211120_fk_user_to_workspaces;
+mod m20260825_000000_create_one_time_passwords_table;
+mod m20260825_000001_create_countries_table;
+mod m20260825_000002_create_revoked_tokens_table;
+mod m20260825_000003_create_invitations_table;
+mod m20260825_000004_add_password_to_user_table;
 
 pub use sea_orm_migration::prelude::*;
 pub mod exporter;
@@ -67,18 +75,22 @@ impl MigratorTrait for Migrator {
             Box::new(m20260331_000000_add_workspace_flags::Migration),
             Box::new(m20260403_000000_add_workspace_security::Migration),
             Box::new(m20260501_000000_fix_sync_queue_uuid_triggers::Migration),
-            Box::new(
-                m20260518_000000_remove_email_unique_constraint_from_user_preference::Migration,
-            ),
-            Box::new(
-                m20260527_110010_rename_user_preference_table_to_workspace_preference::Migration,
-            ),
+            Box::new(m20260518_000000_remove_email_unique_constraint_from_user_preference::Migration),
+            Box::new(m20260527_110010_rename_user_preference_table_to_workspace_preference::Migration),
             Box::new(m20260527_110634_create_user_preference_table::Migration),
             Box::new(m20260527_171026_remove_email_from_workspace_preference::Migration),
             Box::new(m20260528_132342_notification::Migration),
             Box::new(m20260528_200000_add_workspace_and_is_read_to_notifications::Migration),
             Box::new(m20260824_000000_create_workspace_members::Migration),
             Box::new(m20260824_100000_rename_workspace_preference_to_workspace_profile::Migration),
+            Box::new(m20260824_210059_link_user_to_workspaces::Migration),
+            Box::new(m20260824_210439_create_user_table::Migration),
+            Box::new(m20260824_211120_fk_user_to_workspaces::Migration),
+            Box::new(m20260825_000000_create_one_time_passwords_table::Migration),
+            Box::new(m20260825_000001_create_countries_table::Migration),
+            Box::new(m20260825_000002_create_revoked_tokens_table::Migration),
+            Box::new(m20260825_000003_create_invitations_table::Migration),
+            Box::new(m20260825_000004_add_password_to_user_table::Migration),
         ]
     }
 }

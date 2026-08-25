@@ -10,11 +10,11 @@ use crate::{
         request::AuthenticatedRequest, users::PartialUserProfile,
         workspace_member::AccountWorkspaceResponse,
     },
-    entities::users,
     errors::{app_error::AppError, service_error::ServiceError},
     response::{ApiResponse, ApiResponseBuilder},
     states::AppState,
 };
+use lunar::entities::users;
 
 pub async fn retrieve_information(
     State(state): State<Arc<AppState>>,

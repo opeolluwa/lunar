@@ -1,19 +1,20 @@
 <script setup lang="ts">
 import { kFab } from "konsta/vue";
 import EmptyState from "@shared/components/app/EmptyState.vue";
+import NotesCard from "@mobile/components/notes/card.vue"
 import {
   NOTE_SORT_OPTIONS,
   sortNotes,
   type NoteSort,
 } from "@shared/utils/sorting";
 import { useNoteStore } from "@shared/stores/notes";
-import NotesCard from "@shared/components/notes/notes-card.vue";
 const noteStore = useNoteStore();
 const { searchQuery, clearSearch } = useAppSearch();
 const sortBy = ref<NoteSort>("date-newest");
 
 definePageMeta({
   layout: "notes",
+  name: "Notes",
 });
 
 onMounted(async () => {
@@ -43,7 +44,7 @@ const filteredNotes = computed(() => {
       <kFab
         component="button"
         aria-label="Add note"
-        class="absolute bottom-24 right-7 z-[60] md:hidden"
+        class="absolute bottom-24 right-7 md:hidden"
         :colors="{
           bgIos: 'bg-primary-500 dark:bg-primary-600',
           bgMaterial: 'bg-primary-500 dark:bg-primary-600',

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 type BackupProvider = "local" | "cloud" | "self-hosted";
 
+definePageMeta({ name: "Backup & Sync" });
+
 const options: {
   key: BackupProvider;
   label: string;

@@ -52,7 +52,7 @@ db-pull:
 	@echo "Waiting for PostgreSQL to be ready..."
 	just migrate-up
 	just db-pull-postgres
-	just db-pull-server
+	# just db-pull-server
 
 [working-directory: 'lunar']
 test-lunar:

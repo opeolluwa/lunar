@@ -2,6 +2,8 @@
 import { invoke } from "@tauri-apps/api/core";
 import { useAlarmSettings } from "@shared/composables/useAlarmSettings";
 
+definePageMeta({ name: "Alarm" });
+
 interface AlarmSound {
   name: string;
   filename: string;

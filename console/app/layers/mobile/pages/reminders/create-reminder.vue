@@ -1,90 +1,48 @@
-<template>
-  <k-page>
-    <k-navbar title="Action Sheet" />
-    <k-block strong inset class="space-y-4">
-      <p>
-        Action Sheet is a slide-up pane for presenting the user with a set of
-        alternatives for how to proceed with a given task.
-      </p>
-    </k-block>
-    <k-block-title>Open Action Sheet</k-block-title>
-    <k-block strong inset class="flex space-x-4 rtl:space-x-reverse">
-      <k-button rounded @click="() => (actionsOneOpened = true)"
-        >One group</k-button
-      >
-      <k-button rounded @click="() => (actionsTwoOpened = true)"
-        >Two groups</k-button
-      >
-    </k-block>
-    <k-actions
-      :opened="actionsOneOpened"
-      @backdropclick="() => (actionsOneOpened = false)"
-    >
-      <k-actions-group>
-        <k-actions-label>Do something</k-actions-label>
-        <k-actions-button bold @click="() => (actionsOneOpened = false)">
-          Button 1
-        </k-actions-button>
-        <k-actions-button @click="() => (actionsOneOpened = false)">
-          Button 2
-        </k-actions-button>
-        <k-actions-button @click="() => (actionsOneOpened = false)">
-          Cancel
-        </k-actions-button>
-      </k-actions-group>
-    </k-actions>
-    <k-actions
-      :opened="actionsTwoOpened"
-      @backdropclick="() => (actionsTwoOpened = false)"
-    >
-      <k-actions-group>
-        <k-actions-label>Do something</k-actions-label>
-        <k-actions-button bold @click="() => (actionsTwoOpened = false)">
-          Button 1
-        </k-actions-button>
-        <k-actions-button @click="() => (actionsTwoOpened = false)">
-          Button 2
-        </k-actions-button>
-      </k-actions-group>
-      <k-actions-group>
-        <k-actions-button @click="() => (actionsTwoOpened = false)">
-          Cancel
-        </k-actions-button>
-      </k-actions-group>
-    </k-actions>
-  </k-page>
-</template>
-<script>
+<script setup lang="ts">
 import {
-  kPage,
-  kNavbar,
-  kNavbarBackLink,
-  kBlockTitle,
   kBlock,
+  kBlockTitle,
   kButton,
   kActions,
   kActionsButton,
   kActionsLabel,
   kActionsGroup,
 } from "konsta/vue";
-import { ref } from "vue";
-export default {
-  components: {
-    kPage,
-    kNavbar,
-    kNavbarBackLink,
-    kBlockTitle,
-    kBlock,
-    kButton,
-    kActions,
-    kActionsButton,
-    kActionsLabel,
-    kActionsGroup,
-  },
-  setup() {
-    const actionsOneOpened = ref(false);
-    const actionsTwoOpened = ref(false);
-    return { actionsOneOpened, actionsTwoOpened };
-  },
-};
+
+definePageMeta({ name: "New reminder" });
+
+const actionsOneOpened = ref(false);
+const actionsTwoOpened = ref(false);
 </script>
+
+<template>
+  <kBlock strong inset class="space-y-4">
+    <p>
+      Action Sheet is a slide-up pane for presenting the user with a set of
+      alternatives for how to proceed with a given task.
+    </p>
+  </kBlock>
+  <kBlockTitle>Open Action Sheet</kBlockTitle>
+  <kBlock strong inset class="flex space-x-4 rtl:space-x-reverse">
+    <kButton rounded @click="actionsOneOpened = true">One group</kButton>
+    <kButton rounded @click="actionsTwoOpened = true">Two groups</kButton>
+  </kBlock>
+  <kActions :opened="actionsOneOpened" @backdropclick="actionsOneOpened = false">
+    <kActionsGroup>
+      <kActionsLabel>Do something</kActionsLabel>
+      <kActionsButton bold @click="actionsOneOpened = false">Button 1</kActionsButton>
+      <kActionsButton @click="actionsOneOpened = false">Button 2</kActionsButton>
+      <kActionsButton @click="actionsOneOpened = false">Cancel</kActionsButton>
+    </kActionsGroup>
+  </kActions>
+  <kActions :opened="actionsTwoOpened" @backdropclick="actionsTwoOpened = false">
+    <kActionsGroup>
+      <kActionsLabel>Do something</kActionsLabel>
+      <kActionsButton bold @click="actionsTwoOpened = false">Button 1</kActionsButton>
+      <kActionsButton @click="actionsTwoOpened = false">Button 2</kActionsButton>
+    </kActionsGroup>
+    <kActionsGroup>
+      <kActionsButton @click="actionsTwoOpened = false">Cancel</kActionsButton>
+    </kActionsGroup>
+  </kActions>
+</template>

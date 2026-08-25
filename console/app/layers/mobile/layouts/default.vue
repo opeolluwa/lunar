@@ -1,29 +1,20 @@
 <script lang="ts" setup>
 import { primaryRoutes, secondaryRoutes } from "@shared/data/routes";
-
-import { kNavbar, kNavbarBackLink, kPage } from "konsta/vue";
+import { kNavbar, kPage } from "konsta/vue";
 
 const route = useRoute();
 const router = useRouter();
-
 const { toggleMobileNav } = useMobileNav();
 
 const topLevelPaths = [...primaryRoutes, ...secondaryRoutes].map(
   (item) => item.path,
 );
-
 const isTopLevel = computed(() => topLevelPaths.includes(route.path));
-
-const hideHeaderAndNav = computed(() => {
-  return (
-    route.path.includes("/create-notes") || route.path.includes("/edit-notes")
-  );
-});
 </script>
 
 <template>
-  <kPage>
-    <kNavbar bg-class="bg-white dark:bg-app-dark-800" class="px-3">
+  <kPage class="h-dvh overflow-hidden flex flex-col">
+    <kNavbar bg-class="bg-white dark:bg-app-dark-800" class="shrink-0 px-2">
       <template #left>
         <UButton
           v-if="isTopLevel"
@@ -31,44 +22,25 @@ const hideHeaderAndNav = computed(() => {
           color="neutral"
           variant="ghost"
           icon="heroicons:bars-3"
-          class="text-gray-400 dark:text-gray-500"
           aria-label="Open menu"
           @click="toggleMobileNav"
         />
 
-        <kNavbarBackLink
-          v-else
-          text="Back"
-          component="div"
-          class="size-5 text-gray-400 dark:text-gray-500"
-          @click="router.back()"
-        />
+        <button v-else class="inline-flex items-center" @click="router.back()">
+          <UIcon name="lucide:arrow-left" class="size-5" />
+        </button>
       </template>
 
       <template #right>
-        <UButton
-          size="md"
-          color="neutral"
-          variant="ghost"
-          icon="heroicons:bell"
-          class="text-gray-400 dark:text-gray-500"
-          aria-label="Notifications"
-          @click="navigateTo('/notifications')"
-        />
+      <AppHeaderRightPartial/>
       </template>
     </kNavbar>
 
-    <main
-      id="default_layout_mobile"
-      class="flex h-dvh flex-col overflow-hidden bg-gray-50 dark:bg-app-dark-800"
-    >
-      <AppViewport :hide-header-and-nav="hideHeaderAndNav">
+    <main class="flex min-h-0 flex-1 flex-col overflow-hidden">
+      <AppViewport class="bg-white/90 dark:bg-app-dark-800">
         <slot />
       </AppViewport>
-
-      <AppBottonNav v-if="!hideHeaderAndNav" />
-
-      <!-- DO NOT use v-if here -->
+      <AppBottonNav />
       <AppSideNav />
     </main>
   </kPage>

@@ -19,12 +19,15 @@ pub struct Model {
     pub is_secured: bool,
     #[sea_orm(column_type = "Text", nullable)]
     pub password_hash: Option<String>,
+    pub user_identifier: Option<Uuid>,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {
     #[sea_orm(has_many = "super::bookmark::Entity")]
     Bookmark,
+    #[sea_orm(has_many = "super::invitation::Entity")]
+    Invitation,
     #[sea_orm(has_many = "super::notes::Entity")]
     Notes,
     #[sea_orm(has_many = "super::notifications::Entity")]
@@ -37,6 +40,16 @@ pub enum Relation {
     Snippets,
     #[sea_orm(has_many = "super::todo::Entity")]
     Todo,
+    #[sea_orm(
+        belongs_to = "super::users::Entity",
+        from = "Column::UserIdentifier",
+        to = "super::users::Column::Identifier",
+        on_update = "NoAction",
+        on_delete = "Cascade"
+    )]
+    Users,
+    #[sea_orm(has_many = "super::workspace_members::Entity")]
+    WorkspaceMembers,
     #[sea_orm(has_many = "super::workspace_profiles::Entity")]
     WorkspaceProfiles,
 }
@@ -44,6 +57,12 @@ pub enum Relation {
 impl Related<super::bookmark::Entity> for Entity {
     fn to() -> RelationDef {
         Relation::Bookmark.def()
+    }
+}
+
+impl Related<super::invitation::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::Invitation.def()
     }
 }
 
@@ -83,6 +102,18 @@ impl Related<super::todo::Entity> for Entity {
     }
 }
 
+impl Related<super::users::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::Users.def()
+    }
+}
+
+impl Related<super::workspace_members::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::WorkspaceMembers.def()
+    }
+}
+
 impl Related<super::workspace_profiles::Entity> for Entity {
     fn to() -> RelationDef {
         Relation::WorkspaceProfiles.def()
@@ -95,6 +126,8 @@ impl ActiveModelBehavior for ActiveModel {}
 pub enum RelatedEntity {
     #[sea_orm(entity = "super::bookmark::Entity")]
     Bookmark,
+    #[sea_orm(entity = "super::invitation::Entity")]
+    Invitation,
     #[sea_orm(entity = "super::notes::Entity")]
     Notes,
     #[sea_orm(entity = "super::notifications::Entity")]
@@ -107,6 +140,10 @@ pub enum RelatedEntity {
     Snippets,
     #[sea_orm(entity = "super::todo::Entity")]
     Todo,
+    #[sea_orm(entity = "super::users::Entity")]
+    Users,
+    #[sea_orm(entity = "super::workspace_members::Entity")]
+    WorkspaceMembers,
     #[sea_orm(entity = "super::workspace_profiles::Entity")]
     WorkspaceProfiles,
 }

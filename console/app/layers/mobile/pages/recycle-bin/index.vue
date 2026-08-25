@@ -5,6 +5,8 @@ import {
 } from "@shared/stores/recycle-bin";
 import EmptyState from "@shared/components/app/EmptyState.vue";
 
+definePageMeta({ name: "Recycle bin" });
+
 const recycleBinStore = useRecycleBinStore();
 const { searchQuery, clearSearch } = useAppSearch();
 const { notify } = useAppNotification();

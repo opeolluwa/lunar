@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import TodoCard from "@shared/components/todo/todo-card.vue";
+import TodoCard from "@desktop/components/todo/todo-card.vue";
 import { useTodoStore } from "@shared/stores/todo";
 import {
   TODO_SORT_OPTIONS,

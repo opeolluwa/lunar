@@ -21,7 +21,6 @@ export default defineNuxtConfig({
   modules: [
     "@nuxtjs/apollo",
     "@nuxt/eslint",
-    "@nuxt/hints",
     "@nuxt/image",
     "@nuxt/ui",
     "@nuxtjs/device",

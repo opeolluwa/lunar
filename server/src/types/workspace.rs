@@ -27,6 +27,7 @@ impl TryFrom<SyncWorkspaceInput> for entities::workspaces::Model {
             identifier: val.identifier,
             name: val.name,
             description: val.description,
+            user_identifier: None,
             created_at: val
                 .created_at
                 .parse()
