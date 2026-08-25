@@ -23,7 +23,7 @@ function goBack() {
 </script>
 
 <template>
-  <kPage>
+  <div>
     <kNavbar transparent bg-class="bg-white dark:bg-app-dark-800" class="px">
       <template #left>
         <kNavbarBackLink
@@ -61,5 +61,5 @@ function goBack() {
         <slot />
       </div>
     </main>
-  </kPage>
+  </div>
 </template>

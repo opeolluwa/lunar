@@ -14,8 +14,8 @@ const pageTitle = computed(() => (route.meta.name as string) || "dd");
 </script>
 
 <template>
-  <div class="h-dvh overflow-hidden">
-    <kNavbar bg-class="bg-white dark:bg-app-dark-800" class="px-2">
+  <div class="h-dvh overflow-hidden flex flex-col">
+    <kNavbar bg-class="bg-white dark:bg-app-dark-800" class="shrink-0 px-2">
       <template #title>
         <h3 class="hidden">
           {{ pageTitle }}
