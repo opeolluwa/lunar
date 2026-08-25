@@ -14,6 +14,7 @@ const sortBy = ref<NoteSort>("date-newest");
 
 definePageMeta({
   layout: "notes",
+  name: "Notes",
 });
 
 onMounted(async () => {

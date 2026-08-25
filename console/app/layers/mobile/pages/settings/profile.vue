@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { useUserPreferenceStore } from "@shared/stores/workspace-preferences";
+
+definePageMeta({ name: "Profile" });
+
 const store = useUserPreferenceStore();
 
 const form = reactive({

@@ -5,7 +5,9 @@
 
 
 
-
+<script setup lang="ts">
+definePageMeta({ name: "Reminders" });
+</script>
 
 <template>  <k-page>    <k-navbar title="Action Sheet" />
 <k-block strong inset class="space-y-4">      <p>        Action Sheet is a slide-up pane for presenting the user with a set of        alternatives for how to proceed with a given task.      </p>    </k-block>    <k-block-title>Open Action Sheet</k-block-title>    <k-block strong inset class="flex space-x-4 rtl:space-x-reverse">      <k-button rounded @click="() => (actionsOneOpened = true)"        >One group</k-button      >      <k-button rounded @click="() => (actionsTwoOpened = true)"        >Two groups</k-button      >    </k-block>

@@ -2,6 +2,8 @@
 import { kFab } from "konsta/vue";
 import { useWorkspacesStore } from "@shared/stores/workspaces";
 
+definePageMeta({ name: "Workspaces" });
+
 const { notify } = useAppNotification();
 const workspaceStore = useWorkspacesStore();
 

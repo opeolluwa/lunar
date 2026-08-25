@@ -3,6 +3,8 @@ import { kFab } from "konsta/vue";
 import { useBookmarkStore } from "@shared/stores/bookmarks";
 import EmptyState from "@shared/components/app/EmptyState.vue";
 
+definePageMeta({ name: "Bookmarks" });
+
 const bookmarkStore = useBookmarkStore();
 const { notify } = useAppNotification();
 

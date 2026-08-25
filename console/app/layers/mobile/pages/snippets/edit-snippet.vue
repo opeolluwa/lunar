@@ -1,4 +1,6 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+definePageMeta({ name: "Edit snippet" });
+</script>
 
 <template>
   <div class="flex items-center justify-center h-full">

@@ -1,3 +1,7 @@
+<script setup lang="ts">
+definePageMeta({ name: "Notifications" });
+</script>
+
 <template>
   <div>
     Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis

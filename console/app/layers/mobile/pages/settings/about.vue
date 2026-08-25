@@ -2,6 +2,8 @@
 import { platform } from "@tauri-apps/plugin-os";
 import { getName, getVersion, getTauriVersion } from "@tauri-apps/api/app";
 
+definePageMeta({ name: "About" });
+
 const tauriVersion = await getTauriVersion();
 const appVersion = await getVersion();
 const currentPlatform = platform();

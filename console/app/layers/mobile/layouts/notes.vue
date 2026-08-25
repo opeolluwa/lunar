@@ -19,10 +19,13 @@ const showEditorToolBar = computed(() => {
 const editorHeaderTitle = computed(() =>
   route.path.includes("/create-notes") ? "New note" : "Edit notes",
 );
+
+const pageTitle = computed(() => route.meta.name);
+useHead({ title: () => pageTitle.value as string });
 </script>
 
 <template>
-  <kPage>
+  <div>
     <main
       id="default_layout_mobile"
       class="flex h-dvh flex-col overflow-hidden bg-gray-50 dark:bg-app-dark-800"
@@ -91,5 +94,5 @@ const editorHeaderTitle = computed(() =>
       <AppBottonNav v-if="!showEditorToolBar" />
       <AppSideNav :mobile-nav-open="mobileNavOpen" />
     </main>
-  </kPage>
+  </div>
 </template>

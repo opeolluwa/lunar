@@ -1,4 +1,6 @@
 <script setup lang="ts">
+definePageMeta({ name: "Appearance" });
+
 const colorMode = useColorMode();
 const isDark = computed({
   get: () => colorMode.value === "dark",

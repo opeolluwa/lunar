@@ -3,6 +3,8 @@ import { kFab } from "konsta/vue";
 import { useTodoStore } from "@shared/stores/todo";
 import EmptyState from "@shared/components/app/EmptyState.vue";
 
+definePageMeta({ name: "Tasks" });
+
 const todoStore = useTodoStore();
 const { notify } = useAppNotification();
 

@@ -8,8 +8,7 @@ const kbInset = useKeyboardInset();
 <template>
   <div
     id="viewport_mobile"
-    class="min-h-0 flex-1 overscroll-contain overflow-y-auto p-6"
-    :class="hideHeaderAndNav ? 'pb-6 pt-15' : 'pb-24 pt-20'"
+    class="px-6 flex-1 overflow-y-scroll min-h-0 pt-8 pb-32"
     :style="kbInset > 0 ? { paddingBottom: `${kbInset}px` } : undefined"
   >
     <slot />

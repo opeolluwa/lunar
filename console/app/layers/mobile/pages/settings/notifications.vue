@@ -1,4 +1,6 @@
 <script setup lang="ts">
+definePageMeta({ name: "Notifications" });
+
 const notifTasksDue = ref(true);
 const notifReminders = ref(true);
 const notifSyncComplete = ref(false);

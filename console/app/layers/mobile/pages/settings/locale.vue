@@ -19,5 +19,7 @@
 <script setup lang="ts">
 import * as locales from "@nuxt/ui/locale";
 
+definePageMeta({ name: "Locale" });
+
 const locale = ref("en");
 </script>

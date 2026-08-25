@@ -54,6 +54,9 @@
     </k-actions>
   </k-page>
 </template>
+<script setup lang="ts">
+definePageMeta({ name: "New reminder" });
+</script>
 <script>
 import {
   kPage,

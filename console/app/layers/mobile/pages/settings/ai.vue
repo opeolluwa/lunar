@@ -1,4 +1,6 @@
 <script setup lang="ts">
+definePageMeta({ name: "AI & Ollama" });
+
 const ollamaUrl = ref("http://localhost:11434");
 const defaultModel = ref("llama3");
 const models = ["llama3", "codellama", "mistral", "gemma"];

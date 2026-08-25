@@ -19,11 +19,19 @@ const hideHeaderAndNav = computed(() => {
     route.path.includes("/create-notes") || route.path.includes("/edit-notes")
   );
 });
+
+const pageTitle = computed(() => route.meta.name);
+
+useHead({ title: () => pageTitle.value as string });
 </script>
 
 <template>
-  <kPage>
-    <kNavbar bg-class="bg-white dark:bg-app-dark-800" class="px-3">
+  <div>
+    <kNavbar bg-class="bg-white dark:bg-app-dark-800" class="px-2">
+      <template #title>
+        <span class="font-medium text-lg">{{ pageTitle }}</span>
+      </template>
+
       <template #left>
         <UButton
           v-if="isTopLevel"
@@ -31,7 +39,6 @@ const hideHeaderAndNav = computed(() => {
           color="neutral"
           variant="ghost"
           icon="heroicons:bars-3"
-          class="text-gray-400 dark:text-gray-500"
           aria-label="Open menu"
           @click="toggleMobileNav"
         />
@@ -40,7 +47,6 @@ const hideHeaderAndNav = computed(() => {
           v-else
           text="Back"
           component="div"
-          class="size-5 text-gray-400 dark:text-gray-500"
           @click="router.back()"
         />
       </template>
@@ -51,7 +57,6 @@ const hideHeaderAndNav = computed(() => {
           color="neutral"
           variant="ghost"
           icon="heroicons:bell"
-          class="text-gray-400 dark:text-gray-500"
           aria-label="Notifications"
           @click="navigateTo('/notifications')"
         />
@@ -68,8 +73,7 @@ const hideHeaderAndNav = computed(() => {
 
       <AppBottonNav v-if="!hideHeaderAndNav" />
 
-      <!-- DO NOT use v-if here -->
       <AppSideNav />
     </main>
-  </kPage>
+  </div>
 </template>
