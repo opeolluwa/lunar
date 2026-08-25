@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Workspace } from "@shared/stores/workspaces";
+import MetaControls from "../meta/meta-controls.vue";
 
 defineProps<{ workspace: Workspace }>();
 

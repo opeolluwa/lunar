@@ -2,7 +2,7 @@
 import { kFab } from "konsta/vue";
 import { useBookmarkStore } from "@shared/stores/bookmarks";
 import { safeOpenUrl as openUrl } from "@shared/utils/safe-open-url";
-import BookmarkCard from "@shared/components/bookmark/card.vue";
+import BookmarkCard  from "@mobile/components/bookmark/bookmark-card.vue"
 import EmptyState from "@shared/components/app/EmptyState.vue";
 
 definePageMeta({ name: "Bookmarks" });
@@ -33,7 +33,7 @@ function handleCreated() {
     <!-- Create bookmark FAB -->
     <div
       v-if="bookmarkStore.bookmarks.length !== 0"
-      class="fixed bottom-20 right-5 z-40"
+      class="fixed bottom-20 right-5"
     >
       <kFab
         component="button"

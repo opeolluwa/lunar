@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { kFab } from "konsta/vue";
 import { useWorkspacesStore } from "@shared/stores/workspaces";
-
+import WorkspaceCard from "@mobile/components/workspace/workspace-card.vue"
 definePageMeta({ name: "Workspaces" });
 
 const { notify } = useAppNotification();

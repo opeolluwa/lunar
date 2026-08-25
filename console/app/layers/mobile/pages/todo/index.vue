@@ -31,7 +31,7 @@ function handleCreated() {
     <!-- Create task FAB -->
     <div
       v-if="todoStore.todos.length !== 0"
-      class="fixed bottom-20 right-5 z-40"
+      class="fixed bottom-20 right-5"
     >
       <kFab
         component="button"

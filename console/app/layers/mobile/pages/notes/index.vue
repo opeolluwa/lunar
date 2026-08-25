@@ -44,7 +44,7 @@ const filteredNotes = computed(() => {
       <kFab
         component="button"
         aria-label="Add note"
-        class="absolute bottom-24 right-7 z-[60] md:hidden"
+        class="absolute bottom-24 right-7 md:hidden"
         :colors="{
           bgIos: 'bg-primary-500 dark:bg-primary-600',
           bgMaterial: 'bg-primary-500 dark:bg-primary-600',
