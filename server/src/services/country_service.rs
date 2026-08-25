@@ -1,10 +1,11 @@
 use std::sync::Arc;
 
 use sea_orm::DatabaseConnection;
+use lunar::entities::country;
 
 use crate::{
     adapters::country::FetchCountriesResponse,
-    entities::countries,
+    
     errors::service_error::ServiceError,
     repositories::{
         base::Repository,
@@ -37,7 +38,7 @@ pub(crate) trait CountryServiceExt {
     async fn get_country_by_identifier(
         &self,
         identifier: &str,
-    ) -> Result<Option<countries::Model>, ServiceError>;
+    ) -> Result<Option<country::Model>, ServiceError>;
 
     async fn get_countries_by_currency_code(
         &self,
@@ -59,7 +60,7 @@ impl CountryServiceExt for CountryService {
     async fn get_country_by_identifier(
         &self,
         identifier: &str,
-    ) -> Result<Option<countries::Model>, ServiceError> {
+    ) -> Result<Option<country::Model>, ServiceError> {
         let country = self
             .country_repository
             .fetch_country_by_identifier(identifier)

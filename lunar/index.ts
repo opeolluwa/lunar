@@ -6,11 +6,15 @@ export type { Tag } from "./bindings/Tag";
 export type { JsonValue } from "./bindings/serde_json/JsonValue";
 
 export type { BookmarkInterface as Bookmark } from "./bindings/BookmarkInterface";
+export type { CountryInterface as Country } from "./bindings/CountryInterface";
+export type { InvitationInterface as Invitation } from "./bindings/InvitationInterface";
 export type { NoteCategoriesInterface as NoteCategories } from "./bindings/NoteCategoriesInterface";
 export type { NotesInterface as Notes } from "./bindings/NotesInterface";
 export type { NotificationsInterface as Notifications } from "./bindings/NotificationsInterface";
+export type { OneTimePasswordInterface as OneTimePassword } from "./bindings/OneTimePasswordInterface";
 export type { RecycleBinInterface as RecycleBin } from "./bindings/RecycleBinInterface";
 export type { ReminderInterface as Reminder } from "./bindings/ReminderInterface";
+export type { RevokedTokenInterface as RevokedToken } from "./bindings/RevokedTokenInterface";
 export type { SnippetsInterface as Snippets } from "./bindings/SnippetsInterface";
 export type { SyncQueueInterface as SyncQueue } from "./bindings/SyncQueueInterface";
 export type { TodoInterface as Todo } from "./bindings/TodoInterface";

@@ -4,43 +4,33 @@ use sea_orm::entity::prelude::*;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, PartialEq, Eq, DeriveEntityModel, Serialize, Deserialize)]
-#[sea_orm(table_name = "users")]
+#[sea_orm(table_name = "invitation")]
 #[serde(rename_all = "camelCase")]
 #[lunar_macros::ts_rs_export_sea_orm_entity_name]
 pub struct Model {
     #[sea_orm(primary_key, auto_increment = false)]
     pub identifier: Uuid,
+    pub workspace_identifier: Uuid,
+    pub email: String,
     pub first_name: Option<String>,
     pub last_name: Option<String>,
     #[sea_orm(unique)]
-    pub email: String,
-    pub is_active: bool,
-    pub profile_picture: Option<String>,
-    pub username: Option<String>,
-    pub created_at: DateTime,
-    pub updated_at: Option<DateTime>,
+    pub token: String,
+    pub status: String,
+    pub expires_at: DateTimeWithTimeZone,
+    pub created_at: DateTimeWithTimeZone,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]
 pub enum Relation {
-    #[sea_orm(has_many = "super::one_time_password::Entity")]
-    OneTimePassword,
-    #[sea_orm(has_many = "super::revoked_token::Entity")]
-    RevokedToken,
-    #[sea_orm(has_many = "super::workspaces::Entity")]
+    #[sea_orm(
+        belongs_to = "super::workspaces::Entity",
+        from = "Column::WorkspaceIdentifier",
+        to = "super::workspaces::Column::Identifier",
+        on_update = "NoAction",
+        on_delete = "Cascade"
+    )]
     Workspaces,
-}
-
-impl Related<super::one_time_password::Entity> for Entity {
-    fn to() -> RelationDef {
-        Relation::OneTimePassword.def()
-    }
-}
-
-impl Related<super::revoked_token::Entity> for Entity {
-    fn to() -> RelationDef {
-        Relation::RevokedToken.def()
-    }
 }
 
 impl Related<super::workspaces::Entity> for Entity {
@@ -53,10 +43,6 @@ impl ActiveModelBehavior for ActiveModel {}
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelatedEntity)]
 pub enum RelatedEntity {
-    #[sea_orm(entity = "super::one_time_password::Entity")]
-    OneTimePassword,
-    #[sea_orm(entity = "super::revoked_token::Entity")]
-    RevokedToken,
     #[sea_orm(entity = "super::workspaces::Entity")]
     Workspaces,
 }

@@ -26,6 +26,8 @@ pub struct Model {
 pub enum Relation {
     #[sea_orm(has_many = "super::bookmark::Entity")]
     Bookmark,
+    #[sea_orm(has_many = "super::invitation::Entity")]
+    Invitation,
     #[sea_orm(has_many = "super::notes::Entity")]
     Notes,
     #[sea_orm(has_many = "super::notifications::Entity")]
@@ -55,6 +57,12 @@ pub enum Relation {
 impl Related<super::bookmark::Entity> for Entity {
     fn to() -> RelationDef {
         Relation::Bookmark.def()
+    }
+}
+
+impl Related<super::invitation::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::Invitation.def()
     }
 }
 
@@ -118,6 +126,8 @@ impl ActiveModelBehavior for ActiveModel {}
 pub enum RelatedEntity {
     #[sea_orm(entity = "super::bookmark::Entity")]
     Bookmark,
+    #[sea_orm(entity = "super::invitation::Entity")]
+    Invitation,
     #[sea_orm(entity = "super::notes::Entity")]
     Notes,
     #[sea_orm(entity = "super::notifications::Entity")]

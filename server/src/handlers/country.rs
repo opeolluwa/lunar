@@ -4,12 +4,13 @@ use axum::extract::{Path, State};
 
 use crate::{
     adapters::country::FetchCountriesResponse,
-    entities::countries,
     errors::service_error::ServiceError,
     response::ApiResponse,
     services::country_service::CountryServiceExt,
     states::AppState,
 };
+
+use lunar::entities::country;
 
 pub async fn fetch_all_countries(
     State(state): State<Arc<AppState>>,
@@ -25,7 +26,7 @@ pub async fn fetch_all_countries(
 pub async fn fetch_country_by_identifier(
     State(state): State<Arc<AppState>>,
     Path(identifier): Path<String>,
-) -> Result<ApiResponse<Option<countries::Model>>, ServiceError> {
+) -> Result<ApiResponse<Option<country::Model>>, ServiceError> {
     let country = state
         .services
         .country_service

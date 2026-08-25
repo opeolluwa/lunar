@@ -35,6 +35,10 @@ mod m20260824_100000_rename_workspace_preference_to_workspace_profile;
 mod m20260824_210059_link_user_to_workspaces;
 mod m20260824_210439_create_user_table;
 mod m20260824_211120_fk_user_to_workspaces;
+mod m20260825_000000_create_one_time_passwords_table;
+mod m20260825_000001_create_countries_table;
+mod m20260825_000002_create_revoked_tokens_table;
+mod m20260825_000003_create_invitations_table;
 
 pub use sea_orm_migration::prelude::*;
 pub mod exporter;
@@ -81,6 +85,10 @@ impl MigratorTrait for Migrator {
             Box::new(m20260824_210059_link_user_to_workspaces::Migration),
             Box::new(m20260824_210439_create_user_table::Migration),
             Box::new(m20260824_211120_fk_user_to_workspaces::Migration),
+            Box::new(m20260825_000000_create_one_time_passwords_table::Migration),
+            Box::new(m20260825_000001_create_countries_table::Migration),
+            Box::new(m20260825_000002_create_revoked_tokens_table::Migration),
+            Box::new(m20260825_000003_create_invitations_table::Migration),
         ]
     }
 }

@@ -3,13 +3,14 @@ use std::sync::Arc;
 use chrono::Utc;
 use sea_orm::{ActiveModelTrait, ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter, Set};
 use uuid::Uuid;
-
+use chrono::Local;
 use crate::{
     adapters::invitation::InviteWorkspaceMemberRequest,
-    entities::invitation::{self, ActiveModel, Entity as InvitationEntity},
+
     errors::database_error::DatabaseError,
     repositories::base::Repository,
 };
+use lunar::entities::invitation::{self, ActiveModel, Entity as InvitationEntity};
 
 #[derive(Clone)]
 pub struct InvitationRepository {
@@ -121,8 +122,8 @@ impl InvitationRepositoryTrait for InvitationRepository {
             last_name: Set(req.last_name.clone()),
             token: Set(token.to_owned()),
             status: Set("pending".to_string()),
-            expires_at: Set((Utc::now() + chrono::Duration::days(7)).naive_utc()),
-            created_at: Set(Utc::now().naive_utc()),
+            expires_at: Set((Local::now() + chrono::Duration::days(7)).into()),
+            created_at: Set(Local::now().into()),
         };
         model
             .insert(self.db_conn.as_ref())

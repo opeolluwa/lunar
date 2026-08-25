@@ -93,9 +93,9 @@ async fn main() -> Result<(), AppError> {
     let db = lunar.connection().to_owned();
     let db_conn = Arc::new(db.clone());
 
-    Migrator::up(&db, None)
-        .await
-        .map_err(|e| LunarError::DbConnectError(e.to_string()))?;
+    // Migrator::up(&db, None)
+    //     .await
+    //     .map_err(|e| LunarError::DbConnectError(e.to_string()))?;
 
     let schema = orchard_lib::query_root::schema(db, Some(100), app_config.complexity_limit)
         .map_err(|err| AppError::GraphQLError(err.to_string()))?;

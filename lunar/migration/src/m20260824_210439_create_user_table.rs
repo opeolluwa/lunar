@@ -17,6 +17,7 @@ impl MigrationTrait for Migration {
                     .table("users")
                     .col(ColumnDef::new("identifier").uuid().primary_key())
                     .col(string_null("first_name"))
+                    .col(string("password"))
                     .col(string_null("last_name"))
                     .col(string("email").unique_key())
                     .col(boolean("is_active").default(false))

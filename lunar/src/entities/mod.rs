@@ -3,11 +3,15 @@
 pub mod prelude;
 
 pub mod bookmark;
+pub mod country;
+pub mod invitation;
 pub mod note_categories;
 pub mod notes;
 pub mod notifications;
+pub mod one_time_password;
 pub mod recycle_bin;
 pub mod reminder;
+pub mod revoked_token;
 pub mod sea_orm_active_enums;
 pub mod snippets;
 pub mod sync_queue;
@@ -20,11 +24,15 @@ pub mod workspaces;
 
 seaography::register_entity_modules!([
     bookmark,
+    country,
+    invitation,
     note_categories,
     notes,
     notifications,
+    one_time_password,
     recycle_bin,
     reminder,
+    revoked_token,
     snippets,
     sync_queue,
     todo,

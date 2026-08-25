@@ -1,8 +1,8 @@
 <template>
   <UApp id="lunar_mobile">
-    <kApp :theme="framework7Theme">
+     <kApp :theme="framework7Theme"> 
       <NuxtLayout>
-        <NuxtPage />
+        <NuxtPage :key="$route.fullPath" />
       </NuxtLayout>
     </kApp>
   </UApp>

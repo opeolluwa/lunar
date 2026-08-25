@@ -5,7 +5,7 @@ use sea_orm::ActiveValue::Set;
 use sea_orm::{ActiveModelTrait, ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter};
 use uuid::Uuid;
 
-use crate::entities::revoked_tokens;
+use lunar::entities::revoked_token;
 use crate::errors::database_error::DatabaseError;
 use crate::repositories::base::Repository;
 
@@ -40,7 +40,7 @@ impl TokenBlacklistRepositoryTrait for TokenBlacklistRepository {
         user_identifier: &Uuid,
         expires_at: DateTime<chrono::FixedOffset>,
     ) -> Result<(), DatabaseError> {
-        let record = revoked_tokens::ActiveModel {
+        let record = revoked_token::ActiveModel {
             identifier: Set(Uuid::new_v4()),
             jti: Set(*jti),
             user_identifier: Set(*user_identifier),
@@ -56,8 +56,8 @@ impl TokenBlacklistRepositoryTrait for TokenBlacklistRepository {
     }
 
     async fn is_revoked(&self, jti: &Uuid) -> Result<bool, DatabaseError> {
-        let record = revoked_tokens::Entity::find()
-            .filter(revoked_tokens::Column::Jti.eq(*jti))
+        let record = revoked_token::Entity::find()
+            .filter(revoked_token::Column::Jti.eq(*jti))
             .one(self.db_conn.as_ref())
             .await
             .map_err(DatabaseError::from)?;

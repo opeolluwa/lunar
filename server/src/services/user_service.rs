@@ -9,7 +9,7 @@ use crate::adapters::authentication::SetNewPasswordRequest;
 use crate::adapters::profile::UploadProfilePictureRequest;
 use crate::adapters::users::PartialUserProfile;
 use crate::config::AppConfig;
-use crate::entities::users;
+use lunar::entities::users;
 use crate::errors::database_error::DatabaseError;
 use crate::errors::service_error::ServiceError;
 use crate::repositories::user::{UserRepository, UserRepositoryTrait};

@@ -7,7 +7,7 @@ use lunar::{
 };
 use sea_orm::DatabaseConnection;
 use uuid::Uuid;
-
+use chrono::Local;
 use crate::{
     adapters::{
         invitation::{InviteWorkspaceMemberRequest, InviteWorkspaceMemberResponse},
@@ -121,7 +121,7 @@ impl InvitationService {
             )));
         }
 
-        if invitation.expires_at < Utc::now().naive_utc() {
+        if invitation.expires_at < Local::now() {
             self.invitation_repository
                 .update_status(invitation.clone(), "expired")
                 .await
