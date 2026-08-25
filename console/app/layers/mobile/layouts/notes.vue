@@ -56,16 +56,7 @@ useHead({ title: () => pageTitle.value as string });
         </template>
 
         <template #right>
-          <div class="flex items-center gap-1">
-            <UButton
-              size="md"
-              color="neutral"
-              variant="ghost"
-              icon="heroicons:bell"
-              aria-label="Notifications"
-              @click="navigateTo('/notifications')"
-            />
-          </div>
+          <AppHeaderRightPartial />
         </template>
       </kNavbar>
 

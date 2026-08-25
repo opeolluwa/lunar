@@ -14,7 +14,7 @@ withDefaults(
   }>(),
   {
     enablePasswordToggle: true,
-    size: "lg",
+    size: "md",
     label: undefined,
     name: undefined,
     icon: undefined,

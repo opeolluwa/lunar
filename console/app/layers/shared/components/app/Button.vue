@@ -30,7 +30,7 @@ withDefaults(
     loading: false,
     disabled: false,
     error: false,
-    size: "lg",
+    size: "md",
     variant: "solid",
   },
 );

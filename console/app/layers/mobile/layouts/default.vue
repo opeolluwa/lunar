@@ -32,14 +32,7 @@ const isTopLevel = computed(() => topLevelPaths.includes(route.path));
       </template>
 
       <template #right>
-        <UButton
-          size="md"
-          color="neutral"
-          variant="ghost"
-          icon="heroicons:bell"
-          aria-label="Notifications"
-          @click="navigateTo('/notifications')"
-        />
+      <AppHeaderRightPartial/>
       </template>
     </kNavbar>
 
