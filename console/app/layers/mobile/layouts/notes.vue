@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { primaryRoutes, secondaryRoutes } from "@shared/data/routes";
-import { kPage, kNavbar, kNavbarBackLink } from "konsta/vue";
+import { kPage, kNavbar } from "konsta/vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -28,7 +28,7 @@ useHead({ title: () => pageTitle.value as string });
   <kPage>
     <main
       id="default_layout_mobile"
-      class="flex h-dvh flex-col overflow-hidden bg-gray-50 dark:bg-app-dark-800"
+      class="flex h-dvh flex-col overflow-hidden"
     >
       <kNavbar
         v-if="!showEditorToolBar"
@@ -42,7 +42,6 @@ useHead({ title: () => pageTitle.value as string });
             color="neutral"
             variant="ghost"
             icon="heroicons:bars-3"
-            class="text-gray-400 dark:text-gray-500"
             aria-label="Open menu"
             @click="toggleMobileNav()"
           />
@@ -60,7 +59,6 @@ useHead({ title: () => pageTitle.value as string });
           <div class="flex items-center gap-1">
             <UButton
               size="md"
-              class="text-gray-400 dark:text-gray-500"
               color="neutral"
               variant="ghost"
               icon="heroicons:bell"

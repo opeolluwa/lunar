@@ -43,10 +43,8 @@ const isTopLevel = computed(() => topLevelPaths.includes(route.path));
       </template>
     </kNavbar>
 
-    <main
-      class="flex min-h-0 flex-1 flex-col overflow-hidden bg-gray-50 dark:bg-app-dark-800"
-    >
-      <AppViewport>
+    <main class="flex min-h-0 flex-1 flex-col overflow-hidden">
+      <AppViewport class="bg-white/90 dark:bg-app-dark-800">
         <slot />
       </AppViewport>
       <AppBottonNav />
