@@ -10,17 +10,11 @@ const topLevelPaths = [...primaryRoutes, ...secondaryRoutes].map(
   (item) => item.path,
 );
 const isTopLevel = computed(() => topLevelPaths.includes(route.path));
-const pageTitle = computed(() => (route.meta.name as string) || "dd");
 </script>
 
 <template>
   <div class="h-dvh overflow-hidden flex flex-col">
     <kNavbar bg-class="bg-white dark:bg-app-dark-800" class="shrink-0 px-2">
-      <template #title>
-        <h3 class="hidden">
-          {{ pageTitle }}
-        </h3>
-      </template>
       <template #left>
         <UButton
           v-if="isTopLevel"

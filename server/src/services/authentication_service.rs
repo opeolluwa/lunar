@@ -441,6 +441,7 @@ impl AuthenticationServiceTrait for AuthenticationService {
             return Err(AuthenticationError::WrongCredentials.into());
         }
 
+
         let new_password_hash = self
             .user_helper_service
             .hash_password(&request.new_password)?;
@@ -503,7 +504,7 @@ impl AuthenticationServiceTrait for AuthenticationService {
             }
         };
 
-        let (subject, default_msg) = match flow {
+        let (subject, _default_msg) = match flow {
             "reset" => (
                 "Reset your Almonds password",
                 format!("Your password reset code is: {otp}"),
