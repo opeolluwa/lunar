@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import { ref } from "vue";
-import { kPopover } from "konsta/vue";
-import type { DropdownMenuItem } from "@nuxt/ui";
+import { kSheet } from "konsta/vue";
 import { useWorkspacesStore } from "@shared/stores/workspaces";
 
 const { notify } = useAppNotification();
@@ -14,8 +13,7 @@ const showDeleteConfirm = ref(false);
 const targetWorkspaceId = ref("");
 const isSubmitting = ref(false);
 
-const popoverOpened = ref(false);
-const triggerRef = ref<HTMLElement | null>(null);
+const sheetOpened = ref(false);
 
 const currentWorkspaceId = computed(() => workspaceStore.activeWorkspaceId);
 const emit = defineEmits([
@@ -93,16 +91,16 @@ const controls = computed(() => [
   ],
 ]);
 
-function togglePopover() {
-  popoverOpened.value = !popoverOpened.value;
+function openSheet() {
+  sheetOpened.value = true;
 }
 
-function closePopover() {
-  popoverOpened.value = false;
+function closeSheet() {
+  sheetOpened.value = false;
 }
 
 function handleItemSelect(onSelect: () => void) {
-  closePopover();
+  closeSheet();
   onSelect();
 }
 
@@ -149,7 +147,7 @@ watch(showTransferModal, (open) => {
   if (open) targetWorkspaceId.value = "";
 });
 
-const workspaces = computed<DropdownMenuItem[]>(() => [
+const workspaces = computed(() => [
   ...workspaceStore.workspaces
     .filter((w): w is Workspace => !!w)
     .map((w) => {
@@ -171,9 +169,8 @@ const workspaces = computed<DropdownMenuItem[]>(() => [
 <template>
   <div>
     <button
-      ref="triggerRef"
       class="p-1 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-150 focus:outline-none"
-      @click="togglePopover"
+      @click="openSheet"
     >
       <UIcon
         name="heroicons:ellipsis-vertical"
@@ -181,36 +178,35 @@ const workspaces = computed<DropdownMenuItem[]>(() => [
       />
     </button>
 
-    <kPopover
-      :opened="popoverOpened"
-      :target="triggerRef"
-      :backdrop="true"
-      class="w-48"
-      @backdropclick="closePopover"
-    >
-      <div class="py-1">
+    <kSheet :opened="sheetOpened" @backdropclick="closeSheet">
+      <div
+        class="bg-white dark:bg-app-dark-800 rounded-t-2xl px-4 pb-8 pt-3"
+        style="padding-bottom: env(safe-area-inset-bottom, 8px)"
+      >
+        <div class="mx-auto mb-3 h-1 w-10 rounded-full bg-gray-300 dark:bg-gray-600" />
+
         <template v-for="(group, gi) in controls" :key="gi">
           <div v-if="group.length" class="py-1">
             <button
               v-for="(item, ii) in group"
               :key="ii"
               :class="[
-                'flex items-center gap-2.5 w-full px-3 py-2 text-sm rounded-lg mx-1 transition-colors duration-150',
+                'flex items-center gap-3 w-full px-4 py-3 text-sm rounded-xl transition-colors active:bg-gray-100 dark:active:bg-gray-700',
                 item.class,
               ]"
               @click="handleItemSelect(item.onSelect)"
             >
-              <UIcon :name="item.icon" class="size-4 shrink-0" />
+              <UIcon :name="item.icon" class="size-5 shrink-0" />
               <span>{{ item.label }}</span>
             </button>
           </div>
           <div
             v-if="gi < controls.length - 1 && group.length"
-            class="my-1 mx-2 border-t border-gray-100 dark:border-gray-800"
+            class="my-1 border-t border-gray-100 dark:border-gray-800"
           />
         </template>
       </div>
-    </kPopover>
+    </kSheet>
 
     <UModal v-model:open="showDuplicateModal">
       <template #content>
