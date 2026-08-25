@@ -1,20 +1,17 @@
 <template>
-  <kApp :theme="framework7Theme">
-    <UApp id="lunar_mobile">
-      <NuxtLayout class="safe-areas">
+  <UApp id="lunar_mobile">
+    <kApp :theme="framework7Theme">
+      <NuxtLayout>
         <NuxtPage />
       </NuxtLayout>
-    </UApp>
-  </kApp>
+    </kApp>
+  </UApp>
 </template>
 
 <script lang="ts" setup>
 import { kApp } from "konsta/vue";
-import { startSyncWorker } from "@syncular/client/worker";
 const { framework7Theme } = usePlatform();
-onMounted(() => {
-  startSyncWorker();
-});
+
 </script>
 
 <style></style>
