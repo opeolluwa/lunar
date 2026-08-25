@@ -35,6 +35,12 @@ export const routes = [
     ],
   },
 
+  // Walkthrough
+  {
+    path: "/walkthrough/",
+    componentUrl: "/walkthrough.vue",
+  },
+
   // Main
   {
     path: "/bookmarks/",

@@ -2,7 +2,6 @@
 import { kPage, kNavbar, kPopup, kBlock } from "konsta/vue";
 import { useTodoStore } from "@shared/stores/todo";
 import type { Todo } from "@shared/stores/todo";
-import AppButton from "@shared/components/app/Button.vue";
 
 withDefaults(
   defineProps<{
@@ -24,6 +23,12 @@ const emit = defineEmits<{
 }>();
 
 const todoStore = useTodoStore();
+
+const priorityOptions = [
+  { label: "Low", value: "low" },
+  { label: "Medium", value: "medium" },
+  { label: "High", value: "high" },
+];
 
 const form = reactive({
   title: "",
@@ -100,19 +105,17 @@ async function handleSubmit() {
 
 <template>
   <kPopup :opened="open" @backdropclick="requestClose">
-    <kPage>
-      <kNavbar
-        :title="title"
-        bg-class="bg-white dark:bg-app-dark-800"
-        class="px-3"
-      >
+    <kPage class="bg-gray-50 dark:bg-app-dark-800">
+      <kNavbar bg-class="bg-white dark:bg-app-dark-800" class="px-3">
+        <template #title>
+          <AppPageTitle>{{ title }}</AppPageTitle>
+        </template>
         <template #right>
           <UButton
             size="md"
             color="neutral"
             variant="ghost"
             icon="heroicons:x-mark"
-            class="text-gray-400 dark:text-gray-500"
             aria-label="Close"
             :disabled="loading"
             @click="requestClose"
@@ -120,8 +123,8 @@ async function handleSubmit() {
         </template>
       </kNavbar>
 
-      <kBlock strong inset class="space-y-4">
-        <p class="mb-2 text-sm text-gray-500 dark:text-gray-400">
+      <kBlock inset class="mx-3 mt-6">
+        <p class="mb-4 mt-3 text-sm text-gray-500 dark:text-gray-400">
           {{ description }}
         </p>
 
@@ -129,7 +132,6 @@ async function handleSubmit() {
           <AppInput
             v-model="form.title"
             label="Title"
-            hint="required"
             type="text"
             name="todo-title"
             placeholder="What needs to be done?"
@@ -221,52 +223,31 @@ async function handleSubmit() {
             <label class="text-xs font-medium text-gray-600 dark:text-gray-400">
               Priority
             </label>
-            <div class="flex gap-2">
-              <button
-                v-for="p in ['low', 'medium', 'high'] as const"
-                :key="p"
-                type="button"
-                class="flex-1 py-2 rounded-lg text-xs font-medium capitalize border transition-colors"
-                :class="
-                  form.priority === p
-                    ? p === 'high'
-                      ? 'bg-rose-50 dark:bg-rose-950 border-rose-300 dark:border-rose-700 text-rose-600 dark:text-rose-400'
-                      : p === 'medium'
-                        ? 'bg-amber-50 dark:bg-amber-950 border-amber-300 dark:border-amber-700 text-amber-600 dark:text-amber-400'
-                        : 'bg-emerald-50 dark:bg-emerald-950 border-emerald-300 dark:border-emerald-700 text-emerald-600 dark:text-emerald-400'
-                    : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700 text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700'
-                "
-                :disabled="loading"
-                @click="form.priority = p"
-              >
-                {{ p }}
-              </button>
-            </div>
+            <URadioGroup
+              v-model="form.priority"
+              :items="priorityOptions"
+              orientation="horizontal"
+              size="sm"
+              :disabled="loading"
+            />
           </div>
 
           <p v-if="submitError" class="text-sm text-red-500">
             {{ submitError }}
           </p>
 
-          <div class="flex gap-2 pt-2">
-            <AppButton
-              type="button"
+          <div class="flex gap-2 pt-2 justify-between">
+            <UButton
+              color="error"
               variant="outline"
-              size="sm"
-              class="flex-1 justify-center"
               :disabled="loading"
               @click="requestClose"
             >
               Cancel
-            </AppButton>
-            <AppButton
-              type="submit"
-              size="sm"
-              class="flex-1 justify-center"
-              :loading="loading"
-            >
+            </UButton>
+            <UButton type="submit" :loading="loading">
               {{ submitLabel }}
-            </AppButton>
+            </UButton>
           </div>
         </form>
       </kBlock>
