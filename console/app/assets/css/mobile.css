@@ -43,10 +43,6 @@
   }
 }
 
-#auth_layout_mobile {
-  @apply bg-gray-50 dark:bg-app-dark-800;
-}
-
 #auth_layout_mobile form {
   @apply flex flex-col gap-y-6 mt-8;
 }

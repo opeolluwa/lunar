@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { primaryRoutes, secondaryRoutes } from "@shared/data/routes";
-import { kNavbar } from "konsta/vue";
+import { kNavbar, kPage } from "konsta/vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -13,7 +13,7 @@ const isTopLevel = computed(() => topLevelPaths.includes(route.path));
 </script>
 
 <template>
-  <div class="h-dvh overflow-hidden flex flex-col">
+  <kPage class="h-dvh overflow-hidden flex flex-col">
     <kNavbar bg-class="bg-white dark:bg-app-dark-800" class="shrink-0 px-2">
       <template #left>
         <UButton
@@ -52,5 +52,5 @@ const isTopLevel = computed(() => topLevelPaths.includes(route.path));
       <AppBottonNav />
       <AppSideNav />
     </main>
-  </div>
+  </kPage>
 </template>

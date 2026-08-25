@@ -14,12 +14,12 @@ pub struct Model {
     pub last_name: Option<String>,
     #[sea_orm(unique)]
     pub email: String,
-    pub password: String,
     pub is_active: bool,
     pub profile_picture: Option<String>,
     pub username: Option<String>,
     pub created_at: DateTime,
     pub updated_at: Option<DateTime>,
+    pub password: String,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

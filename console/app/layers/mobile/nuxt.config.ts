@@ -13,10 +13,6 @@ export default defineNuxtConfig({
   },
 
   app: {
-    pageTransition: {
-      name: "slide-left",
-      mode: "out-in",
-    },
     head: {
       meta: [
         {

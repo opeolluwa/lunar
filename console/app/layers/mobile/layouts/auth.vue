@@ -24,15 +24,15 @@ function goBack() {
 
 <template>
   <div>
-    <kNavbar transparent bg-class="bg-white dark:bg-app-dark-800" class="px">
+    <kNavbar
+      transparent
+      bg-class="bg-white dark:bg-app-dark-800"
+      class="px-2 mt-0"
+    >
       <template #left>
-        <kNavbarBackLink
-          v-if="showBackButton"
-          component="div"
-          text="Back"
-          class="size-5 text-gray-400 dark:text-gray-500"
-          @click="goBack"
-        />
+        <button class="inline-flex items-center" @click="router.back()">
+          <UIcon name="lucide:arrow-left" class="size-5" />
+        </button>
       </template>
 
       <template #right>
@@ -42,7 +42,7 @@ function goBack() {
           class="inline-flex"
         >
           <span
-            class="whitespace-nowrap text-xs font-medium text-primary-500 hover:text-primary-600"
+            class="whitespace-nowrap text-xs font-semibold text-primary-500 hover:text-primary-600"
           >
             Not Adeoye?
           </span>
@@ -52,7 +52,7 @@ function goBack() {
 
     <main
       id="auth_layout_mobile"
-      class="flex h-dvh flex-col overflow-hidden bg-gray-50 dark:bg-app-dark-800"
+      class="flex h-dvh flex-col overflow-hidden dark:bg-app-dark-800"
     >
       <div
         class="w-full min-h-0 flex-1 overflow-y-auto overscroll-contain p-6"

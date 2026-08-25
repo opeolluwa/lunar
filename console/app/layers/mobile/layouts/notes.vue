@@ -25,7 +25,7 @@ useHead({ title: () => pageTitle.value as string });
 </script>
 
 <template>
-  <div>
+  <kPage>
     <main
       id="default_layout_mobile"
       class="flex h-dvh flex-col overflow-hidden bg-gray-50 dark:bg-app-dark-800"
@@ -33,7 +33,7 @@ useHead({ title: () => pageTitle.value as string });
       <kNavbar
         v-if="!showEditorToolBar"
         bg-class="bg-white dark:bg-app-dark-800"
-        class="absolute inset-x-0 top-0 z-40 flex max-h-20 items-center justify-between px-6 border-gray-200 dark:border-gray-800 dark:text-gray-500"
+        class="shrink-0 px-2"
       >
         <template #left>
           <UButton
@@ -47,13 +47,13 @@ useHead({ title: () => pageTitle.value as string });
             @click="toggleMobileNav()"
           />
 
-          <kNavbarBackLink
+          <button
             v-else
-            text="Back"
-            component="div"
-            class="size-5 text-gray-400 dark:text-gray-500"
+            class="inline-flex items-center"
             @click="router.back()"
-          />
+          >
+            <UIcon name="lucide:arrow-left" class="size-5" />
+          </button>
         </template>
 
         <template #right>
@@ -76,7 +76,7 @@ useHead({ title: () => pageTitle.value as string });
         :center-title="false"
         title-class="truncate text-sm font-medium"
         bg-class="bg-white dark:bg-app-dark-800"
-        class="absolute inset-x-0 top-0 z-40 flex max-h-20 items-center justify-between px-6 border-gray-200 dark:border-gray-800 dark:text-gray-500"
+        class="shrink-0 px-2"
       >
         <template #left>
           <NuxtLink class="inline-flex" @click="router.back()">
@@ -94,5 +94,5 @@ useHead({ title: () => pageTitle.value as string });
       <AppBottonNav v-if="!showEditorToolBar" />
       <AppSideNav :mobile-nav-open="mobileNavOpen" />
     </main>
-  </div>
+  </kPage>
 </template>

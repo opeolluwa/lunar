@@ -11,7 +11,6 @@
 <script lang="ts" setup>
 import { kApp } from "konsta/vue";
 const { framework7Theme } = usePlatform();
-
 </script>
 
 <style></style>

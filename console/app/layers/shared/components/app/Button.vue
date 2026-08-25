@@ -1,3 +1,41 @@
+<script setup lang="ts">
+type ButtonType = "button" | "submit" | "reset" | "link";
+
+type ButtonColor =
+  | "primary"
+  | "error"
+  | "secondary"
+  | "success"
+  | "info"
+  | "warning"
+  | "neutral";
+
+type ButtonSize = "xs" | "sm" | "md" | "lg" | "xl";
+
+type ButtonVariant = "link" | "solid" | "outline" | "soft" | "subtle" | "ghost";
+
+withDefaults(
+  defineProps<{
+    type?: ButtonType;
+    color?: ButtonColor;
+    loading?: boolean;
+    disabled?: boolean;
+    error?: boolean;
+    size?: ButtonSize;
+    variant?: ButtonVariant;
+  }>(),
+  {
+    type: "button",
+    color: "primary",
+    loading: false,
+    disabled: false,
+    error: false,
+    size: "lg",
+    variant: "solid",
+  },
+);
+</script>
+
 <template>
   <UButton
     :type="type"
@@ -6,50 +44,8 @@
     :variant="variant"
     :size="size"
     :disabled="disabled || loading"
-    class="w-full py-3 bg-primary-500 text-center hover:bg-primary-600 cursor-pointer text-white font-medium disabled:opacity-50"
+    class="w-full cursor-pointer bg-primary-500 py-3 text-center font-medium text-white hover:bg-primary-600 disabled:opacity-50"
   >
     <slot />
   </UButton>
 </template>
-
-<script setup lang="ts">
-defineProps({
-  type: {
-    type: String as PropType<"button" | "submit" | "reset" | "link">,
-    default: "button",
-  },
-  color: {
-    type: String as PropType<
-      | "primary"
-      | "error"
-      | "secondary"
-      | "success"
-      | "info"
-      | "warning"
-      | "neutral"
-    >,
-    default: "primary",
-  },
-  loading: {
-    type: Boolean,
-    default: false,
-  },
-  disabled: {
-    type: Boolean,
-    default: false,
-  },
-  error: {
-    type: Boolean,
-    default: false,
-  },
-  size: {
-    type: String as PropType<"xs" | "sm" | "md" | "lg" | "xl">,
-    default: "lg",
-  },
-  variant: {
-    type:
-      "link" | "solid" | "outline" | "soft" | "subtle" | "ghost" | undefined,
-    default: "solid",
-  },
-});
-</script>
