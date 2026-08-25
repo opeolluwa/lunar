@@ -11,7 +11,7 @@ const routes = [
   {
     label: "Appearance",
     description: "Dark mode & font size",
-    icon: "heroicons:paint-brush",
+    icon: "ri:paint-brush-line",
     to: "/settings/appearance",
   },
   {
