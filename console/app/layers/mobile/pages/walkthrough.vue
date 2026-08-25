@@ -1,5 +1,5 @@
 <script setup lang="ts">
-definePageMeta({ layout: "auth", name: "Walkthrough" });
+definePageMeta({ layout: "walkthrough", name: "Walkthrough" });
 
 const walkthroughSeen = useLocalStorage("walkthroughSeen", false);
 
@@ -41,25 +41,22 @@ function next() {
 </script>
 
 <template>
-  <div class="flex flex-col items-center justify-between flex-1 px-6 py-10">
+  <div
+    class="h-dvh flex flex-col justify-between px-6 pt-12 pb-[env(safe-area-inset-bottom)]"
+  >
     <UCarousel
       v-slot="{ item }"
       v-model="currentSlide"
       :items="slides"
       :ui="{ item: 'basis-full' }"
       dots
-      class="w-full"
+      class="w-full flex-1 flex items-center"
     >
-      <div
-        class="flex flex-col items-center text-center gap-6 px-4"
-      >
+      <div class="flex flex-col items-center text-center gap-6 px-4">
         <div
           class="size-20 rounded-full bg-primary-50 dark:bg-primary-950 flex items-center justify-center"
         >
-          <UIcon
-            :name="item.icon"
-            class="size-10 text-primary-500"
-          />
+          <UIcon :name="item.icon" class="size-10 text-primary-500" />
         </div>
         <div class="flex flex-col gap-2">
           <h2 class="text-xl font-semibold text-gray-900 dark:text-white">
@@ -72,7 +69,7 @@ function next() {
       </div>
     </UCarousel>
 
-    <div class="flex flex-col gap-3 w-full pt-8">
+    <div class="flex flex-col gap-3 w-full">
       <AppButton @click="next">
         {{ isLastSlide ? "Get started" : "Next" }}
       </AppButton>
