@@ -19,19 +19,11 @@ const hideHeaderAndNav = computed(() => {
     route.path.includes("/create-notes") || route.path.includes("/edit-notes")
   );
 });
-
-const pageTitle = computed(() => route.meta.name);
-
-useHead({ title: () => pageTitle.value as string });
 </script>
 
 <template>
-  <div>
+  <kPage>
     <kNavbar bg-class="bg-white dark:bg-app-dark-800" class="px-2">
-      <template #title>
-        <span class="font-medium text-lg">{{ pageTitle }}</span>
-      </template>
-
       <template #left>
         <UButton
           v-if="isTopLevel"
@@ -43,12 +35,13 @@ useHead({ title: () => pageTitle.value as string });
           @click="toggleMobileNav"
         />
 
-        <kNavbarBackLink
+        <button
           v-else
-          text="Back"
-          component="div"
+          class="inline-flex items-center"
           @click="router.back()"
-        />
+        >
+          <UIcon name="lucide:arrow-left" class="size-5" />
+        </button>
       </template>
 
       <template #right>
@@ -73,7 +66,8 @@ useHead({ title: () => pageTitle.value as string });
 
       <AppBottonNav v-if="!hideHeaderAndNav" />
 
+      <!-- DO NOT use v-if here -->
       <AppSideNav />
     </main>
-  </div>
+  </kPage>
 </template>
