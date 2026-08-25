@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useNoteStore } from "@shared/stores/notes";
 import { useWorkspacesStore } from "@shared/stores/workspaces";
-
+import MetaControls from "../meta/meta-controls.vue";
 const props = defineProps<{
   identifier: string;
   title: string;

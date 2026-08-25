@@ -2,6 +2,7 @@
 import type { Bookmark } from "@shared/stores/bookmarks";
 import { useBookmarkStore } from "@shared/stores/bookmarks";
 import { useWorkspacesStore } from "@shared/stores/workspaces";
+import MetaControls from "../meta/meta-controls.vue";
 
 const bookmarksStore = useBookmarkStore();
 const workspaceStore = useWorkspacesStore();

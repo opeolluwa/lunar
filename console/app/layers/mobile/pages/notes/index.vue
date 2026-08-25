@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { kFab } from "konsta/vue";
 import EmptyState from "@shared/components/app/EmptyState.vue";
+import NotesCard from "@mobile/components/notes/card.vue"
 import {
   NOTE_SORT_OPTIONS,
   sortNotes,

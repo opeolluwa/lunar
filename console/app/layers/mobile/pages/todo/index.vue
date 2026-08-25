@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { kFab } from "konsta/vue";
 import { useTodoStore } from "@shared/stores/todo";
-import TodoCard from "@shared/components/todo/todo-card.vue";
 import EmptyState from "@shared/components/app/EmptyState.vue";
 
 definePageMeta({ name: "Tasks" });
