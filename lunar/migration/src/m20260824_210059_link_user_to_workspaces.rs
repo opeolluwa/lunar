@@ -1,4 +1,4 @@
-use sea_orm_migration::prelude::*;
+use sea_orm_migration::{prelude::*, sea_orm::DatabaseBackend};
 
 pub struct Migration;
 
@@ -11,6 +11,9 @@ impl MigrationName for Migration {
 #[async_trait::async_trait]
 impl MigrationTrait for Migration {
     async fn up(&self, manager: &SchemaManager) -> Result<(), DbErr> {
+
+        let db_backend = manager.get_database_backend();
+        if db_backend == DatabaseBackend::Postgres{
         manager
             .alter_table(
                 Table::alter()
@@ -18,10 +21,16 @@ impl MigrationTrait for Migration {
                     .add_column(ColumnDef::new("user_identifier").uuid())
                     .to_owned(),
             )
-            .await
+            .await?;
+
+        }
+
+        Ok(())
     }
 
     async fn down(&self, manager: &SchemaManager) -> Result<(), DbErr> {
+        let db_backend = manager.get_database_backend();
+        if db_backend == DatabaseBackend::Postgres{
         manager
             .alter_table(
                 Table::alter()
@@ -29,6 +38,9 @@ impl MigrationTrait for Migration {
                     .drop_column("user_identifier")
                     .to_owned(),
             )
-            .await
+            .await?;
+        }
+
+        Ok(())
     }
 }
