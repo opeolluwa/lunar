@@ -1,15 +1,9 @@
-<script setup lang="ts">
-defineProps({
-  hideHeaderAndNav: Boolean,
-});
+<script setup lang="ts"></script>
 
-const kbInset = useKeyboardInset();
-</script>
 <template>
   <div
     id="viewport_mobile"
-    class="px-6 flex-1 overflow-y-scroll min-h-0 pt-8 pb-32"
-    :style="kbInset > 0 ? { paddingBottom: `${kbInset}px` } : undefined"
+    class="flex-1 min-h-0 overflow-y-auto px-6 pt-8 pb-32"
   >
     <slot />
   </div>
