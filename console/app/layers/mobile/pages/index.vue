@@ -57,7 +57,7 @@ const { container, isRefreshing, pullDistance } = usePullToRefresh({
     </Transition>
 
     <HomeHeader />
-    <HomeQuickActions />
+    <!-- <HomeQuickActions /> -->
     <HomeStats />
     <HomeTodos />
     <HomeNotes />
