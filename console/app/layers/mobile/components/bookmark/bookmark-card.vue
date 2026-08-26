@@ -76,7 +76,7 @@ const handleTransfer = async (targetWorkspaceId: string) => {
         title="Preview"
         @click="emit('preview', bookmark)"
       >
-        <UIcon name="heroicons:eye" class="size-4" />
+        <UIcon name="lucide:square-arrow-out-up-right" class="size-4" />
       </button>
       <MetaControls
         item-name="bookmark"

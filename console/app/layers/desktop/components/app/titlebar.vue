@@ -174,10 +174,7 @@ useEventListener("keydown", (e: KeyboardEvent) => {
       />
     </div>
 
-    <WorkspaceSelect
-      v-if="!hideAuthGated"
-      class="cursor-pointer hidden md:block"
-    />
+    <WorkspaceSelect class="cursor-pointer hidden md:block" />
 
     <UButton
       size="sm"
@@ -262,7 +259,6 @@ useEventListener("keydown", (e: KeyboardEvent) => {
 
       <UTooltip text="Notifications">
         <UButton
-          v-if="!hideAuthGated"
           size="sm"
           color="neutral"
           class="cursor-pointer"
@@ -273,7 +269,7 @@ useEventListener("keydown", (e: KeyboardEvent) => {
         />
       </UTooltip>
 
-      <div v-if="!hideAuthGated" class="items-center gap-1.5 flex">
+      <div class="items-center gap-1.5 flex">
         <UDropdownMenu
           :items="userMenuItems"
           :ui="{

@@ -43,7 +43,7 @@ const statPills = computed(() => [
       v-for="s in statPills"
       :key="s.label"
       :to="s.href"
-      class="flex min-w-[110px] flex-1 snap-start items-center gap-2.5 rounded-xl border border-gray-200/80 bg-white/70 px-3.5 py-2.5 backdrop-blur-sm transition-colors active:scale-[0.97] dark:border-gray-700/60 dark:bg-gray-900/60"
+      class="flex min-w-[110px] flex-1 snap-start items-center gap-2.5 rounded-xl border border-gray-200/80 bg-white px-3.5 py-2.5 backdrop-blur-sm transition-colors active:scale-[0.97] dark:border-gray-700/60 dark:bg-gray-900/60"
     >
       <div
         class="flex size-8 shrink-0 items-center justify-center rounded-lg"
