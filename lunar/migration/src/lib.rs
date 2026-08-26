@@ -40,6 +40,7 @@ mod m20260825_000001_create_countries_table;
 mod m20260825_000002_create_revoked_tokens_table;
 mod m20260825_000003_create_invitations_table;
 // mod m20260825_000004_add_password_to_user_table;
+mod m20260826_000000_add_user_identifier_to_workspaces;
 
 pub use sea_orm_migration::prelude::*;
 pub mod exporter;
@@ -91,6 +92,7 @@ impl MigratorTrait for Migrator {
             Box::new(m20260825_000002_create_revoked_tokens_table::Migration),
             Box::new(m20260825_000003_create_invitations_table::Migration),
             // Box::new(m20260825_000004_add_password_to_user_table::Migration),
+            Box::new(m20260826_000000_add_user_identifier_to_workspaces::Migration),
         ]
     }
 }
