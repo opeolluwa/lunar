@@ -27,58 +27,57 @@ function handleCreated() {
 </script>
 
 <template>
-  <div>
-    <!-- Create task FAB -->
-    <div
-      v-if="todoStore.todos.length !== 0"
-      class="fixed bottom-20 right-5"
-    >
-      <kFab
-        component="button"
-        aria-label="Add task"
-        :colors="fabColors"
-        @click="showCreatePopup = true"
+  <PullToRefresh @refresh="() => todoStore.fetchTodos()">
+    <div>
+      <!-- Create task FAB -->
+      <div v-if="todoStore.todos.length !== 0" class="fixed bottom-20 right-5">
+        <kFab
+          component="button"
+          aria-label="Add task"
+          :colors="fabColors"
+          @click="showCreatePopup = true"
+        >
+          <template #icon>
+            <UIcon name="heroicons:plus" class="size-6" />
+          </template>
+        </kFab>
+      </div>
+
+      <!-- Loading -->
+      <div v-if="todoStore.loading" class="flex flex-col gap-2">
+        <USkeleton v-for="i in 4" :key="i" class="h-16 rounded-lg" />
+      </div>
+
+      <!-- Empty state: no todos at all -->
+      <div
+        v-else-if="todoStore.todos.length === 0"
+        class="flex flex-col items-center justify-center py-20 text-center"
       >
-        <template #icon>
-          <UIcon name="heroicons:plus" class="size-6" />
-        </template>
-      </kFab>
-    </div>
+        <EmptyState
+          title="No task yet"
+          description="Create your first task to get started."
+          icon="ri:calendar-todo-line"
+          action-label="create task"
+          @action="showCreatePopup = true"
+        />
+      </div>
 
-    <!-- Loading -->
-    <div v-if="todoStore.loading" class="flex flex-col gap-2">
-      <USkeleton v-for="i in 4" :key="i" class="h-16 rounded-lg" />
-    </div>
+      <!-- Todo list -->
+      <div v-else class="flex flex-col gap-2">
+        <TodoCard
+          v-for="todo in todoStore.todos"
+          :key="todo.identifier"
+          :todo="todo"
+          @toggle="(id, done) => todoStore.toggleDone(id, done)"
+          @delete="(id) => todoStore.deleteTodo(id)"
+        />
+      </div>
 
-    <!-- Empty state: no todos at all -->
-    <div
-      v-else-if="todoStore.todos.length === 0"
-      class="flex flex-col items-center justify-center py-20 text-center"
-    >
-      <EmptyState
-        title="No task yet"
-        description="Create your first task to get started."
-        icon="ri:calendar-todo-line"
-        action-label="create task"
-        @action="showCreatePopup = true"
+      <!-- Create task popup -->
+      <TodoCreatePopup
+        v-model:open="showCreatePopup"
+        @created="handleCreated"
       />
     </div>
-
-    <!-- Todo list -->
-    <div v-else class="flex flex-col gap-2">
-      <TodoCard
-        v-for="todo in todoStore.todos"
-        :key="todo.identifier"
-        :todo="todo"
-        @toggle="(id, done) => todoStore.toggleDone(id, done)"
-        @delete="(id) => todoStore.deleteTodo(id)"
-      />
-    </div>
-
-    <!-- Create task popup -->
-    <TodoCreatePopup
-      v-model:open="showCreatePopup"
-      @created="handleCreated"
-    />
-  </div>
+  </PullToRefresh>
 </template>
