@@ -54,10 +54,10 @@ const show = ref(false);
           base: icon ? 'py-3 bg-transparent' : 'py-3 pl-4 bg-transparent',
         }"
         :class="[
-          'w-full transition-colors',
+          'w-full transition-colors ring-0 focus-visible:ring-0',
           error
             ? 'border-red-500 focus-within:border-red-500'
-            : 'border-gray-300 dark:border-gray-600 focus-within:border-black dark:focus-within:border-gray-400',
+            : 'border-gray-300 dark:border-gray-600 focus-within:border-primary-400 dark:focus-within:border-primary-500',
         ]"
       >
         <template v-if="enablePasswordToggle" #trailing>
@@ -87,10 +87,10 @@ const show = ref(false);
           base: icon ? 'py-3 bg-transparent' : 'py-3 pl-4 bg-transparent',
         }"
         :class="[
-          'w-full transition-colors',
+          'w-full transition-colors ring-0 focus-visible:ring-0',
           error
             ? 'border-red-500 focus-within:border-red-500'
-            : 'border-gray-300 dark:border-gray-600 focus-within:border-black dark:focus-within:border-gray-400',
+            : 'border-gray-300 dark:border-gray-600 focus-within:border-primary-400 dark:focus-within:border-primary-500',
         ]"
     /></template>
   </UFormField>

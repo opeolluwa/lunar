@@ -15,10 +15,6 @@ impl MigrationTrait for Migration {
         let backend = manager.get_database_backend();
 
         if backend == DbBackend::Sqlite {
-            // if manager.has_column("workspaces", "user_identifier").await? {
-            //     return Ok(());
-            // }
-
             db.execute_unprepared(
                 r#"
                 PRAGMA foreign_keys = OFF;

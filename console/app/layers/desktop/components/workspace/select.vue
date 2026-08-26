@@ -40,7 +40,7 @@ const workspaceItems = computed(() => [
     {
       label: "Manage Workspaces",
       icon: "heroicons:cog-6-tooth",
-      class: "text-amber-500 dark:text-amber-400 font-medium",
+      class: "font-medium",
       onSelect: () => navigateTo("/settings?section=workspaces"),
     },
     {
