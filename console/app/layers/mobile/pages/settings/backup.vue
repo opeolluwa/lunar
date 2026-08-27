@@ -1,5 +1,5 @@
 <script setup lang="ts">
-type BackupProvider = "local" | "cloud" | "self-hosted";
+type BackupProvider = "local" | "cloud";
 
 definePageMeta({ name: "Backup & Sync" });
 
@@ -20,12 +20,6 @@ const options: {
     label: "Almond Cloud",
     desc: "Sync across devices via Almond Cloud.",
     icon: "heroicons:cloud",
-  },
-  {
-    key: "self-hosted",
-    label: "Self Hosted",
-    desc: "Use your own server to sync data.",
-    icon: "heroicons:server",
   },
 ];
 
@@ -118,54 +112,6 @@ onMounted(() => backupStore.init());
           View plans
           <UIcon name="heroicons:arrow-top-right-on-square" class="size-3.5" />
         </NuxtLink>
-      </div>
-
-      <!-- Self Hosted config -->
-      <div
-        v-else-if="backupStore.provider === 'self-hosted'"
-        class="flex flex-col gap-4"
-      >
-        <div>
-          <label
-            class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5"
-            >API Endpoint</label
-          >
-          <input
-            v-model="backupStore.selfHostedApiUrl"
-            type="url"
-            placeholder="https://sync.example.com/api"
-            class="w-full bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-600 outline-none focus:ring-2 focus:ring-primary-300 dark:focus:ring-primary-600 focus:border-transparent font-mono"
-          />
-          <p class="text-xs text-gray-400 mt-1">
-            Base URL of your self-hosted Almond sync server.
-          </p>
-        </div>
-        <div>
-          <label
-            class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5"
-            >API Key</label
-          >
-          <input
-            v-model="backupStore.selfHostedApiKey"
-            type="password"
-            placeholder="sk-••••••••••••"
-            class="w-full bg-gray-50 dark:bg-gray-700 rounded-lg px-3 py-2 text-sm text-gray-700 dark:text-gray-200 border border-gray-200 dark:border-gray-600 outline-none focus:ring-2 focus:ring-primary-300 dark:focus:ring-primary-600 focus:border-transparent font-mono"
-          />
-        </div>
-        <div class="flex items-center justify-between">
-          <button
-            class="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-          >
-            <UIcon name="heroicons:signal" class="size-5" />
-            Test connection
-          </button>
-          <button
-            class="px-4 py-2 bg-primary-500 text-white text-sm font-medium rounded-lg hover:bg-primary-600 transition-colors"
-            @click="backupStore.save()"
-          >
-            {{ !backupStore.savedConfigExists ? "Save" : "Update" }}
-          </button>
-        </div>
       </div>
     </div>
   </div>

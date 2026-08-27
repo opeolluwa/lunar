@@ -21,7 +21,6 @@ export default defineNuxtConfig({
   ssr: false,
 
   modules: [
-    "@nuxtjs/apollo",
     "@nuxt/eslint",
     "@nuxt/image",
     "@nuxt/ui",

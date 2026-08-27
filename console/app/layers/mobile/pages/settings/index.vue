@@ -22,7 +22,7 @@ const routes = [
   },
   {
     label: "Backup & Sync",
-    description: "Local, cloud or self-hosted backup",
+    description: "Local or cloud backup",
     icon: "heroicons:cloud-arrow-up",
     to: "/settings/backup",
   },

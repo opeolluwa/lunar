@@ -1,7 +1,6 @@
 // layers/desktop/nuxt.config.ts
 export default defineNuxtConfig({
   modules: [
-    "@nuxtjs/apollo",
     "@nuxt/eslint",
     "@nuxt/hints",
     "@nuxt/image",

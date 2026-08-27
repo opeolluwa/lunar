@@ -6,10 +6,12 @@ mod utils;
 
 use std::sync::Arc;
 
+use loomabase::client::SqliteClient;
+use loomabase::Result;
 use lunar::{adapters::notifications::CreateNotification, DataEngine};
 use tauri::Listener;
 use tauri::Manager;
-
+// use tauri:: // get device name from tauri
 use crate::state::alarm::AlarmState;
 use crate::state::app::AppState;
 use crate::state::scheduler::SchedulerState;
@@ -70,13 +72,24 @@ pub async fn run() {
                         Ok(path) => std::path::PathBuf::from(path),
                         Err(_) => app_data_dir.join("almonds.db"),
                     };
-
-                    // let config = SyncularConfig {
-                    //     base_url: Some("https://your.server".into()),
-                    //     db_path: Some(db_path.display().to_string()),
-                    //     auto_sync: true,
-                    //     ..Default::default()
-                    // };
+                    
+                    let client = match SqliteClient::open(&db_path, "client").await {
+                        Ok(client) => client,
+                        Err(e) => {
+                            eprintln!("Failed to open SQLite client: {e}");
+                            return;
+                        }
+                    };
+                    
+                    match client.local_delta().await {
+                        Ok(outbound) => {
+                            dbg!("Outbound: {:?}", outbound);
+                            // Send outbound through your authenticated transport.
+                        }
+                        Err(e) => {
+                            eprintln!("Failed to get local delta: {e}");
+                        }
+                    }
 
                     let db_url = format!("sqlite://{}?mode=rwc", db_path.display());
                     dbg!("Database URL: {:?}", &db_url);
@@ -95,9 +108,7 @@ pub async fn run() {
                     app_handle.manage(state);
                     app_handle.manage(AlarmState::new());
                     app_handle.manage(SchedulerState::new());
-                    // app.handle()
-                    //     .plugin(tauri_plugin_syncular::init(config))
-                    //     .expect("failed to init syncular plugin");
+                   
                 })
             });
 

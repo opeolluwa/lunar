@@ -20,6 +20,7 @@ crate-type = ["staticlib", "cdylib", "rlib"]
 base64 = "0.22"
 chrono = { version = "0.4.43", features = ["serde"] }
 log = "0.4"
+loomabase = { version = "0.1.0", path = "../../loomabase" ,  }
 lunar = { version = "0.1.0", path = "../../lunar", features = ["markdown2pdf"] }
 sanitizer = { version = "1.0.0", features = ["derive"] }
 serde = { version = "1.0", features = ["derive"] }
