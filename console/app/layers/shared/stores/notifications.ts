@@ -3,7 +3,7 @@ import type {
   NotificationType,
   Notifications,
 } from "lunar";
-import { invoke } from "~/utils/invoke";
+import { invoke } from "../utils/invoke";
 import { defineStore } from "pinia";
 
 export type Notification = Notifications;

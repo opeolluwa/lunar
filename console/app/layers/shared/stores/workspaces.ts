@@ -4,14 +4,14 @@ import { invoke } from "@shared/utils/invoke";
 import { useNoteStore } from "./notes";
 import { useTodoStore } from "./todo";
 import { useBookmarkStore } from "./bookmarks";
+import { useRecycleBinStore } from "./recycle-bin";
+import { useReminderStore } from "./reminder";
+import { useUserPreferenceStore } from "./workspace-profile";
+import { useSnippetStore } from "./snippets";
 
 export type Workspace = Workspaces;
-
 export type CreateWorkspacePayload = CreateWorkspace;
-
 export type UpdateWorkspacePayload = Partial<UpdateWorkspace>;
-
-const resolvedWorkspaceIds = new Set<string>();
 
 export const useWorkspacesStore = defineStore("workspaces_store", {
   state: () => ({
@@ -121,14 +121,16 @@ export const useWorkspacesStore = defineStore("workspaces_store", {
       const userPreferenceStore = useUserPreferenceStore();
       const snippetsStore = useSnippetStore();
 
-      await noteStore.fetchNotes();
-      await noteStore.fetchRecentNotes();
-      await todoStore.fetchTodos();
-      await bookmarksStore.fetchBookmarks();
-      await recycleBinStore.fetchEntries();
-      await reminderStore.fetchReminders();
-      await userPreferenceStore.fetchPreference();
-      await snippetsStore.fetchSnippets();
+      await Promise.all([
+        noteStore.fetchNotes(),
+        noteStore.fetchRecentNotes(),
+        todoStore.fetchTodos(),
+        bookmarksStore.fetchBookmarks(),
+        recycleBinStore.fetchEntries(),
+        reminderStore.fetchReminders(),
+        userPreferenceStore.fetchPreference(),
+        snippetsStore.fetchSnippets(),
+      ]);
     },
 
     async verifyWorkspacePassword(
@@ -154,115 +156,6 @@ export const useWorkspacesStore = defineStore("workspaces_store", {
       } catch (error) {
         console.error("Error fetching unsynced workspaces:", error);
         return [];
-      }
-    },
-
-    async syncUpstream() {
-      const workspaces = await this.fetchUnsynced();
-      if (!workspaces.length) return;
-
-      const input = workspaces.map((w) => ({
-        identifier: w.identifier,
-        name: w.name,
-        description: w.description,
-        created_at: w.createdAt,
-        updated_at: w.updatedAt,
-        is_default: w.isDefault,
-        is_hidden: w.isHidden,
-        is_secured: w.isSecured,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        password_hash: (w as any).passwordHash ?? null,
-      }));
-      const query = gql`
-        mutation SyncWorkspaces($input: [SyncWorkspaceInput!]!) {
-          sync_workspace(input: $input) {
-            success
-            error_message
-            identifier
-          }
-        }
-      `;
-
-      const { mutate } = useMutation(query, { variables: { input } });
-
-      try {
-        const data = await mutate();
-        console.log("Workspaces sync response:", JSON.stringify(data, null, 2));
-      } catch (error) {
-        console.error("Error syncing workspaces:", error);
-      }
-    },
-
-    async clearQueue(identifiers: string[]) {
-      await invoke("clear_synced_workspaces", { identifiers });
-    },
-
-    async resolveWorkspace(identifier: string) {
-      if (!identifier || resolvedWorkspaceIds.has(identifier)) return;
-
-      const { client } = useApolloClient();
-      const existsQuery = gql`
-        query FindWorkSpaces($identifier: String!) {
-          workspaces(filters: { identifier: $identifier }) {
-            nodes {
-              identifier
-              name
-              createdAt
-              isHidden
-              isDefault
-              isSecured
-              description
-            }
-          }
-        }
-      `;
-
-      try {
-        const { data } = await client.query({
-          query: existsQuery,
-          variables: { identifier },
-          fetchPolicy: "network-only",
-        });
-
-        if (!data?.workspace_exists) {
-          const workspace = this.workspaces.find(
-            (w) => w.identifier === identifier,
-          );
-          if (workspace) {
-            const input = [
-              {
-                identifier: workspace.identifier,
-                name: workspace.name,
-                description: workspace.description,
-                created_at: workspace.createdAt,
-                updated_at: workspace.updatedAt,
-                is_default: workspace.isDefault,
-                is_hidden: workspace.isHidden,
-                is_secured: workspace.isSecured,
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                password_hash: (workspace as any).passwordHash ?? null,
-              },
-            ];
-            const syncMutation = gql`
-              mutation SyncWorkspaces($input: [SyncWorkspaceInput!]!) {
-                sync_workspace(input: $input) {
-                  success
-                  error_message
-                  identifier
-                }
-              }
-            `;
-            const { mutate } = useMutation(syncMutation, {
-              variables: { input },
-            });
-            await mutate();
-          }
-        }
-
-        resolvedWorkspaceIds.add(identifier);
-      } catch (error) {
-        console.error("Error resolving workspace:", identifier, error);
-        throw error;
       }
     },
   },

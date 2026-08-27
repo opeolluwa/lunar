@@ -1,16 +1,14 @@
 import type {
   CreateWorkspaceProfile,
   UpdateWorkspaceProfile,
-  WorkspaceProfilesInterface,
+  WorkspaceProfiles
 } from "lunar";
 import { defineStore } from "pinia";
-import { invoke } from "~/utils/invoke";
-import { getWorkspaceMeta } from "~/composables/getWorkspaceMeta";
+import { invoke } from "../utils/invoke";
+import { getWorkspaceMeta } from "#imports";
 
-export type UserPreference = WorkspaceProfilesInterface;
-
+export type UserPreference = WorkspaceProfiles;
 export type CreateUserPreferencePayload = CreateWorkspaceProfile;
-
 export type UpdateUserPreferencePayload = Partial<UpdateWorkspaceProfile>;
 
 export const useUserPreferenceStore = defineStore("user_preference_store", {

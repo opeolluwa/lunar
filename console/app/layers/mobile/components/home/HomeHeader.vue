@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useTodoStore } from "@shared/stores/todo";
-import { useUserPreferenceStore } from "@shared/stores/workspace-preferences";
+import { useUserPreferenceStore } from "@shared/stores/workspace-profile";
 
 const todoStore = useTodoStore();
 const userPreferenceStore = useUserPreferenceStore();

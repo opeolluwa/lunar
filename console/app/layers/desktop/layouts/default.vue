@@ -2,7 +2,7 @@
 import _ from "lodash";
 
 import { primaryRoutes, secondaryRoutes } from "@shared/data/routes";
-import { useUserPreferenceStore } from "@shared/stores/workspace-preferences";
+import { useUserPreferenceStore } from "@shared/stores/workspace-profile";
 import { useWorkspacesStore } from "@shared/stores/workspaces";
 
 const preferenceStore = useUserPreferenceStore();

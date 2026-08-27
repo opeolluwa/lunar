@@ -1,6 +1,6 @@
 import type { CreateReminder, Reminder, UpdateReminder } from "lunar";
 import { defineStore } from "pinia";
-import { invoke } from "~/utils/invoke";
+import { invoke } from "../utils/invoke";
 
 export type { Reminder };
 
@@ -118,45 +118,5 @@ export const useReminderStore = defineStore("reminder_store", {
       }
     },
 
-    async syncUpstream() {
-      const reminders = await this.fetchUnsynced();
-      if (!reminders.length) return;
-
-      const input = reminders.map((r) => ({
-        identifier: r.identifier,
-        title: r.title,
-        description: r.description ?? null,
-        recurring: r.recurring,
-        recurrence_rule: r.recurrenceRule ?? null,
-        alarm_sound: r.alarmSound ?? null,
-        remind_at: r.remindAt,
-        created_at: r.createdAt,
-        updated_at: r.updatedAt,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        workspace_identifier: (r as any).workspaceIdentifier ?? null,
-      }));
-      const query = gql`
-        mutation SyncReminders($input: [SyncReminderInput!]!) {
-          sync_reminder(input: $input) {
-            success
-            error_message
-            identifier
-          }
-        }
-      `;
-
-      const { mutate } = useMutation(query, { variables: { input } });
-
-      try {
-        const data = await mutate();
-        console.log("Reminders sync response:", JSON.stringify(data, null, 2));
-      } catch (error) {
-        console.error("Error syncing reminders:", error);
-      }
-    },
-
-    async clearQueue(identifiers: string[]) {
-      await invoke("clear_synced_reminders", { identifiers });
-    },
   },
 });

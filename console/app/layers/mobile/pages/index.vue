@@ -2,7 +2,7 @@
 import { useNoteStore } from "@shared/stores/notes";
 import { useBookmarkStore } from "@shared/stores/bookmarks";
 import { useTodoStore } from "@shared/stores/todo";
-import { useUserPreferenceStore } from "@shared/stores/workspace-preferences";
+import { useUserPreferenceStore } from "@shared/stores/workspace-profile";
 
 import HomeHeader from "@mobile/components/home/HomeHeader.vue";
 import HomeStats from "@mobile/components/home/HomeStats.vue";

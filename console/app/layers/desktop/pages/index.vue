@@ -2,7 +2,7 @@
 import { useNoteStore } from "@shared/stores/notes";
 import { useBookmarkStore } from "@shared/stores/bookmarks";
 import { useTodoStore } from "@shared/stores/todo";
-import { useUserPreferenceStore } from "@shared/stores/workspace-preferences";
+import { useUserPreferenceStore } from "@shared/stores/workspace-profile";
 
 definePageMeta({ layout: false });
 

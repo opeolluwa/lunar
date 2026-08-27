@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { invoke } from "~/utils/invoke";
+import { invoke } from "../utils/invoke";
 
 export interface MoodboardImage {
   filename: string;

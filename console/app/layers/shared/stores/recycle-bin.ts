@@ -1,6 +1,6 @@
 import type { CreateRecycleBinEntry, ItemType, RecycleBin } from "lunar";
 import { defineStore } from "pinia";
-import { invoke } from "~/utils/invoke";
+import { invoke } from "../utils/invoke";
 
 export type RecycleBinItemType = ItemType;
 
@@ -101,46 +101,6 @@ export const useRecycleBinStore = defineStore("recycle_bin_store", {
         console.error("Error fetching unsynced recycle bin:", error);
         return [];
       }
-    },
-
-    async syncUpstream() {
-      const recycleBin = await this.fetchUnsynced();
-      if (!recycleBin.length) return;
-
-      const input = recycleBin.map((e) => ({
-        identifier: e.identifier,
-        item_id: e.itemId,
-        item_type: e.itemType,
-        payload: e.payload,
-        deleted_at: e.deletedAt,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        workspace_identifier: (e as any).workspaceIdentifier ?? null,
-      }));
-      const query = gql`
-        mutation SyncRecycleBin($input: [SyncRecycleBinInput!]!) {
-          sync_recycle_bin_item(input: $input) {
-            success
-            error_message
-            identifier
-          }
-        }
-      `;
-
-      const { mutate } = useMutation(query, { variables: { input } });
-
-      try {
-        const data = await mutate();
-        console.log(
-          "Recycle bin sync response:",
-          JSON.stringify(data, null, 2),
-        );
-      } catch (error) {
-        console.error("Error syncing recycle bin:", error);
-      }
-    },
-
-    async clearQueue(identifiers: string[]) {
-      await invoke("clear_synced_recycle_bin", { identifiers });
     },
   },
 });

@@ -68,9 +68,11 @@ db-pull-server:
 #   just build-wasm          # dev profile (matches pkg/ checked into the repo)
 #   just build-wasm release  # release profile
 [working-directory: 'lunar']
-build-wasm profile='dev':
+build-lunar profile='dev':
 	cargo run --manifest-path migration/Cargo.toml --bin migration-export -- generated/pglite/migrations
 	wasm-pack build --target web --{{profile}}
+	cargo test
+	node ../scripts/fix-ts-exports.mjs src/entities
 
 # Export PGlite migration SQL only (no WASM build).
 # This is what console/scripts/sync-lunar-schema.mjs runs if the generated

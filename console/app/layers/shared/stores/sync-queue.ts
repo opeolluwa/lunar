@@ -6,7 +6,7 @@ import { useRecycleBinStore } from "@shared/stores/recycle-bin";
 import { useReminderStore } from "@shared/stores/reminder";
 import { useSnippetStore } from "@shared/stores/snippets";
 import { useTodoStore } from "@shared/stores/todo";
-import { useUserPreferenceStore } from "@shared/stores/workspace-preferences";
+import { useUserPreferenceStore } from "@shared/stores/workspace-profile";
 import { useWorkspacesStore } from "@shared/stores/workspaces";
 import { useNetwork } from "@vueuse/core";
 import { defineStore } from "pinia";
@@ -32,87 +32,7 @@ export const useSyncQueueStore = defineStore("sync_queue_store", () => {
 
   async function runSync() {
     if (runningSync.value || !isOnline.value) return;
-    runningSync.value = true;
-    try {
-      await useWorkspacesStore()
-        .syncUpstream()
-        .then(async () => {
-          await useNotificationStore().createNotification({
-            title: "Workspace Sync Successful",
-            body: "Your data has been synced successfully.",
-            notificationType: "backup_success",
-          });
-        });
-      await Promise.all([
-        useBookmarkStore()
-          .syncUpstream()
-          .then(async () => {
-            await useNotificationStore().createNotification({
-              title: "Bookmark Sync Successful",
-              body: "Your bookmark data has been synced successfully.",
-              notificationType: "backup_success",
-            });
-          }),
-        useNoteStore()
-          .syncUpstream()
-          .then(async () => {
-            await useNotificationStore().createNotification({
-              title: "Note Sync Successful",
-              body: "Your note data has been synced successfully.",
-              notificationType: "backup_success",
-            });
-          }),
-        useTodoStore()
-          .syncUpstream()
-          .then(async () => {
-            await useNotificationStore().createNotification({
-              title: "Todo Sync Successful",
-              body: "Your todo data has been synced successfully.",
-              notificationType: "backup_success",
-            });
-          }),
-        useReminderStore()
-          .syncUpstream()
-          .then(async () => {
-            await useNotificationStore().createNotification({
-              title: "Reminder Sync Successful",
-              body: "Your reminder data has been synced successfully.",
-              notificationType: "backup_success",
-            });
-          }),
-        useUserPreferenceStore()
-          .syncUpstream()
-          .then(async () => {
-            await useNotificationStore().createNotification({
-              title: "User Preference Sync Successful",
-              body: "Your user preference data has been synced successfully.",
-              notificationType: "backup_success",
-            });
-          }),
-        useSnippetStore()
-          .syncUpstream()
-          .then(async () => {
-            await useNotificationStore().createNotification({
-              title: "Snippet Sync Successful",
-              body: "Your snippet data has been synced successfully.",
-              notificationType: "backup_success",
-            });
-          }),
-        useRecycleBinStore()
-          .syncUpstream()
-          .then(async () => {
-            await useNotificationStore().createNotification({
-              title: "Recycle Bin Sync Successful",
-              body: "Your recycle bin data has been synced successfully.",
-              notificationType: "backup_success",
-            });
-          }),
-      ]);
-    } catch (err) {
-      console.error("Error during sync:", err);
-    } finally {
-      runningSync.value = false;
-    }
+    // runningSync.value = true;
   }
 
   return { isOnline, runningSync, preflightCheck, runSync };

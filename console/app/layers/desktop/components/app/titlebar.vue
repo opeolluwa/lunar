@@ -6,7 +6,7 @@ import { platform } from "@tauri-apps/plugin-os";
 import { useEventListener } from "@vueuse/core";
 import { computed, onMounted, watch } from "vue";
 import { IS_WEB } from "@shared/env";
-import { useUserPreferenceStore } from "@shared/stores/workspace-preferences";
+import { useUserPreferenceStore } from "@shared/stores/workspace-profile";
 
 const props = defineProps<{ authenticated?: boolean }>();
 const authStore = useAuthStore();

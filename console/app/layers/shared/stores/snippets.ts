@@ -1,6 +1,6 @@
 import type { CreateSnippet, Snippets, UpdateSnippet } from "lunar";
 import { defineStore } from "pinia";
-import { invoke } from "~/utils/invoke";
+import { invoke } from "../utils/invoke";
 
 export type Snippet = Snippets;
 
@@ -127,46 +127,6 @@ export const useSnippetStore = defineStore("snippets_store", {
         console.error("Error fetching unsynced snippets:", error);
         return [];
       }
-    },
-
-    async syncUpstream() {
-      const snippets = await this.fetchUnsynced();
-      if (!snippets.length) return;
-
-      const input = snippets.map((s) => ({
-        identifier: s.identifier,
-        title: s.title ?? null,
-        language: s.language ?? null,
-        code: s.code,
-        description: s.description ?? null,
-        is_pinned: s.isPinned,
-        created_at: s.createdAt,
-        updated_at: s.updatedAt,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        workspace_identifier: (s as any).workspaceIdentifier ?? null,
-      }));
-      const query = gql`
-        mutation SyncSnippets($input: [SyncSnippetInput!]!) {
-          sync_snippet(input: $input) {
-            success
-            error_message
-            identifier
-          }
-        }
-      `;
-
-      const { mutate } = useMutation(query, { variables: { input } });
-
-      try {
-        const data = await mutate();
-        console.log("Snippets sync response:", JSON.stringify(data, null, 2));
-      } catch (error) {
-        console.error("Error syncing snippets:", error);
-      }
-    },
-
-    async clearQueue(identifiers: string[]) {
-      await invoke("clear_synced_snippets", { identifiers });
     },
   },
 });

@@ -134,46 +134,5 @@ export const useBookmarkStore = defineStore("bookmark_store", {
         return [];
       }
     },
-
-    async syncUpstream() {
-      const bookmarks = await this.fetchUnsynced();
-      if (!bookmarks.length) return;
-
-      const input = bookmarks.map((b) => ({
-        identifier: b.identifier,
-        title: b.title,
-        url: b.url,
-        tag: b.tag,
-        created_at: b.createdAt,
-        updated_at: b.updatedAt,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        workspace_identifier: (b as any).workspaceIdentifier ?? null,
-      }));
-      const query = gql`
-        mutation SyncBookmarks($input: [SyncBookmarkInput!]!) {
-          sync_bookmark(input: $input) {
-            success
-            error_message
-            identifier
-          }
-        }
-      `;
-
-      const { mutate } = useMutation(query, { variables: { input } });
-
-      try {
-        const data = await mutate();
-        console.log(
-          "Bookmarks checks response:",
-          JSON.stringify(data, null, 2),
-        );
-      } catch (error) {
-        console.error("Error syncing bookmarks:", error);
-      }
-    },
-
-    async clearQueue(identifiers: string[]) {
-      await invoke("clear_synced_bookmarks", { identifiers });
-    },
   },
 });

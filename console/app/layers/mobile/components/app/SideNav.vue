@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { primaryRoutes, secondaryRoutes } from "@shared/data/routes";
 import { useAuthStore } from "@shared/stores/auth";
-import { useUserPreferenceStore } from "@shared/stores/workspace-preferences";
+import { useUserPreferenceStore } from "@shared/stores/workspace-profile";
 
 const route = useRoute();
 const colorMode = useColorMode();
