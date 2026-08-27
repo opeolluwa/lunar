@@ -4,8 +4,8 @@ export type WorkspaceProfilesInterface = {
   identifier: string;
   firstName: string;
   lastName: string;
-  profilePicture: string | null;
   createdAt: string;
   updatedAt: string;
   workspaceIdentifier: string | null;
+  profilePicture: string | null;
 };

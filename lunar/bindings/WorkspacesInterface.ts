@@ -10,4 +10,5 @@ export type WorkspacesInterface = {
   isHidden: boolean;
   isSecured: boolean;
   passwordHash: string | null;
+  userIdentifier: string | null;
 };
