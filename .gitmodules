@@ -1,0 +1,3 @@
+[submodule "loombase"]
+	path = loombase
+	url = https://github.com/opeolluwa/loomabase
