@@ -1,5 +1,5 @@
-import { invoke } from "~/utils/invoke";
-import { useAlarmSettings } from "~/composables/useAlarmSettings";
+// import { invoke } from "../utils/invoke";
+import { useAlarmSettings } from "../composables/useAlarmSettings";
 
 /**
  * Syncs alarm settings to the Rust backend scheduler.
@@ -11,14 +11,14 @@ export function useAlarmScheduler() {
   const { settings } = useAlarmSettings();
 
   async function syncSettings() {
-    try {
-      await invoke("set_alarm_settings", {
-        leadTimeMinutes: settings.value.leadTimeMinutes,
-        defaultSound: settings.value.defaultSound,
-      });
-    } catch (e) {
-      console.error("[AlarmScheduler] Failed to sync settings:", e);
-    }
+    // try {
+    //   await invoke("set_alarm_settings", {
+    //     leadTimeMinutes: settings.value.leadTimeMinutes,
+    //     defaultSound: settings.value.defaultSound,
+    //   });
+    // } catch (e) {
+    //   console.error("[AlarmScheduler] Failed to sync settings:", e);
+    // }
   }
 
   onMounted(syncSettings);
