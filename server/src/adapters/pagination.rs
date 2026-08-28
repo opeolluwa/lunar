@@ -1,4 +1,5 @@
 use serde::{de::DeserializeOwned, Deserialize, Serialize};
+use ts_rs::TS;
 
 #[derive(Serialize, Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
@@ -25,8 +26,9 @@ where
     }
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, TS)]
 #[serde(rename_all = "camelCase")]
+#[ts(export, export_to = "pagination.ts")]
 pub struct PaginationParams {
     pub(crate) page: Option<u32>,
     pub(crate) per_page: Option<u32>,

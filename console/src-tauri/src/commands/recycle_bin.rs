@@ -6,7 +6,10 @@ use lunar::{
 use tauri::State;
 use uuid::Uuid;
 
-use crate::{adapters::recycle_bin::CreateRecycleBinEntry, errors::AppError, state::app::AppState};
+use crate::{
+    adapters::recycle_bin::CreateRecycleBinEntry, errors::AppError, state::app::AppState,
+    state::mirror,
+};
 
 #[tauri::command]
 pub async fn create_recycle_bin_entry(
@@ -14,11 +17,13 @@ pub async fn create_recycle_bin_entry(
     entry: CreateRecycleBinEntry,
     meta: Option<RequestMeta>,
 ) -> Result<recycle_bin::Model, AppError> {
-    state
+    let model = state
         .recycle_bin_repository
         .store(&entry.into(), &meta)
         .await
-        .map_err(Into::into)
+        .map_err(AppError::from)?;
+    mirror::mirror_recycle_bin(&state.sync_manager, &model).await;
+    Ok(model)
 }
 
 #[tauri::command]
@@ -69,7 +74,9 @@ pub async fn purge_recycle_bin_entry(
         .recycle_bin_repository
         .purge(&identifier, &meta)
         .await
-        .map_err(Into::into)
+        .map_err(AppError::from)?;
+    mirror::tombstone(&state.sync_manager, mirror::TABLE_RECYCLE_BIN, &identifier).await;
+    Ok(())
 }
 
 #[tauri::command]
@@ -77,11 +84,15 @@ pub async fn purge_all_recycle_bin_entries(
     state: State<'_, AppState>,
     meta: Option<RequestMeta>,
 ) -> Result<(), AppError> {
-    state
+    let identifiers = state
         .recycle_bin_repository
         .purge_all(&meta)
         .await
-        .map_err(Into::into)
+        .map_err(AppError::from)?;
+    for identifier in &identifiers {
+        mirror::tombstone(&state.sync_manager, mirror::TABLE_RECYCLE_BIN, identifier).await;
+    }
+    Ok(())
 }
 
 #[tauri::command]
@@ -90,11 +101,19 @@ pub async fn restore_recycle_bin_entry(
     identifier: Uuid,
     meta: Option<RequestMeta>,
 ) -> Result<(), AppError> {
-    state
+    let entry = state
         .recycle_bin_repository
         .restore(&identifier, &meta)
         .await
-        .map_err(Into::into)
+        .map_err(AppError::from)?;
+    mirror::restore_row(
+        &state.sync_manager,
+        mirror::table_for_item_type(&entry.item_type),
+        &entry.item_id,
+    )
+    .await;
+    mirror::tombstone(&state.sync_manager, mirror::TABLE_RECYCLE_BIN, &entry.identifier).await;
+    Ok(())
 }
 
 #[tauri::command]

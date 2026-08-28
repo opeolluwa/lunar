@@ -12,8 +12,9 @@ use tauri::Manager;
 // use tauri:: // get device name from tauri
 use crate::state::alarm::AlarmState;
 use crate::state::app::AppState;
+use crate::state::mirror::backfill_all;
 use crate::state::scheduler::SchedulerState;
-use crate::state::sync::{backfill_todos, load_device_id, SyncManager};
+use crate::state::sync::{os_device_id, SyncManager};
 
 // event channels
 const EVENT_NOTIFICATION_RECEIVED: &str = "notification:received";
@@ -72,13 +73,23 @@ pub async fn run() {
                         Err(_) => app_data_dir.join("almonds.db"),
                     };
                     
-                    let device_id = match load_device_id(&app_data_dir) {
-                        Ok(id) => id,
-                        Err(e) => {
-                            eprintln!("Failed to load device identifier: {e}");
-                            return;
+                    let device_id = os_device_id();
+
+                    // Reconcile the database's recorded identity with the
+                    // OS-derived device id so a database recovered from a
+                    // backup or copied between installs does not hard-block
+                    // startup.
+                    if let Ok(current) = loomabase::client::SqliteClient::current_device_id(&db_path)
+                        .await
+                    {
+                        if current.as_deref().is_some_and(|id| id != device_id) {
+                            let _ = loomabase::client::SqliteClient::set_device_id(
+                                &db_path,
+                                device_id.clone(),
+                            )
+                            .await;
                         }
-                    };
+                    }
 
                     let sync_manager = match SyncManager::open_store(&db_path, device_id).await {
                         Ok(manager) => manager,
@@ -101,14 +112,15 @@ pub async fn run() {
 
                     let conn = Arc::new(kernel.connection().clone());
 
-                    let backfill_marker = app_data_dir.join("backfill-v1.done");
+                    let backfill_marker = app_data_dir.join("backfill-v2.done");
                     if !backfill_marker.exists() {
-                        match backfill_todos(Some(&sync_manager), &conn).await {
+                        let conn_ref = conn.as_ref();
+                        match backfill_all(&sync_manager, conn_ref).await {
                             Ok(seeded) => {
-                                println!("Seeded {seeded} todos into the offline store");
+                                println!("Seeded {seeded} rows into the offline store");
                                 let _ = std::fs::write(&backfill_marker, "done");
                             }
-                            Err(e) => eprintln!("Failed to backfill todos: {e}"),
+                            Err(e) => eprintln!("Failed to backfill offline store: {e}"),
                         }
                     }
 
@@ -186,6 +198,7 @@ pub async fn run() {
             commands::snippets::update_snippet,
             commands::sync::sync_all,
             commands::sync::current_device_id,
+            commands::sync::update_device_id,
             commands::sync_queue::add_sync_queue_entry,
             commands::sync_queue::count_sync_queue_entries,
             commands::sync_queue::remove_sync_queue_entry,

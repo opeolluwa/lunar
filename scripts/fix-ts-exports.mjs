@@ -22,7 +22,7 @@ import { dirname, join } from "node:path";
 
 const ENUM_PATTERN = /^pub enum (\w+)/m;
 const EXPORT_TO_PATTERN = /#\[ts\([^)]*export_to\s*=\s*"([^"]+)\.ts"\)\]/;
-const STRUCT_PATTERN = /^pub struct (\w+)/m;
+const TYPE_PATTERN = /^pub (?:struct|enum) (\w+)/m;
 
 const SKIP = new Set(["mod", "prelude"]);
 
@@ -58,10 +58,10 @@ function discoverEnums(path) {
 }
 
 /**
- * Return [structName, exportToFileStem] pairs for
- * #[ts(export, export_to=...)] structs in a Rust source file.
+ * Return [typeName, exportToFileStem] pairs for
+ * #[ts(export, export_to=...)] structs and enums in a Rust source file.
  */
-function discoverStructExports(path) {
+function discoverTypeExports(path) {
   if (!existsSync(path)) return [];
   const results = [];
   let currentTarget = null;
@@ -71,9 +71,9 @@ function discoverStructExports(path) {
       currentTarget = attr[1];
       continue;
     }
-    const struct = STRUCT_PATTERN.exec(line);
-    if (struct && currentTarget) {
-      results.push([struct[1], currentTarget]);
+    const type = TYPE_PATTERN.exec(line);
+    if (type && currentTarget) {
+      results.push([type[1], currentTarget]);
     }
   }
   return results;
@@ -82,10 +82,15 @@ function discoverStructExports(path) {
 /** Discover adapter/sync_engine structs exported to bindings, sorted by struct name. */
 function discoverActionTypes(root) {
   const sources = [];
-  const adaptersDir = join(root, "src", "adapters");
-  if (existsSync(adaptersDir)) {
-    for (const entry of readdirSync(adaptersDir).sort()) {
-      if (entry.endsWith(".rs")) sources.push(join(adaptersDir, entry));
+  const adaptersDirs = [
+    join(root, "src", "adapters"),
+    join(root, "..", "server", "src", "adapters"),
+  ];
+  for (const adaptersDir of adaptersDirs) {
+    if (existsSync(adaptersDir)) {
+      for (const entry of readdirSync(adaptersDir).sort()) {
+        if (entry.endsWith(".rs")) sources.push(join(adaptersDir, entry));
+      }
     }
   }
   const syncEngine = join(root, "src", "sync_engine.rs");
@@ -93,7 +98,7 @@ function discoverActionTypes(root) {
 
   const types = new Map();
   for (const source of sources) {
-    for (const [name, target] of discoverStructExports(source)) {
+    for (const [name, target] of discoverTypeExports(source)) {
       if (!types.has(name)) types.set(name, target);
     }
   }

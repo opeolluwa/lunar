@@ -1,10 +1,12 @@
 use serde::{Deserialize, Serialize};
+use ts_rs::TS;
 use validator::Validate;
 
 use crate::adapters::jwt::Claims;
 
-#[derive(Debug, Serialize, Deserialize, Validate)]
+#[derive(Debug, Serialize, Deserialize, Validate, TS)]
 #[serde(rename_all = "camelCase")]
+#[ts(export, export_to = "authentication.ts")]
 pub struct CreateUserRequest {
     #[validate(email)]
     pub email: String,
@@ -12,8 +14,9 @@ pub struct CreateUserRequest {
     pub password: String,
 }
 
-#[derive(Debug, Serialize, Deserialize, Validate)]
+#[derive(Debug, Serialize, Deserialize, Validate, TS)]
 #[serde(rename_all = "camelCase")]
+#[ts(export, export_to = "authentication.ts")]
 pub struct LoginRequest {
     #[validate(email)]
     pub email: String,
@@ -21,15 +24,17 @@ pub struct LoginRequest {
     pub password: String,
 }
 
-#[derive(Debug, Serialize, Deserialize, Validate)]
+#[derive(Debug, Serialize, Deserialize, Validate, TS)]
 #[serde(rename_all = "camelCase")]
+#[ts(export, export_to = "authentication.ts")]
 pub struct ForgottenPasswordRequest {
     #[validate(email)]
     pub email: String,
 }
 
-#[derive(Debug, Serialize, Deserialize, Validate)]
+#[derive(Debug, Serialize, Deserialize, Validate, TS)]
 #[serde(rename_all = "camelCase")]
+#[ts(export, export_to = "authentication.ts")]
 pub struct SetNewPasswordRequest {
     #[validate(length(min = 1, message = "password cannot be empty"))]
     pub password: String,
@@ -37,22 +42,25 @@ pub struct SetNewPasswordRequest {
     pub confirm_password: String,
 }
 
-#[derive(Debug, Serialize, Deserialize, Validate)]
+#[derive(Debug, Serialize, Deserialize, Validate, TS)]
 #[serde(rename_all = "camelCase")]
+#[ts(export, export_to = "authentication.ts")]
 pub struct VerifyAccountRequest {
     pub otp: String,
 }
 
 pub type RefreshTokenRequest = Claims;
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, TS)]
 #[serde(rename_all = "camelCase")]
+#[ts(export, export_to = "authentication.ts")]
 pub struct CreateUserResponse {
     pub token: String,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, TS)]
 #[serde(rename_all = "camelCase")]
+#[ts(export, export_to = "authentication.ts")]
 pub struct LoginResponse {
     pub access_token: String,
     pub refresh_token: String,
@@ -62,23 +70,27 @@ pub struct LoginResponse {
     pub refresh_token_iat: i64,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, TS)]
 #[serde(rename_all = "camelCase")]
+#[ts(export, export_to = "authentication.ts")]
 pub struct ForgottenPasswordResponse {
     pub token: String,
 }
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, TS)]
 #[serde(rename_all = "camelCase")]
+#[ts(export, export_to = "authentication.ts")]
 pub struct SetNewPasswordResponse {}
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, TS)]
 #[serde(rename_all = "camelCase")]
+#[ts(export, export_to = "authentication.ts")]
 pub struct VerifyAccountResponse {
     pub token: String,
 }
 
-#[derive(Debug, Serialize, Deserialize, Validate)]
+#[derive(Debug, Serialize, Deserialize, Validate, TS)]
 #[serde(rename_all = "camelCase")]
+#[ts(export, export_to = "authentication.ts")]
 pub struct ResendOtpRequest {
     #[validate(length(min = 1, message = "flow is required"))]
     pub flow: String,
@@ -86,8 +98,9 @@ pub struct ResendOtpRequest {
 
 pub type RefreshTokenResponse = LoginResponse;
 
-#[derive(Debug, Serialize, Deserialize, Validate)]
+#[derive(Debug, Serialize, Deserialize, Validate, TS)]
 #[serde(rename_all = "camelCase")]
+#[ts(export, export_to = "authentication.ts")]
 pub struct OnboardingRequest {
     #[validate(length(min = 1, message = "first name cannot be empty"))]
     pub first_name: String,
@@ -98,8 +111,9 @@ pub struct OnboardingRequest {
     pub country_identifier: String,
 }
 
-#[derive(Debug, Serialize, Deserialize, Validate)]
+#[derive(Debug, Serialize, Deserialize, Validate, TS)]
 #[serde(rename_all = "camelCase")]
+#[ts(export, export_to = "authentication.ts")]
 pub struct ChangePasswordRequest {
     pub current_password: String,
     pub new_password: String,

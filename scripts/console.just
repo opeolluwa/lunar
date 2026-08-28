@@ -51,3 +51,33 @@ test-console:
 [working-directory('console/src-tauri')]
 test-tauri:
     echo "TBD"
+
+# Mint a development JWT for the orchard sync endpoint — no account required
+# (the tenant is just the JWT's user_identifier). Requires JWT_SIGNING_KEY to
+# match the running server (env or server/.env). Optional passthrough args:
+# `just dev-token -- --user-id <uuid> --exp <unix-ts>`
+dev-token ARGS="":
+    {{ justfile_directory() }}/scripts/mint-dev-token.sh {{ ARGS }}
+
+# Act as a second device against the local sync endpoint to exercise the
+# inbound mirror path without running a second Tauri instance. Set
+# LUNAR_DEV_TOKEN first (see `just dev-token`).
+[working-directory('console/src-tauri')]
+dev-device-b ID="" TITLE="from device B":
+    #!/usr/bin/env bash
+    set -euo pipefail
+    : "${LUNAR_DEV_TOKEN:?run \`just dev-token\` first and export LUNAR_DEV_TOKEN}"
+    if [ -z "{{ ID }}" ]; then
+        cargo run --example dev_device_b -- --title "{{ TITLE }}"
+    else
+        cargo run --example dev_device_b -- --id "{{ ID }}" --title "{{ TITLE }}"
+    fi
+
+# One-shot device-B injector: mints a token, sets LUNAR_DEV_TOKEN, and pushes a
+# todo from a fresh in-memory second device. Start the server first.
+dev-sync ID="" TITLE="from device B":
+    #!/usr/bin/env bash
+    set -euo pipefail
+    LUNAR_DEV_TOKEN="$("{{ justfile_directory() }}"/scripts/mint-dev-token.sh)"
+    export LUNAR_DEV_TOKEN
+    just dev-device-b "{{ ID }}" "{{ TITLE }}"

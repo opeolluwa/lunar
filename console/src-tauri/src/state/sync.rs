@@ -1,15 +1,19 @@
 use std::collections::BTreeMap;
 use std::path::Path;
+use std::sync::Arc;
 
 use loomabase::client::SqliteClient;
-use loomabase::crdt::{CrdtValue, SyncPayload};
+use loomabase::crdt::{RowChange, SyncPayload};
 use loomabase::{Result as LoomabaseResult, SyncError};
 use serde::Serialize;
 
-use crate::errors::AppError;
+use crate::state::mirror;
 
 /// HTTP header carrying the persisted device identifier.
 pub const DEVICE_ID_HEADER: &str = "x-device-id";
+
+/// Mirrors [`loomabase::client::MAX_SYNC_PAGES_PER_CALL`], which is private.
+pub const MAX_SYNC_PAGES_PER_CALL: u32 = 100;
 
 /// Holds one `SqliteClient` per contract table, all sharing the app database
 /// file and one stable device identifier. This is the offline-first source of
@@ -18,7 +22,7 @@ pub const DEVICE_ID_HEADER: &str = "x-device-id";
 #[derive(Clone)]
 pub struct SyncManager {
     clients: BTreeMap<String, SqliteClient>,
-    device_id: String,
+    device_id: Arc<std::sync::RwLock<String>>,
     server_url: String,
 }
 
@@ -36,6 +40,7 @@ pub struct SyncTableReport {
     pub received_rows: usize,
     pub has_more: bool,
     pub caught_up: bool,
+    pub applied_rows: usize,
 }
 
 impl SyncManager {
@@ -56,14 +61,26 @@ impl SyncManager {
 
         Ok(Self {
             clients,
-            device_id,
+            device_id: Arc::new(std::sync::RwLock::new(device_id)),
             server_url,
         })
     }
 
     #[must_use]
-    pub fn device_id(&self) -> &str {
-        &self.device_id
+    pub fn device_id(&self) -> String {
+        self.device_id
+            .read()
+            .expect("sync device_id lock poisoned")
+            .clone()
+    }
+
+    /// Updates the in-memory device identifier after it has been re-recorded
+    /// in the store (see the `update_device_id` command).
+    pub fn set_device_id(&self, device_id: String) {
+        *self
+            .device_id
+            .write()
+            .expect("sync device_id lock poisoned") = device_id;
     }
 
     /// Resolves the store client for one contract table (e.g. `"todos"`).
@@ -75,148 +92,110 @@ impl SyncManager {
     /// orchard server. All stores synchronize through the same authenticated
     /// transport; each table is an independent CRDT domain and converges under
     /// last-writer-wins at the cell level.
-    pub async fn sync_all(&self, token: &str) -> Result<SyncReport, SyncError> {
-        let device_id = self.device_id.clone();
-        let token = token.to_owned();
+    ///
+    /// Every page returned across all tables is accumulated and then written
+    /// back into the sea-orm tables (see [`mirror::apply_all`]) so changes made
+    /// on other devices are reflected in this app's read path.
+    pub async fn sync_all(&self, token: &str, conn: &lunar::sea_orm::DatabaseConnection) -> Result<SyncReport, SyncError> {
+        let mut by_table: BTreeMap<String, Vec<RowChange>> = BTreeMap::new();
         let mut report = SyncReport::default();
+        let device_id = self.device_id();
 
         for (table_name, client) in &self.clients {
             let outbound = client.local_delta().await?;
             let sent_rows = outbound.changes.len();
 
-            let response = client
-                .sync_until_caught_up(|payload| {
-                    let url = self.server_url.clone();
-                    let device_id = device_id.clone();
-                    let token = token.clone();
-                    async move {
-                        let http = reqwest::Client::new();
-                        let result = http
-                            .post(&url)
-                            .bearer_auth(&token)
-                            .header(DEVICE_ID_HEADER, &device_id)
-                            .json(&payload)
-                            .send()
-                            .await
-                            .map_err(transport_error)?;
-                        if !result.status().is_success() {
-                            let status = result.status();
-                            let body = result
-                                .text()
-                                .await
-                                .unwrap_or_else(|_| String::new());
-                            return Err(SyncError::InvalidPayload(format!(
-                                "sync failed ({status}): {body}"
-                            )));
-                        }
-                        result.json::<SyncPayload>().await.map_err(transport_error)
-                    }
-                })
-                .await?;
+            let mut received_rows = 0usize;
+            let mut has_more = false;
+            let mut received: Vec<RowChange> = Vec::new();
+
+            for _ in 0..MAX_SYNC_PAGES_PER_CALL {
+                let outbound = client.local_delta().await?;
+                let response = transport(&self.server_url, token, &device_id, outbound.clone()).await?;
+                client.complete_sync(outbound, response.clone()).await?;
+
+                received_rows += response.changes.len();
+                received.extend(response.changes);
+                has_more = response.has_more;
+                if !has_more {
+                    break;
+                }
+            }
+            if has_more {
+                return Err(SyncError::SyncPageBudgetExhausted);
+            }
+
+            let applied_rows = received.len();
+            if !received.is_empty() && is_mirror_table(table_name) {
+                by_table.insert(table_name.clone(), std::mem::take(&mut received));
+            }
 
             report.tables.push(SyncTableReport {
                 table: table_name.clone(),
                 sent_rows,
-                received_rows: response.changes.len(),
-                has_more: response.has_more,
-                caught_up: !response.has_more,
+                received_rows,
+                has_more,
+                caught_up: !has_more,
+                applied_rows,
             });
         }
+
+        mirror::apply_all(conn, &by_table).await;
 
         Ok(report)
     }
 }
 
-/// Seeds the `todos` store from the legacy lunar table once, so pre-existing
-/// rows participate in the first sync. Safe only while the store is still empty
-/// (i.e. before any sync has completed for this device).
-pub async fn backfill_todos(
-    sync_manager: Option<&SyncManager>,
-    conn: &lunar::sea_orm::DatabaseConnection,
-) -> Result<usize, AppError> {
-    use lunar::entities::todo;
-    use lunar::sea_orm::EntityTrait;
-
-    let Some(store) = sync_manager.and_then(|manager| manager.client("todos")) else {
-        return Ok(0);
-    };
-
-    let models = todo::Entity::find()
-        .all(conn)
-        .await
-        .map_err(|err| AppError::Kernel(lunar::error::LunarError::DbOperationError(err.to_string())))?;
-
-    let mut seeded = 0;
-    for model in &models {
-        let mut values = BTreeMap::new();
-        values.insert("title".to_string(), CrdtValue::Text(model.title.clone()));
-        values.insert("completed".to_string(), CrdtValue::Boolean(model.done));
-        values.insert(
-            "priority".to_string(),
-            CrdtValue::Text(priority_to_text(&model.priority).to_string()),
-        );
-        if let Some(description) = &model.description {
-            values.insert("description".to_string(), CrdtValue::Text(description.clone()));
-        }
-        if let Some(due_date) = &model.due_date {
-            values.insert(
-                "due_date".to_string(),
-                CrdtValue::Text(due_date.format("%Y-%m-%d").to_string()),
-            );
-        }
-        if let Some(due_time) = &model.due_time {
-            values.insert(
-                "due_time".to_string(),
-                CrdtValue::Text(due_time.format("%H:%M:%S").to_string()),
-            );
-        }
-        values.insert(
-            "created_at".to_string(),
-            CrdtValue::Text(model.created_at.to_rfc3339()),
-        );
-        values.insert(
-            "updated_at".to_string(),
-            CrdtValue::Text(model.updated_at.to_rfc3339()),
-        );
-        if let Some(workspace_identifier) = &model.workspace_identifier {
-            values.insert(
-                "workspace_identifier".to_string(),
-                CrdtValue::Text(workspace_identifier.to_string()),
-            );
-        }
-
-        store
-            .insert(model.identifier.to_string(), values)
-            .await
-            .map_err(|err| AppError::Kernel(lunar::error::LunarError::DbOperationError(err.to_string())))?;
-        seeded += 1;
-    }
-    Ok(seeded)
+fn is_mirror_table(table: &str) -> bool {
+    matches!(
+        table,
+        mirror::TABLE_TODOS
+            | mirror::TABLE_NOTES
+            | mirror::TABLE_BOOKMARKS
+            | mirror::TABLE_REMINDERS
+            | mirror::TABLE_SNIPPETS
+            | mirror::TABLE_WORKSPACES
+            | mirror::TABLE_WORKSPACE_PROFILES
+            | mirror::TABLE_RECYCLE_BIN
+    )
 }
 
-fn priority_to_text(priority: &lunar::entities::sea_orm_active_enums::Priority) -> &'static str {
-    use lunar::entities::sea_orm_active_enums::Priority;
-    match priority {
-        Priority::High => "high",
-        Priority::Medium => "medium",
-        Priority::Low => "low",
+/// POSTs one synchronization page through the authenticated transport.
+async fn transport(
+    server_url: &str,
+    token: &str,
+    device_id: &str,
+    payload: SyncPayload,
+) -> Result<SyncPayload, SyncError> {
+    let http = reqwest::Client::new();
+    let result = http
+        .post(server_url)
+        .bearer_auth(token)
+        .header(DEVICE_ID_HEADER, device_id)
+        .json(&payload)
+        .send()
+        .await
+        .map_err(transport_error)?;
+    if !result.status().is_success() {
+        let status = result.status();
+        let body = result.text().await.unwrap_or_else(|_| String::new());
+        return Err(SyncError::InvalidPayload(format!(
+            "sync failed ({status}): {body}"
+        )));
     }
+    result.json::<SyncPayload>().await.map_err(transport_error)
 }
 
 fn transport_error(error: reqwest::Error) -> SyncError {
     SyncError::BlockingTask(error.to_string())
 }
 
-/// Loads or creates the stable per-install device identifier persisted in the
-/// app data directory.
-pub fn load_device_id(app_data_dir: &Path) -> Result<String, AppError> {
-    let path = app_data_dir.join("device_id");
-    match std::fs::read_to_string(&path) {
-        Ok(existing) => Ok(existing.trim().to_string()),
-        Err(_) => {
-            let device_id = uuid::Uuid::new_v4().to_string();
-            std::fs::write(&path, &device_id).map_err(AppError::io)?;
-            Ok(device_id)
-        }
-    }
+/// Derives a stable per-device identifier from OS-level information reported
+/// by the `tauri-plugin-os` plugin. Combining the hostname with the platform
+/// and architecture reduces the chance two devices collide on the same name.
+pub fn os_device_id() -> String {
+    let hostname = tauri_plugin_os::hostname();
+    let platform = tauri_plugin_os::platform();
+    let arch = tauri_plugin_os::arch();
+    format!("{hostname}@{platform}:{arch}")
 }

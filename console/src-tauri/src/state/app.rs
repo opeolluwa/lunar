@@ -17,6 +17,7 @@ use crate::state::sync::SyncManager;
 
 pub struct AppState {
     pub bookmark_repository: BookmarkRepository,
+    pub conn: Arc<DatabaseConnection>,
     pub notes_repository: NotesRepository,
     pub notification_repository: NotificationRepository,
     pub recycle_bin_repository: RecycleBinRepository,
@@ -46,6 +47,7 @@ impl AppState {
 
         AppState {
             bookmark_repository,
+            conn,
             notes_repository,
             notification_repository,
             recycle_bin_repository,

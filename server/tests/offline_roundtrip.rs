@@ -26,7 +26,7 @@ fn todos_table() -> TableDef {
 fn database_url() -> String {
     std::env::var("LOOMABASE_TEST_DATABASE_URL")
         .or_else(|_| std::env::var("DATABASE_URL"))
-        .unwrap_or_else(|_| "postgres://postgres:postgres@localhost:5432/lunar".to_string())
+        .unwrap_or_else(|_| "postgres://orchard:orchard@localhost:6543/orchard".to_string())
 }
 
 async fn remote_merge(

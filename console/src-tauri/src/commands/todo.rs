@@ -12,6 +12,7 @@ use crate::{
     adapters::todo::{CreateTodo, UpdateTodo},
     errors::AppError,
     state::app::AppState,
+    state::mirror,
 };
 
 #[tauri::command]
@@ -20,11 +21,13 @@ pub async fn create_todo(
     todo: CreateTodo,
     meta: Option<RequestMeta>,
 ) -> Result<todo::Model, AppError> {
-    state
+    let model = state
         .todo_repository
         .create_todo(&todo.into(), &meta)
         .await
-        .map_err(Into::into)
+        .map_err(AppError::from)?;
+    mirror::mirror_todo(&state.sync_manager, &model).await;
+    Ok(model)
 }
 
 #[tauri::command]
@@ -59,11 +62,13 @@ pub async fn update_todo(
     todo: UpdateTodo,
     meta: Option<RequestMeta>,
 ) -> Result<todo::Model, AppError> {
-    state
+    let model = state
         .todo_repository
         .update(&identifier, &todo.into(), &meta)
         .await
-        .map_err(Into::into)
+        .map_err(AppError::from)?;
+    mirror::mirror_todo(&state.sync_manager, &model).await;
+    Ok(model)
 }
 
 #[tauri::command]
@@ -72,11 +77,14 @@ pub async fn delete_todo(
     identifier: Uuid,
     meta: Option<RequestMeta>,
 ) -> Result<(), AppError> {
-    state
+    let bin = state
         .todo_repository
         .delete(&identifier, &meta)
         .await
-        .map_err(Into::into)
+        .map_err(AppError::from)?;
+    mirror::mirror_recycle_bin(&state.sync_manager, &bin).await;
+    mirror::tombstone(&state.sync_manager, mirror::TABLE_TODOS, &identifier).await;
+    Ok(())
 }
 
 #[tauri::command]
@@ -86,11 +94,13 @@ pub async fn mark_todo_done(
     done: bool,
     meta: Option<RequestMeta>,
 ) -> Result<todo::Model, AppError> {
-    state
+    let model = state
         .todo_repository
         .mark_done(&identifier, done, &meta)
         .await
-        .map_err(Into::into)
+        .map_err(AppError::from)?;
+    mirror::mirror_todo(&state.sync_manager, &model).await;
+    Ok(model)
 }
 
 #[tauri::command]
@@ -105,11 +115,13 @@ pub async fn change_todo_priority(
         "low" => TodoPriority::Low,
         _ => TodoPriority::Medium,
     };
-    state
+    let model = state
         .todo_repository
         .change_priority(&identifier, &priority, &meta)
         .await
-        .map_err(Into::into)
+        .map_err(AppError::from)?;
+    mirror::mirror_todo(&state.sync_manager, &model).await;
+    Ok(model)
 }
 
 #[tauri::command]
@@ -125,11 +137,13 @@ pub async fn update_todo_due_date(
         .as_deref()
         .and_then(|d| NaiveDate::parse_from_str(d, "%Y-%m-%d").ok());
 
-    state
+    let model = state
         .todo_repository
         .update_due_date(&identifier, date, &meta)
         .await
-        .map_err(Into::into)
+        .map_err(AppError::from)?;
+    mirror::mirror_todo(&state.sync_manager, &model).await;
+    Ok(model)
 }
 
 #[tauri::command]
@@ -148,7 +162,15 @@ pub async fn transfer_todo(
             &target_workspace_identifier,
         )
         .await
-        .map_err(Into::into)
+        .map_err(AppError::from)?;
+    mirror::transfer(
+        &state.sync_manager,
+        mirror::TABLE_TODOS,
+        &record_identifier,
+        &target_workspace_identifier,
+    )
+    .await;
+    Ok(())
 }
 
 #[tauri::command]
@@ -159,7 +181,7 @@ pub async fn duplicate_todo(
     target_workspace_identifier: Uuid,
     _meta: Option<RequestMeta>,
 ) -> Result<(), AppError> {
-    state
+    let new_identifier = state
         .todo_repository
         .duplicate_record(
             &record_identifier,
@@ -167,7 +189,19 @@ pub async fn duplicate_todo(
             &target_workspace_identifier,
         )
         .await
-        .map_err(Into::into)
+        .map_err(AppError::from)?;
+    let meta = RequestMeta {
+        workspace_identifier: target_workspace_identifier,
+    };
+    if let Some(model) = state
+        .todo_repository
+        .find_by_id(&new_identifier, &Some(meta))
+        .await
+        .map_err(AppError::from)?
+    {
+        mirror::mirror_todo(&state.sync_manager, &model).await;
+    }
+    Ok(())
 }
 
 #[tauri::command]
