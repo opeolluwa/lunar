@@ -33,8 +33,19 @@ impl MigrationTrait for Migration {
                                 .not_null()
                                 .default("medium"),
                         )
+                        .col(date_null("due_date"))
+                        .col(
+                            ColumnDef::new("priority")
+                                .enumeration(
+                                    Priority::Type,
+                                    [Priority::High, Priority::Medium, Priority::Low],
+                                )
+                                .not_null()
+                                .default("medium"),
+                        )
                         .col(timestamp_with_time_zone("created_at"))
                         .col(timestamp_with_time_zone("updated_at"))
+                        .col(ColumnDef::new("due_time").time().null())
                         .col(ColumnDef::new("workspace_identifier").uuid())
                         .col(boolean("done").default(false))
                         .foreign_key(

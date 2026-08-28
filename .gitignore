@@ -24,7 +24,7 @@ test.sqlite
 
 
 almonds/src-tauri/almond.dev.db
-
+almonds/src-tauri/lunar.db
 
 prod.db
 backup.sql
