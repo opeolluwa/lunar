@@ -8,15 +8,13 @@ import { computed, onMounted, watch } from "vue";
 import { IS_WEB } from "@shared/env";
 import { useUserPreferenceStore } from "@shared/stores/workspace-profile";
 
-const props = defineProps<{ authenticated?: boolean }>();
+const iconSize = "sm";
 const authStore = useAuthStore();
 const syncQueueStore = useSyncQueueStore();
 const isOnline = computed(() => syncQueueStore.isOnline);
 const runningSync = computed(() => syncQueueStore.runningSync);
 const router = useRouter();
-const hideAuthGated = computed(
-  () => props.authenticated && !authStore.isAuthenticated && !authStore.isGuest,
-);
+
 const colorMode = useColorMode();
 const { searchQuery, isOpen } = useAppSearch();
 const appWindow = getCurrentWindow();
@@ -35,9 +33,6 @@ const isDark = computed({
   get: () => colorMode.value === "dark",
   set: (v) => (colorMode.preference = v ? "dark" : "light"),
 });
-const themeIcon = computed(() =>
-  isDark.value ? "heroicons:sun" : "heroicons:moon",
-);
 
 const userMenuItems = computed(() => [
   {
@@ -121,7 +116,7 @@ useEventListener("keydown", (e: KeyboardEvent) => {
     <div v-else-if="!isMacOS && IS_WEB" class="flex items-center shrink-0">
       <UTooltip text="Minimize">
         <UButton
-          size="sm"
+          :size="iconSize"
           color="neutral"
           variant="ghost"
           icon="heroicons:minus"
@@ -155,7 +150,7 @@ useEventListener("keydown", (e: KeyboardEvent) => {
 
     <div class="inline-flex items-center shrink-0">
       <UButton
-        size="sm"
+        :size="iconSize"
         color="neutral"
         variant="ghost"
         class="cursor-pointer hidden md:block"
@@ -164,7 +159,7 @@ useEventListener("keydown", (e: KeyboardEvent) => {
         @click="router.back()"
       />
       <UButton
-        size="sm"
+        :size="iconSize"
         color="neutral"
         variant="ghost"
         class="cursor-pointer hidden md:block"
@@ -177,17 +172,17 @@ useEventListener("keydown", (e: KeyboardEvent) => {
     <WorkspaceSelect class="cursor-pointer hidden md:block" />
 
     <UButton
-      size="sm"
+      :size="iconSize"
       variant="ghost"
+      color="neutral"
       :disabled="!isOnline"
       aria-label="Sync data"
-      class="hidden"
       @click="syncQueueStore.runSync()"
     >
       <template #leading>
         <UIcon
           :name="syncIcon"
-          :class="['size-4', runningSync && 'animate-spin']"
+          :class="['size-5', runningSync && 'animate-spin']"
         />
       </template>
     </UButton>
@@ -246,20 +241,12 @@ useEventListener("keydown", (e: KeyboardEvent) => {
     <!-- Right actions -->
     <div class="flex items-center gap-1 ml-auto">
       <UTooltip :text="themeLabel">
-        <UButton
-          size="sm"
-          color="neutral"
-          class="cursor-pointer"
-          variant="ghost"
-          :icon="themeIcon"
-          :aria-label="themeLabel"
-          @click="isDark = !isDark"
-        />
+        <UColorModeButton :size="iconSize" />
       </UTooltip>
 
       <UTooltip text="Notifications">
         <UButton
-          size="sm"
+          :size="iconSize"
           color="neutral"
           class="cursor-pointer"
           variant="ghost"

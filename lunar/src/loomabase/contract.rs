@@ -49,7 +49,7 @@ fn optional_column(column: &str) -> ColumnDef {
 
 fn todos_table() -> Result<TableDef> {
     TableDef::new(
-        "todos",
+        "loomabase_todos",
         vec![
             ColumnDef::new("title", ColumnType::Text),
             // The app's `done` flag maps onto the canonical Loomabase register.

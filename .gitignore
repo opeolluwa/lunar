@@ -37,3 +37,6 @@ console/app/layers/shared/data/lunar/migrations/
 console/src-tauri/gen/keystore.properties
 
 keystore.properties
+console/src-tauri/lunar.db
+console/src-tauri/lunar.db-shm
+console/src-tauri/lunar.db-wal

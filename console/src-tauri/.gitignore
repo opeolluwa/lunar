@@ -12,3 +12,9 @@ backup.sql
  console/src-tauri/almonds-pglite
 
 src-tauri/gen/keystore.properties
+./lunar.db
+./lunar.db-shm
+./lunar.db-wal
+
+
+console/src-tauri/lunar.db-shm
