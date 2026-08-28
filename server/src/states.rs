@@ -4,6 +4,7 @@ use async_graphql::dynamic::Schema;
 use axum::extract::FromRef;
 use sea_orm::DatabaseConnection;
 use seaography::async_graphql;
+use sqlx_postgres::PgPool;
 
 use crate::config::AppConfig;
 use crate::errors::app_error::AppError;
@@ -56,6 +57,7 @@ pub struct AppState {
     pub services: ServicesState,
     pub database_connection: Arc<DatabaseConnection>,
     pub app_config: AppConfig,
+    pub sync_pool: PgPool,
 }
 
 impl Repositories {
@@ -152,7 +154,7 @@ impl FromRef<Arc<AppState>> for InvitationService {
 }
 
 impl AppState {
-    pub fn new(db: &DatabaseConnection) -> Result<Self, AppError> {
+    pub fn new(db: &DatabaseConnection, sync_pool: PgPool) -> Result<Self, AppError> {
         let app_config = AppConfig::from_env()?;
         let db = Arc::new(db.clone());
         let contracts = Contracts::new(&app_config)?;
@@ -163,6 +165,7 @@ impl AppState {
             services,
             database_connection: db,
             app_config,
+            sync_pool,
         })
     }
 }

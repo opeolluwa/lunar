@@ -6,8 +6,6 @@ mod utils;
 
 use std::sync::Arc;
 
-use loomabase::client::SqliteClient;
-use loomabase::Result;
 use lunar::{adapters::notifications::CreateNotification, DataEngine};
 use tauri::Listener;
 use tauri::Manager;
@@ -15,6 +13,7 @@ use tauri::Manager;
 use crate::state::alarm::AlarmState;
 use crate::state::app::AppState;
 use crate::state::scheduler::SchedulerState;
+use crate::state::sync::{backfill_todos, load_device_id, SyncManager};
 
 // event channels
 const EVENT_NOTIFICATION_RECEIVED: &str = "notification:received";
@@ -73,23 +72,21 @@ pub async fn run() {
                         Err(_) => app_data_dir.join("almonds.db"),
                     };
                     
-                    let client = match SqliteClient::open(&db_path, "client").await {
-                        Ok(client) => client,
+                    let device_id = match load_device_id(&app_data_dir) {
+                        Ok(id) => id,
                         Err(e) => {
-                            eprintln!("Failed to open SQLite client: {e}");
+                            eprintln!("Failed to load device identifier: {e}");
                             return;
                         }
                     };
-                    
-                    match client.local_delta().await {
-                        Ok(outbound) => {
-                            dbg!("Outbound: {:?}", outbound);
-                            // Send outbound through your authenticated transport.
-                        }
+
+                    let sync_manager = match SyncManager::open_store(&db_path, device_id).await {
+                        Ok(manager) => manager,
                         Err(e) => {
-                            eprintln!("Failed to get local delta: {e}");
+                            eprintln!("Failed to open offline-first sync store: {e}");
+                            return;
                         }
-                    }
+                    };
 
                     let db_url = format!("sqlite://{}?mode=rwc", db_path.display());
                     dbg!("Database URL: {:?}", &db_url);
@@ -103,7 +100,19 @@ pub async fn run() {
                         .expect("failed to run migrations");
 
                     let conn = Arc::new(kernel.connection().clone());
-                    let state = AppState::new(conn).await;
+
+                    let backfill_marker = app_data_dir.join("backfill-v1.done");
+                    if !backfill_marker.exists() {
+                        match backfill_todos(Some(&sync_manager), &conn).await {
+                            Ok(seeded) => {
+                                println!("Seeded {seeded} todos into the offline store");
+                                let _ = std::fs::write(&backfill_marker, "done");
+                            }
+                            Err(e) => eprintln!("Failed to backfill todos: {e}"),
+                        }
+                    }
+
+                    let state = AppState::new(conn, sync_manager).await;
 
                     app_handle.manage(state);
                     app_handle.manage(AlarmState::new());
@@ -175,6 +184,8 @@ pub async fn run() {
             commands::snippets::clear_synced_snippets,
             commands::snippets::transfer_snippet,
             commands::snippets::update_snippet,
+            commands::sync::sync_all,
+            commands::sync::current_device_id,
             commands::sync_queue::add_sync_queue_entry,
             commands::sync_queue::count_sync_queue_entries,
             commands::sync_queue::remove_sync_queue_entry,
