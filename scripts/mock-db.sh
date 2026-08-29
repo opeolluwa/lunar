@@ -1,0 +1,1 @@
+cp "$HOME/Library/Application Support/com.opeolluwa.lunar/almonds.db" ./lunar.db

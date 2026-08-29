@@ -1,4 +1,4 @@
-import { useUserPreferenceStore } from "~/stores/workspace-preferences";
+import { useUserPreferenceStore } from "~/stores/workspace-profile";
 
 export function useUserSetup() {
   const store = useUserPreferenceStore();

@@ -35,6 +35,7 @@ impl MigrationTrait for Migration {
                         )
                         .col(timestamp_with_time_zone("created_at"))
                         .col(timestamp_with_time_zone("updated_at"))
+                        .col(ColumnDef::new("due_time").time().null())
                         .col(ColumnDef::new("workspace_identifier").uuid())
                         .col(boolean("done").default(false))
                         .foreign_key(

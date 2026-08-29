@@ -53,13 +53,13 @@ pub trait RecycleBinRepositoryExt {
     async fn purge(&self, identifier: &Uuid, meta: &Option<RequestMeta>)
     -> Result<(), LunarError>;
 
-    async fn purge_all(&self, meta: &Option<RequestMeta>) -> Result<(), LunarError>;
+    async fn purge_all(&self, meta: &Option<RequestMeta>) -> Result<Vec<Uuid>, LunarError>;
 
     async fn restore(
         &self,
         identifier: &Uuid,
         meta: &Option<RequestMeta>,
-    ) -> Result<(), LunarError>;
+    ) -> Result<recycle_bin::Model, LunarError>;
 
     async fn extract_unsynced(&self) -> Result<Vec<recycle_bin::Model>, LunarError>;
 
@@ -158,22 +158,31 @@ impl RecycleBinRepositoryExt for RecycleBinRepository {
         Ok(())
     }
 
-    async fn purge_all(&self, meta: &Option<RequestMeta>) -> Result<(), LunarError> {
+    async fn purge_all(&self, meta: &Option<RequestMeta>) -> Result<Vec<Uuid>, LunarError> {
         let meta = extract_req_meta(meta)?;
+
+        let identifiers = recycle_bin::Entity::find()
+            .filter(recycle_bin::Column::WorkspaceIdentifier.eq(meta.workspace_identifier))
+            .all(self.conn.as_ref())
+            .await
+            .map_err(|err| LunarError::DbOperationError(err.to_string()))?
+            .into_iter()
+            .map(|entry| entry.identifier)
+            .collect::<Vec<Uuid>>();
 
         recycle_bin::Entity::delete_many()
             .filter(recycle_bin::Column::WorkspaceIdentifier.eq(meta.workspace_identifier))
             .exec(self.conn.as_ref())
             .await
             .map_err(|err| LunarError::DbOperationError(err.to_string()))?;
-        Ok(())
+        Ok(identifiers)
     }
 
     async fn restore(
         &self,
         identifier: &Uuid,
         meta: &Option<RequestMeta>,
-    ) -> Result<(), LunarError> {
+    ) -> Result<recycle_bin::Model, LunarError> {
         let meta = extract_req_meta(meta)?;
 
         let entry = recycle_bin::Entity::find()
@@ -230,7 +239,7 @@ impl RecycleBinRepositoryExt for RecycleBinRepository {
             .exec(self.conn.as_ref())
             .await
             .map_err(|err| LunarError::DbOperationError(err.to_string()))?;
-        Ok(())
+        Ok(entry)
     }
 
     async fn extract_unsynced(&self) -> Result<Vec<recycle_bin::Model>, LunarError> {

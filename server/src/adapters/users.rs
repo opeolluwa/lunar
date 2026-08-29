@@ -1,9 +1,11 @@
 use serde::{Deserialize, Serialize};
+use ts_rs::TS;
 use uuid::Uuid;
 use validator::Validate;
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, TS)]
 #[serde(rename_all = "camelCase")]
+#[ts(export, export_to = "users.ts")]
 pub struct UserProfile {
     pub identifier: Uuid,
     pub email: String,
@@ -13,8 +15,9 @@ pub struct UserProfile {
     pub username: Option<String>,
     pub country_identifier: Option<String>,
 }
-#[derive(Debug, Serialize, Deserialize, Validate)]
+#[derive(Debug, Serialize, Deserialize, Validate, TS)]
 #[serde(rename_all = "camelCase")]
+#[ts(export, export_to = "users.ts")]
 pub struct PartialUserProfile {
     pub email: Option<String>,
     pub first_name: Option<String>,

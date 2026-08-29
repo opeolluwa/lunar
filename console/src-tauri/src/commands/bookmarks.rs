@@ -12,6 +12,7 @@ use crate::{
     adapters::bookmarks::{CreateBookmark, UpdateBookmark},
     errors::AppError,
     state::app::AppState,
+    state::mirror,
 };
 
 #[tauri::command]
@@ -20,11 +21,13 @@ pub async fn create_bookmark(
     bookmark: CreateBookmark,
     meta: Option<RequestMeta>,
 ) -> Result<bookmark::Model, AppError> {
-    state
+    let model = state
         .bookmark_repository
         .create(&bookmark.into(), &meta)
         .await
-        .map_err(Into::into)
+        .map_err(AppError::from)?;
+    mirror::mirror_bookmark(&state.sync_manager, &model).await;
+    Ok(model)
 }
 
 #[tauri::command]
@@ -90,11 +93,13 @@ pub async fn update_bookmark(
     bookmark: UpdateBookmark,
     meta: Option<RequestMeta>,
 ) -> Result<bookmark::Model, AppError> {
-    state
+    let model = state
         .bookmark_repository
         .update(&identifier, &bookmark.into(), &meta)
         .await
-        .map_err(Into::into)
+        .map_err(AppError::from)?;
+    mirror::mirror_bookmark(&state.sync_manager, &model).await;
+    Ok(model)
 }
 
 #[tauri::command]
@@ -103,11 +108,14 @@ pub async fn delete_bookmark(
     identifier: Uuid,
     meta: Option<RequestMeta>,
 ) -> Result<(), AppError> {
-    state
+    let bin = state
         .bookmark_repository
         .delete(&identifier, &meta)
         .await
-        .map_err(Into::into)
+        .map_err(AppError::from)?;
+    mirror::mirror_recycle_bin(&state.sync_manager, &bin).await;
+    mirror::tombstone(&state.sync_manager, mirror::TABLE_BOOKMARKS, &identifier).await;
+    Ok(())
 }
 
 #[tauri::command]
@@ -118,7 +126,7 @@ pub async fn duplicate_bookmark(
     target_workspace_identifier: Uuid,
     _meta: Option<RequestMeta>,
 ) -> Result<(), AppError> {
-    state
+    let new_identifier = state
         .bookmark_repository
         .duplicate_record(
             &record_identifier,
@@ -126,7 +134,19 @@ pub async fn duplicate_bookmark(
             &target_workspace_identifier,
         )
         .await
-        .map_err(Into::into)
+        .map_err(AppError::from)?;
+    let meta = RequestMeta {
+        workspace_identifier: target_workspace_identifier,
+    };
+    if let Some(model) = state
+        .bookmark_repository
+        .find_by_id(&new_identifier, &Some(meta))
+        .await
+        .map_err(AppError::from)?
+    {
+        mirror::mirror_bookmark(&state.sync_manager, &model).await;
+    }
+    Ok(())
 }
 
 #[tauri::command]
@@ -145,7 +165,15 @@ pub async fn transfer_bookmark(
             &target_workspace_identifier,
         )
         .await
-        .map_err(Into::into)
+        .map_err(AppError::from)?;
+    mirror::transfer(
+        &state.sync_manager,
+        mirror::TABLE_BOOKMARKS,
+        &record_identifier,
+        &target_workspace_identifier,
+    )
+    .await;
+    Ok(())
 }
 
 #[tauri::command]

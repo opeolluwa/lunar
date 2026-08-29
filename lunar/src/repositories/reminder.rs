@@ -17,7 +17,7 @@ use crate::{
         recycle_bin::CreateRecycleBinEntry,
         reminder::{CreateReminder, UpdateReminder},
     },
-    entities::{reminder, sync_queue},
+    entities::{recycle_bin, reminder, sync_queue},
     error::LunarError,
     repositories::{
         prelude::WorkspaceRepositoryExt,
@@ -67,7 +67,7 @@ pub trait ReminderRepositoryExt {
         &self,
         identifier: &Uuid,
         meta: &Option<RequestMeta>,
-    ) -> Result<(), LunarError>;
+    ) -> Result<recycle_bin::Model, LunarError>;
 
     async fn extract_unsynced(&self) -> Result<Vec<reminder::Model>, LunarError>;
 
@@ -183,7 +183,7 @@ impl ReminderRepositoryExt for ReminderRepository {
         &self,
         identifier: &Uuid,
         meta: &Option<RequestMeta>,
-    ) -> Result<(), LunarError> {
+    ) -> Result<recycle_bin::Model, LunarError> {
         let meta = extract_req_meta(meta)?;
 
         let model = reminder::Entity::find()
@@ -197,7 +197,7 @@ impl ReminderRepositoryExt for ReminderRepository {
         let payload = serde_json::to_string(&model)
             .map_err(|err| LunarError::DbOperationError(err.to_string()))?;
 
-        RecycleBinRepository::new(self.conn.clone())
+        let bin = RecycleBinRepository::new(self.conn.clone())
             .store(
                 &CreateRecycleBinEntry {
                     item_id: model.identifier,
@@ -215,7 +215,7 @@ impl ReminderRepositoryExt for ReminderRepository {
             .exec(self.conn.as_ref())
             .await
             .map_err(|err| LunarError::DbOperationError(err.to_string()))?;
-        Ok(())
+        Ok(bin)
     }
 
     async fn extract_unsynced(&self) -> Result<Vec<reminder::Model>, LunarError> {
@@ -389,7 +389,7 @@ impl DuplicateRecord for ReminderRepository {
         record_identifier: &Uuid,
         previous_workspace_identifier: &Uuid,
         target_workspace_identifier: &Uuid,
-    ) -> Result<(), LunarError> {
+    ) -> Result<Uuid, LunarError> {
         let (prev_exists_res, target_exists_res) = tokio::join!(
             self.workspace_repository
                 .exists(previous_workspace_identifier),
@@ -424,7 +424,8 @@ impl DuplicateRecord for ReminderRepository {
 
         let mut new_record = record.into_active_model();
 
-        new_record.identifier = Set(Uuid::new_v4());
+        let new_identifier = Uuid::new_v4();
+        new_record.identifier = Set(new_identifier);
         new_record.workspace_identifier = Set(Some(*target_workspace_identifier));
         new_record.created_at = Set(Utc::now().fixed_offset());
         new_record.updated_at = Set(Utc::now().fixed_offset());
@@ -434,7 +435,7 @@ impl DuplicateRecord for ReminderRepository {
             .await
             .map_err(|err| LunarError::DbOperationError(err.to_string()))?;
 
-        Ok(())
+        Ok(new_identifier)
     }
 }
 

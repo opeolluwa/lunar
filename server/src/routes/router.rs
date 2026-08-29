@@ -2,6 +2,7 @@ use std::sync::Arc;
 
 use axum::{http::StatusCode, response::IntoResponse, Router};
 use sea_orm::DatabaseConnection;
+use sqlx_postgres::PgPool;
 
 use crate::{
     response::ApiResponseBuilder,
@@ -12,8 +13,8 @@ use crate::{
     states::AppState,
 };
 
-pub fn load_routes(db_conn: &Arc<DatabaseConnection>) -> Router {
-    let app_state = AppState::new(db_conn).expect("Failed to initialize app state");
+pub fn load_routes(db_conn: &Arc<DatabaseConnection>, sync_pool: PgPool) -> Router {
+    let app_state = AppState::new(db_conn, sync_pool).expect("Failed to initialize app state");
     let state = Arc::new(app_state);
 
     Router::new()
@@ -23,6 +24,7 @@ pub fn load_routes(db_conn: &Arc<DatabaseConnection>) -> Router {
         .nest("/user", user_routes(state.clone()))
         .nest("/notifications", notification_routes(state.clone()))
         .nest("/invitations", invitation_routes(state.clone()))
+        .nest("/sync", crate::loomabase::sync_routes(state.clone()))
         .fallback(async || {
             ApiResponseBuilder::<()>::new()
                 .message(

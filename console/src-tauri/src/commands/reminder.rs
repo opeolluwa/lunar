@@ -11,6 +11,7 @@ use crate::{
     adapters::reminder::{CreateReminder, UpdateReminder},
     errors::AppError,
     state::app::AppState,
+    state::mirror,
 };
 
 #[tauri::command]
@@ -23,6 +24,7 @@ pub async fn create_reminder(
         .reminder_repository
         .create(&reminder.into(), &meta)
         .await?;
+    mirror::mirror_reminder(&state.sync_manager, &created).await;
     Ok(created)
 }
 
@@ -62,6 +64,7 @@ pub async fn update_reminder(
         .reminder_repository
         .update(&identifier, &reminder.into(), &meta)
         .await?;
+    mirror::mirror_reminder(&state.sync_manager, &updated).await;
     Ok(updated)
 }
 
@@ -71,7 +74,9 @@ pub async fn delete_reminder(
     identifier: Uuid,
     meta: Option<RequestMeta>,
 ) -> Result<(), AppError> {
-    state.reminder_repository.delete(&identifier, &meta).await?;
+    let bin = state.reminder_repository.delete(&identifier, &meta).await?;
+    mirror::mirror_recycle_bin(&state.sync_manager, &bin).await;
+    mirror::tombstone(&state.sync_manager, mirror::TABLE_REMINDERS, &identifier).await;
     Ok(())
 }
 
@@ -83,7 +88,7 @@ pub async fn duplicate_reminder(
     target_workspace_identifier: Uuid,
     _meta: Option<RequestMeta>,
 ) -> Result<(), AppError> {
-    state
+    let new_identifier = state
         .reminder_repository
         .duplicate_record(
             &record_identifier,
@@ -91,7 +96,19 @@ pub async fn duplicate_reminder(
             &target_workspace_identifier,
         )
         .await
-        .map_err(Into::into)
+        .map_err(AppError::from)?;
+    let meta = RequestMeta {
+        workspace_identifier: target_workspace_identifier,
+    };
+    if let Some(model) = state
+        .reminder_repository
+        .find_by_id(&new_identifier, &Some(meta))
+        .await
+        .map_err(AppError::from)?
+    {
+        mirror::mirror_reminder(&state.sync_manager, &model).await;
+    }
+    Ok(())
 }
 
 #[tauri::command]
@@ -110,7 +127,15 @@ pub async fn transfer_reminder(
             &target_workspace_identifier,
         )
         .await
-        .map_err(Into::into)
+        .map_err(AppError::from)?;
+    mirror::transfer(
+        &state.sync_manager,
+        mirror::TABLE_REMINDERS,
+        &record_identifier,
+        &target_workspace_identifier,
+    )
+    .await;
+    Ok(())
 }
 
 #[tauri::command]

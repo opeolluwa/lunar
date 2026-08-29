@@ -6,6 +6,8 @@ pub enum AppError {
     Kernel(#[from] lunar::error::LunarError),
     #[error("IO error: {0}")]
     Io(String),
+    #[error("Sync error: {0}")]
+    Sync(String),
     #[error("Path error: {0}")]
     Path(String),
 }

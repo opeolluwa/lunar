@@ -19,7 +19,7 @@ pub trait DuplicateRecord {
         record_identifier: &Uuid,
         previous_workspace_identifier: &Uuid,
         target_workspace_identifier: &Uuid,
-    ) -> Result<(), LunarError>;
+    ) -> Result<Uuid, LunarError>;
 }
 
 #[async_trait::async_trait]

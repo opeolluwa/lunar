@@ -1,8 +1,10 @@
 use std::fmt::Display;
 
 use serde::{Deserialize, Serialize};
+use ts_rs::TS;
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, TS)]
+#[ts(export, export_to = "otp.ts")]
 pub enum OtpKind {
     AccountVerification,
     PasswordReset,

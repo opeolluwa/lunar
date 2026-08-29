@@ -3,6 +3,8 @@ pub mod adapters;
 pub mod data_engine;
 pub mod entities;
 pub mod error;
+#[cfg(not(target_arch = "wasm32"))]
+pub mod loomabase;
 #[cfg(feature = "markdown2pdf")]
 pub mod markdown2pdf;
 pub mod repositories;

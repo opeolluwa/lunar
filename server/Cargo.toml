@@ -52,7 +52,9 @@ tracing-subscriber = { version = "0.3.17", features = ["env-filter"] }
 ulid = { version = "1.2.1", features = ["serde"] }
 uuid = { version = "1.22.0", features = ["v4"] }
 validator = { version = "0.20.0", features = ["derive"] }
-
+loomabase = { version = "0.1.0", path = "../loomabase" }
+sqlx-postgres = { version = "=0.8.6" }
+ts-rs = { version = "12.0.1", features = ["uuid-impl", "chrono-impl", "serde-json-impl", "format"] }
 [dependencies.sea-orm]
 version = "~2.0.0-rc"
 features = [

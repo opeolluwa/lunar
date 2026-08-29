@@ -321,7 +321,7 @@ impl DuplicateRecord for WorkspaceProfileRepository {
         record_identifier: &Uuid,
         previous_workspace_identifier: &Uuid,
         target_workspace_identifier: &Uuid,
-    ) -> Result<(), LunarError> {
+    ) -> Result<Uuid, LunarError> {
         let (prev_exists_res, target_exists_res) = tokio::join!(
             self.workspace_repository
                 .exists(previous_workspace_identifier),
@@ -359,7 +359,8 @@ impl DuplicateRecord for WorkspaceProfileRepository {
 
         let mut new_record = record.into_active_model();
 
-        new_record.identifier = Set(Uuid::new_v4());
+        let new_identifier = Uuid::new_v4();
+        new_record.identifier = Set(new_identifier);
         new_record.workspace_identifier = Set(Some(*target_workspace_identifier));
         new_record.created_at = Set(Utc::now().fixed_offset());
         new_record.updated_at = Set(Utc::now().fixed_offset());
@@ -369,7 +370,7 @@ impl DuplicateRecord for WorkspaceProfileRepository {
             .await
             .map_err(|err| LunarError::DbOperationError(err.to_string()))?;
 
-        Ok(())
+        Ok(new_identifier)
     }
 }
 

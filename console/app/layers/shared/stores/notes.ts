@@ -1,6 +1,6 @@
 import type { CreateNote, Notes, UpdateNote } from "lunar";
 import { defineStore } from "pinia";
-import { invoke } from "~/utils/invoke";
+import { invoke } from "../utils/invoke";
 
 type _SyncResult = {
   success: boolean;
@@ -150,42 +150,6 @@ export const useNoteStore = defineStore("notes_store", {
       }
     },
 
-    async syncUpstream() {
-      const notes = await this.fetchUnsynced();
-      if (!notes.length) return;
-
-      const input = notes.map((n) => ({
-        identifier: n.identifier,
-        title: n.title,
-        content: n.content,
-        categories: n.categories,
-        created_at: n.createdAt,
-        updated_at: n.updatedAt,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        workspace_identifier: (n as any).workspaceIdentifier ?? null,
-      }));
-      const query = gql`
-        mutation SyncNotes($input: [SyncNoteInput!]!) {
-          sync_note(input: $input) {
-            success
-            error_message
-            identifier
-          }
-        }
-      `;
-
-      const { mutate } = useMutation(query, { variables: { input } });
-
-      try {
-        const data = await mutate();
-        console.log("Notes checks response:", JSON.stringify(data, null, 2));
-      } catch (error) {
-        console.error("Error syncing notes:", error);
-      }
-    },
-
-    async clearQueue(identifiers: string[]) {
-      await invoke("clear_synced_notes", { identifiers });
-    },
+  
   },
 });

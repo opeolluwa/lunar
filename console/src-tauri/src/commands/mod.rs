@@ -6,6 +6,7 @@ pub mod notifications;
 pub mod recycle_bin;
 pub mod reminder;
 pub mod snippets;
+pub mod sync;
 pub mod sync_queue;
 pub mod todo;
 pub mod workspace_profiles;

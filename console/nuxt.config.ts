@@ -1,7 +1,7 @@
 import { resolve } from "path";
 
-// const isMobile = process.env.NUXT_APP_TARGET === "mobile";
-const isMobile = true
+const isMobile = process.env.NUXT_APP_TARGET === "mobile";
+// const isMobile = true
 
 export default defineNuxtConfig({
   srcDir: "app",
@@ -21,7 +21,6 @@ export default defineNuxtConfig({
   ssr: false,
 
   modules: [
-    "@nuxtjs/apollo",
     "@nuxt/eslint",
     "@nuxt/image",
     "@nuxt/ui",

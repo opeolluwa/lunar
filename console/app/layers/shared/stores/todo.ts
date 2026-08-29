@@ -1,6 +1,6 @@
 import type { CreateTodo, Todo, UpdateTodo } from "lunar";
 import { defineStore } from "pinia";
-import { invoke } from "~/utils/invoke";
+import { invoke } from "../utils/invoke";
 
 export type { Todo };
 
@@ -161,47 +161,6 @@ export const useTodoStore = defineStore("todo_store", {
         console.error("Error fetching unsynced todos:", error);
         return [];
       }
-    },
-
-    async syncUpstream() {
-      const todos = await this.fetchUnsynced();
-      if (!todos.length) return;
-
-      const input = todos.map((t) => ({
-        identifier: t.identifier,
-        title: t.title,
-        description: t.description ?? null,
-        due_date: t.dueDate ?? null,
-        priority: t.priority,
-        done: t.done,
-        created_at: t.createdAt,
-        updated_at: t.updatedAt,
-        due_time: t.dueTime ?? null,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        workspace_identifier: (t as any).workspaceIdentifier ?? null,
-      }));
-      const query = gql`
-        mutation SyncTodos($input: [SyncTodoInput!]!) {
-          sync_todo(input: $input) {
-            success
-            error_message
-            identifier
-          }
-        }
-      `;
-
-      const { mutate } = useMutation(query, { variables: { input } });
-
-      try {
-        const data = await mutate();
-        console.log("Todos sync response:", JSON.stringify(data, null, 2));
-      } catch (error) {
-        console.error("Error syncing todos:", error);
-      }
-    },
-
-    async clearQueue(identifiers: string[]) {
-      await invoke("clear_synced_todos", { identifiers });
     },
   },
 });

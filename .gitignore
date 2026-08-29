@@ -24,7 +24,7 @@ test.sqlite
 
 
 almonds/src-tauri/almond.dev.db
-
+almonds/src-tauri/lunar.db
 
 prod.db
 backup.sql
@@ -37,3 +37,8 @@ console/app/layers/shared/data/lunar/migrations/
 console/src-tauri/gen/keystore.properties
 
 keystore.properties
+console/src-tauri/lunar.db
+console/src-tauri/lunar.db-shm
+console/src-tauri/lunar.db-wal
+console/src-tauri/almonds.db-shm
+console/src-tauri/almonds.db-wal

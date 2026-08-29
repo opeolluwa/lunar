@@ -1,21 +1,15 @@
 import type {
   CreateWorkspaceProfile,
   UpdateWorkspaceProfile,
-  WorkspaceProfilesInterface,
+  WorkspaceProfiles
 } from "lunar";
 import { defineStore } from "pinia";
-import { invoke } from "~/utils/invoke";
-import { getWorkspaceMeta } from "~/composables/getWorkspaceMeta";
-
-export type UserPreference = WorkspaceProfilesInterface;
-
-export type CreateUserPreferencePayload = CreateWorkspaceProfile;
-
-export type UpdateUserPreferencePayload = Partial<UpdateWorkspaceProfile>;
+import { invoke } from "../utils/invoke";
+import { getWorkspaceMeta } from "#imports";
 
 export const useUserPreferenceStore = defineStore("user_preference_store", {
   state: () => ({
-    preference: null as UserPreference | null,
+    preference: null as WorkspaceProfiles | null,
     loading: false,
   }),
 
@@ -30,7 +24,7 @@ export const useUserPreferenceStore = defineStore("user_preference_store", {
     async fetchPreference() {
       this.loading = true;
       try {
-        this.preference = await invoke<UserPreference | null>(
+        this.preference = await invoke<WorkspaceProfiles | null>(
           "get_workspace_profile",
           {
             meta: await getWorkspaceMeta(),
@@ -44,9 +38,9 @@ export const useUserPreferenceStore = defineStore("user_preference_store", {
     },
 
     async createPreference(
-      payload: CreateUserPreferencePayload,
-    ): Promise<UserPreference> {
-      const created = await invoke<UserPreference>(
+      payload: CreateWorkspaceProfile,
+    ): Promise<WorkspaceProfiles> {
+      const created = await invoke<WorkspaceProfiles>(
         "create_workspace_profile",
         {
           profile: payload,
@@ -58,12 +52,12 @@ export const useUserPreferenceStore = defineStore("user_preference_store", {
     },
 
     async updatePreference(
-      payload: UpdateUserPreferencePayload,
-    ): Promise<UserPreference> {
+      payload: Partial<UpdateWorkspaceProfile>,
+    ): Promise<WorkspaceProfiles> {
       if (!this.preference) {
-        return this.createPreference(payload as CreateUserPreferencePayload);
+        return this.createPreference(payload as CreateWorkspaceProfile);
       }
-      const updated = await invoke<UserPreference>(
+      const updated = await invoke<WorkspaceProfiles>(
         "update_workspace_profile",
         {
           identifier: this.preference.identifier,
@@ -77,7 +71,7 @@ export const useUserPreferenceStore = defineStore("user_preference_store", {
 
     async fetchUnsynced() {
       try {
-        const userPreferences = await invoke<UserPreference[]>(
+        const userPreferences = await invoke<WorkspaceProfiles[]>(
           "get_unsynced_workspace_profiles",
         );
         return userPreferences;

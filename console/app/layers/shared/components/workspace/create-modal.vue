@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useUserPreferenceStore } from "@shared/stores/workspace-preferences";
+import { useUserPreferenceStore } from "@shared/stores/workspace-profile";
 import { useWorkspacesStore } from "@shared/stores/workspaces";
 import type { Workspace } from "@shared/stores/workspaces";
 
