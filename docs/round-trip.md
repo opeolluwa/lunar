@@ -38,6 +38,27 @@ one at a time.
 9. **UI sees it** — the app reads those same legacy tables, so edits from other
    devices just appear.
 
+## Where old data comes from (backfill)
+
+Data that already exists in your legacy tables (`todo`, `notes`, …) lands in
+the sync system through **backfill** — nothing old is uploaded until it does.
+
+- On every launch, the app checks each store table
+  (`backfill_missing` → `SqliteClient::is_empty`).
+- If a store table is empty but its legacy table has rows, it mirrors every
+  legacy row into the store (`mirror_*` → same insert/set path as live writes),
+  tagged with this device's id and a fresh lamport clock, marked **unsent**.
+- Those seeded rows then show up in the very first `local_delta()`, so the
+  round-trip above uploads your entire existing dataset, and the server merges
+  it under the token's tenant.
+- It's idempotent and self-healing: tables that were already seeded are left
+  untouched, and a swapped-in/replaced database re-seeds automatically.
+  `just reset-backfill` force-cleans the store tables so the next launch
+  re-mirrors everything.
+
+Caveat: seeded rows only leave the app when a sync succeeds with a valid token;
+otherwise they sit pending in the store and go out on a later successful sync.
+
 ## Why it converges
 
 Everything is per-cell last-writer-wins in the CRDT log, and the client
