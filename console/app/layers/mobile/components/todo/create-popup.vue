@@ -201,9 +201,8 @@ async function handleSubmit() {
               Time
             </label>
             <div class="flex items-center gap-2">
-              <UInputTime
+              <AppTimePicker
                 v-model="selectedTime"
-                icon="i-lucide-clock"
                 class="flex-1"
                 :disabled="loading"
               />

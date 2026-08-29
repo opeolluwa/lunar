@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import HomeStats from '~/layers/mobile/components/home/HomeStats.vue';
+
 defineProps<{
   userName: string;
   activeTodoCount: number;
@@ -72,19 +74,7 @@ const today = computed(() =>
       </div>
     </div>
 
-    <div class="relative flex flex-wrap items-center gap-2 mt-5">
-      <NuxtLink
-        v-for="s in stats"
-        :key="s.label"
-        :to="s.href"
-        class="flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-white/70 dark:bg-gray-900/60 border border-gray-200/80 dark:border-gray-700/60 backdrop-blur-sm hover:border-primary-300 dark:hover:border-primary-700 transition-colors"
-      >
-        <UIcon :name="s.icon" class="size-3.5 shrink-0" :class="s.color" />
-        <span class="text-gray-800 dark:text-gray-200 tabular-nums">{{
-          s.value
-        }}</span>
-        <span class="text-gray-400 dark:text-gray-500">{{ s.label }}</span>
-      </NuxtLink>
-    </div>
+
+    <HomeStats :stats="stats" />
   </div>
 </template>

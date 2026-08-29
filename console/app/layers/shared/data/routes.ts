@@ -5,6 +5,13 @@ export interface Route {
   activeIcon: string;
 }
 
+export interface RouteLabel {
+  type: "label";
+  name: string;
+}
+
+export type NavigationRoute = Route | RouteLabel;
+
 export const primaryRoutes: Route[] = [
   {
     path: "/",
@@ -12,51 +19,42 @@ export const primaryRoutes: Route[] = [
     icon: "ri:home-line",
     activeIcon: "ri:home-fill",
   },
+];
+
+export const workspaceRoutes: Route[] = [
   {
     path: "/notes",
     name: "Notes",
     icon: "ri:booklet-line",
     activeIcon: "ri:booklet-fill",
   },
-
-  //     {
-  //     path: "/calendar",
-  //     name: "Calendar",
-  //     icon: "ri:calendar-line",
-  //     activeIcon: "ri:calendar-fill",
-  //   },
   {
     path: "/bookmarks",
     name: "Bookmarks",
     icon: "ri:bookmark-line",
     activeIcon: "ri:bookmark-fill",
   },
-
+  {
+    path: "/todo",
+    name: "Todos",
+    icon: "ri:calendar-todo-line",
+    activeIcon: "ri:calendar-todo-fill",
+  },
   {
     path: "/reminders",
     name: "Reminders",
     icon: "ri:alarm-line",
     activeIcon: "ri:alarm-fill",
   },
-
-  // {
-  //   path: "/ollama",
-  //   name: "Ollama",
-  //   icon: "ri:cpu-line",
-  //   activeIcon: "ri:cpu-fill",
-  // },
   {
     path: "/snippets",
     name: "Snippets",
     icon: "ri:code-s-slash-line",
     activeIcon: "ri:code-s-slash-fill",
   },
-  {
-    path: "/todo",
-    name: "Todo",
-    icon: "ri:calendar-todo-line",
-    activeIcon: "ri:calendar-todo-fill",
-  },
+];
+
+export const toolRoutes: Route[] = [
   {
     path: "/moodboard",
     name: "Moodboard",
@@ -117,4 +115,22 @@ export const mobileBottomNavRoutes: Route[] = [
     icon: "ri:settings-3-line",
     activeIcon: "ri:settings-3-fill",
   },
+];
+
+export const items: NavigationRoute[] = [
+  ...primaryRoutes,
+
+  {
+    type: "label",
+    name: "Workspace",
+  },
+
+  ...workspaceRoutes,
+
+  {
+    type: "label",
+    name: "Tools",
+  },
+
+  ...toolRoutes,
 ];
