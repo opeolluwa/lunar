@@ -81,3 +81,11 @@ dev-sync ID="" TITLE="from device B":
     LUNAR_DEV_TOKEN="$("{{ justfile_directory() }}"/scripts/mint-dev-token.sh)"
     export LUNAR_DEV_TOKEN
     just dev-device-b "{{ ID }}" "{{ TITLE }}"
+
+# Reset the offline CRDT store tables so the next launch re-mirrors every
+# legacy row (when a store is populated but stale and you want a fresh
+# re-upload). The materialized row tables are deleted; the `*_crdt` journals
+# cascade via FK and `client_state` (device id / clock) is preserved.
+[working-directory('console')]
+reset-backfill DB="src-tauri/lunar.db":
+    sqlite3 "{{ DB }}" "BEGIN; DELETE FROM todos; DELETE FROM loomabase_notes; DELETE FROM loomabase_bookmarks; DELETE FROM loomabase_reminders; DELETE FROM loomabase_snippets; DELETE FROM loomabase_workspaces; DELETE FROM loomabase_workspace_profiles; DELETE FROM loomabase_recycle_bin; DELETE FROM loomabase_cursor; COMMIT;"

@@ -40,3 +40,5 @@ keystore.properties
 console/src-tauri/lunar.db
 console/src-tauri/lunar.db-shm
 console/src-tauri/lunar.db-wal
+console/src-tauri/almonds.db-shm
+console/src-tauri/almonds.db-wal

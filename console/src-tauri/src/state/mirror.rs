@@ -1005,61 +1005,115 @@ pub async fn apply_all(conn: &DatabaseConnection, by_table: &BTreeMap<String, Ve
 /// Seeds every syncable store from the legacy tables on the first run after an
 /// upgrade. Runs only when a marker file indicates it has not completed, and
 /// only while the store has no synced history yet.
+/// Mirrors every legacy row of every sync table into its store, regardless of
+/// whether the store already has rows. Used to bootstrap a fresh store.
 pub async fn backfill_all(
     sync_manager: &SyncManager,
     conn: &DatabaseConnection,
+) -> Result<usize, crate::errors::AppError> {
+    backfill_tables(sync_manager, conn, false).await
+}
+
+/// Mirrors legacy rows into any store table that is still empty. Runs on every
+/// launch so a swapped-in or freshly copied database self-heals: existing
+/// legacy rows are seeded whenever their store partition is empty, no matter
+/// what happened on previous launches. Tables whose store already has rows are
+/// left untouched.
+pub async fn backfill_missing(
+    sync_manager: &SyncManager,
+    conn: &DatabaseConnection,
+) -> Result<usize, crate::errors::AppError> {
+    backfill_tables(sync_manager, conn, true).await
+}
+
+async fn backfill_tables(
+    sync_manager: &SyncManager,
+    conn: &DatabaseConnection,
+    only_empty: bool,
 ) -> Result<usize, crate::errors::AppError> {
     use lunar::sea_orm::EntityTrait;
 
     let mut total = 0usize;
 
-    let workspaces = workspaces::Entity::find().all(conn).await.map_err(db_error)?;
-    for model in &workspaces {
-        mirror_workspace(sync_manager, model).await;
-        total += 1;
+    if !only_empty || store_needs_seeding(sync_manager, TABLE_WORKSPACES).await {
+        let rows = workspaces::Entity::find().all(conn).await.map_err(db_error)?;
+        for model in &rows {
+            mirror_workspace(sync_manager, model).await;
+        }
+        total += rows.len();
     }
 
-    let profiles = workspace_profiles::Entity::find().all(conn).await.map_err(db_error)?;
-    for model in &profiles {
-        mirror_workspace_profile(sync_manager, model).await;
-        total += 1;
+    if !only_empty || store_needs_seeding(sync_manager, TABLE_WORKSPACE_PROFILES).await {
+        let rows = workspace_profiles::Entity::find().all(conn).await.map_err(db_error)?;
+        for model in &rows {
+            mirror_workspace_profile(sync_manager, model).await;
+        }
+        total += rows.len();
     }
 
-    let todos = todo::Entity::find().all(conn).await.map_err(db_error)?;
-    for model in &todos {
-        mirror_todo(sync_manager, model).await;
-        total += 1;
+    if !only_empty || store_needs_seeding(sync_manager, TABLE_TODOS).await {
+        let rows = todo::Entity::find().all(conn).await.map_err(db_error)?;
+        for model in &rows {
+            mirror_todo(sync_manager, model).await;
+        }
+        total += rows.len();
     }
 
-    let notes = notes::Entity::find().all(conn).await.map_err(db_error)?;
-    for model in &notes {
-        mirror_notes(sync_manager, model).await;
-        total += 1;
+    if !only_empty || store_needs_seeding(sync_manager, TABLE_NOTES).await {
+        let rows = notes::Entity::find().all(conn).await.map_err(db_error)?;
+        for model in &rows {
+            mirror_notes(sync_manager, model).await;
+        }
+        total += rows.len();
     }
 
-    let bookmarks = bookmark::Entity::find().all(conn).await.map_err(db_error)?;
-    for model in &bookmarks {
-        mirror_bookmark(sync_manager, model).await;
-        total += 1;
+    if !only_empty || store_needs_seeding(sync_manager, TABLE_BOOKMARKS).await {
+        let rows = bookmark::Entity::find().all(conn).await.map_err(db_error)?;
+        for model in &rows {
+            mirror_bookmark(sync_manager, model).await;
+        }
+        total += rows.len();
     }
 
-    let reminders = reminder::Entity::find().all(conn).await.map_err(db_error)?;
-    for model in &reminders {
-        mirror_reminder(sync_manager, model).await;
-        total += 1;
+    if !only_empty || store_needs_seeding(sync_manager, TABLE_REMINDERS).await {
+        let rows = reminder::Entity::find().all(conn).await.map_err(db_error)?;
+        for model in &rows {
+            mirror_reminder(sync_manager, model).await;
+        }
+        total += rows.len();
     }
 
-    let snippets = snippets::Entity::find().all(conn).await.map_err(db_error)?;
-    for model in &snippets {
-        mirror_snippet(sync_manager, model).await;
-        total += 1;
+    if !only_empty || store_needs_seeding(sync_manager, TABLE_SNIPPETS).await {
+        let rows = snippets::Entity::find().all(conn).await.map_err(db_error)?;
+        for model in &rows {
+            mirror_snippet(sync_manager, model).await;
+        }
+        total += rows.len();
     }
 
-    let bins = recycle_bin::Entity::find().all(conn).await.map_err(db_error)?;
-    for model in &bins {
-        mirror_recycle_bin(sync_manager, model).await;
-        total += 1;
+    if !only_empty || store_needs_seeding(sync_manager, TABLE_RECYCLE_BIN).await {
+        let rows = recycle_bin::Entity::find().all(conn).await.map_err(db_error)?;
+        for model in &rows {
+            mirror_recycle_bin(sync_manager, model).await;
+        }
+        total += rows.len();
     }
 
     Ok(total)
+}
+
+/// Whether the given store table still needs to be seeded with legacy rows.
+/// Store failures are best-effort like every mirror: logged, and the table is
+/// skipped so an existing-but-unreadable store is never clobbered.
+async fn store_needs_seeding(sync_manager: &SyncManager, store: &str) -> bool {
+    match sync_manager.client(store) {
+        Some(client) => match client.is_empty().await {
+            Ok(empty) => empty,
+            Err(error) => {
+                log::error!("[backfill] emptiness check for {store}: {error}");
+                false
+            }
+        },
+        None => false,
+    }
 }

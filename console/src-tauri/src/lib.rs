@@ -12,7 +12,7 @@ use tauri::Manager;
 // use tauri:: // get device name from tauri
 use crate::state::alarm::AlarmState;
 use crate::state::app::AppState;
-use crate::state::mirror::backfill_all;
+use crate::state::mirror::backfill_missing;
 use crate::state::scheduler::SchedulerState;
 use crate::state::sync::{os_device_id, SyncManager};
 
@@ -112,16 +112,10 @@ pub async fn run() {
 
                     let conn = Arc::new(kernel.connection().clone());
 
-                    let backfill_marker = app_data_dir.join("backfill-v2.done");
-                    if !backfill_marker.exists() {
-                        let conn_ref = conn.as_ref();
-                        match backfill_all(&sync_manager, conn_ref).await {
-                            Ok(seeded) => {
-                                println!("Seeded {seeded} rows into the offline store");
-                                let _ = std::fs::write(&backfill_marker, "done");
-                            }
-                            Err(e) => eprintln!("Failed to backfill offline store: {e}"),
-                        }
+                    match backfill_missing(&sync_manager, conn.as_ref()).await {
+                        Ok(0) => {}
+                        Ok(seeded) => println!("Seeded {seeded} rows into the offline store"),
+                        Err(e) => eprintln!("Failed to backfill offline store: {e}"),
                     }
 
                     let state = AppState::new(conn, sync_manager).await;
