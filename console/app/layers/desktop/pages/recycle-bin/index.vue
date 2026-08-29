@@ -135,7 +135,7 @@ onUnmounted(() => {
           class="px-3 py-1.5 rounded-lg text-xs font-medium transition-colors capitalize"
           :class="
             typeFilter === opt.value
-              ? 'bg-gray-800 dark:bg-gray-100 text-white dark:text-gray-900'
+              ? 'bg-primary-500 text-white'
               : 'bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700'
           "
           @click="typeFilter = opt.value"

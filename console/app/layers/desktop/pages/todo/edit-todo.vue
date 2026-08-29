@@ -171,8 +171,11 @@ async function handleDelete() {
                       : "Pick a date"
                   }}
                 </button>
-                <template #content>
-                  <AppDatePicker v-model="form.dueDate" />
+                <template #content="{ close }">
+                  <AppDatePicker
+                    v-model="form.dueDate"
+                    @update:model-value="close"
+                  />
                 </template>
               </UPopover>
               <button

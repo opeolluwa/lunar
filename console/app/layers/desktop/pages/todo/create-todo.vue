@@ -114,8 +114,11 @@ async function handleSubmit() {
                       : "Pick a date"
                   }}
                 </button>
-                <template #content>
-                  <AppDatePicker v-model="form.dueDate" />
+                <template #content="{ close }">
+                  <AppDatePicker
+                    v-model="form.dueDate"
+                    @update:model-value="close"
+                  />
                 </template>
               </UPopover>
               <button
@@ -134,11 +137,7 @@ async function handleSubmit() {
               Time
             </label>
             <div class="flex items-center gap-2">
-              <UInputTime
-                v-model="selectedTime"
-                icon="i-lucide-clock"
-                class="flex-1"
-              />
+              <AppTimePicker v-model="selectedTime" class="flex-1" />
               <button
                 v-if="selectedTime"
                 type="button"
