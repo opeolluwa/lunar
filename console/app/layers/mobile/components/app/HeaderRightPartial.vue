@@ -19,5 +19,11 @@
       aria-label="Notifications"
       @click="navigateTo('/notifications')"
     />
+
+    <UUser
+      size="sm"
+      class="cursor-pointer"
+      :avatar="{ src: 'https://i.pravatar.cc/150?u=john-doe' }"
+    />
   </div>
 </template>
