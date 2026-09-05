@@ -1,31 +1,28 @@
-// // app/syncular/engine.ts
+// app/syncular/engine.ts
 
-// import type { SyncClientLike } from '@syncular/react'
-// import { schema } from './syncular.generated'
+import type { SyncClientLike } from "@syncular/react";
+import { schema } from "../../../../../src/syncular.generated";
 
-// const isTauri = () => {
-//   return (
-//     typeof window !== 'undefined' &&
-//     '__TAURI_INTERNALS__' in window
-//   )
-// }
+const isTauri = () => {
+  return typeof window !== "undefined" && "__TAURI_INTERNALS__" in window;
+};
 
-// let client: SyncClientLike | null = null
+let client: SyncClientLike | null = null;
 
-// export async function createEngine(): Promise<SyncClientLike> {
-//   if (client) {
-//     return client
-//   }
+export async function createEngine(): Promise<SyncClientLike> {
+  if (client) {
+    return client;
+  }
 
-//   if (isTauri()) {
-//     const { createTauriSyncClient } = await import('@syncular/tauri')
+  if (isTauri()) {
+    const { createTauriSyncClient } = await import("@syncular/tauri");
 
-//     client = await createTauriSyncClient({
-//       schema,
-//     })
+    client = await createTauriSyncClient({
+      schema,
+    });
 
-//     return client
-//   }
+    return client;
+  }
 
-//   throw new Error('Browser Syncular engine not implemented')
-// }
+  throw new Error("Browser Syncular engine not implemented");
+}

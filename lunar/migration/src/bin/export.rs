@@ -1,5 +1,6 @@
-use std::env;
 use sea_orm::DbBackend;
+use std::env;
+use std::path::Path;
 
 #[tokio::main]
 async fn main() -> Result<(), sea_orm_migration::prelude::DbErr> {
@@ -15,8 +16,14 @@ async fn main() -> Result<(), sea_orm_migration::prelude::DbErr> {
         "postgres" => DbBackend::Postgres,
         "mysql" => DbBackend::MySql,
         "sqlite" => DbBackend::Sqlite,
-        _ => return Err(sea_orm_migration::prelude::DbErr::Custom("invalid backend".to_string())),
+        _ => {
+            return Err(sea_orm_migration::prelude::DbErr::Custom(
+                "invalid backend".to_string(),
+            ))
+        }
     };
+
+    migration::exporter::generate_syncular_migrations(backend, Path::new("generated/syncular")).await?;
 
     migration::exporter::export_sql(output, backend).await?;
 

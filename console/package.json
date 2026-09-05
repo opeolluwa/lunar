@@ -42,6 +42,7 @@
     "@pinia/nuxt": "^1.0.2",
     "@syncular/react": "^0.15.48",
     "@syncular/tauri": "^0.15.48",
+    "@syncular/typegen": "^0.15.48",
     "@tauri-apps/plugin-clipboard-manager": "^2.3.2",
     "@tauri-apps/plugin-notification": "^2.3.3",
     "@tauri-apps/plugin-opener": "^2.5.4",

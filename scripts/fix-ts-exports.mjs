@@ -164,6 +164,7 @@ function generateIndex(entitiesDir, root) {
     } else {
       const typeName = toPascal(stem) + "Interface";
       const shortName = toPascal(stem);
+      aliases.push(`export type { ${typeName} } from "./bindings/${typeName}";\n`);
       aliases.push(`export type { ${typeName} as ${shortName} } from "./bindings/${typeName}";\n`);
     }
   }

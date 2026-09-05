@@ -30,6 +30,7 @@ sea-orm = { version = "2.0.0-rc.37", features = [
 ] }
 tokio = { version = "1.53.1", features = ["macros", "rt"] }
 lunar_macros = { version = "0.1.0", path = "../macros" }
+substring-replace = "0.2.4"
 
 [dependencies.sea-orm-migration]
 version = "~2.0.0-rc.37"
