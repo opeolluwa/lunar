@@ -1,0 +1,5 @@
+{
+  "identifier": "syncular",
+  "windows": ["main"],
+  "permissions": ["syncular:default"]
+}

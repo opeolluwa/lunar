@@ -40,6 +40,7 @@ toml = "^0.8.19"
 ts-rs = "10.1.0"
 uuid = { version = "1", features = ["v4", "serde"] }
 validator = { version = "0.19.0", features = ["derive"] }
+tauri-plugin-syncular = { version = "0.15.48", features = ["native-transport"] }
 
 [target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
 tauri-plugin-single-instance = "2"

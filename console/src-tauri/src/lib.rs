@@ -5,18 +5,16 @@ mod state;
 mod utils;
 
 use std::sync::Arc;
-
-use lunar::{adapters::notifications::CreateNotification, DataEngine};
-use tauri::Listener;
-use tauri::Manager;
-// use tauri:: // get device name from tauri
+use tauri_plugin_syncular::SyncularConfig;
 use crate::state::alarm::AlarmState;
 use crate::state::app::AppState;
 use crate::state::mirror::backfill_missing;
 use crate::state::scheduler::SchedulerState;
 use crate::state::sync::{os_device_id, SyncManager};
+use lunar::{adapters::notifications::CreateNotification, DataEngine};
+use tauri::Listener;
+use tauri::Manager;
 
-// event channels
 const EVENT_NOTIFICATION_RECEIVED: &str = "notification:received";
 
 #[tokio::main]
@@ -72,15 +70,25 @@ pub async fn run() {
                         Ok(path) => std::path::PathBuf::from(path),
                         Err(_) => app_data_dir.join("almonds.db"),
                     };
-                    
+
                     let device_id = os_device_id();
 
+                    //syncular client
+                    let database_path_for_syncular = db_path.clone().into_os_string().into_string().unwrap();
+                    let config = SyncularConfig {
+                        base_url: Some("https://your.server".into()),
+                        db_path: Some(database_path_for_syncular),
+                        auto_sync: true,
+                        ..Default::default()
+                    };
+                    app.handle().plugin(tauri_plugin_syncular::init(config)).unwrap();
+                    
                     // Reconcile the database's recorded identity with the
                     // OS-derived device id so a database recovered from a
                     // backup or copied between installs does not hard-block
                     // startup.
-                    if let Ok(current) = loomabase::client::SqliteClient::current_device_id(&db_path)
-                        .await
+                    if let Ok(current) =
+                        loomabase::client::SqliteClient::current_device_id(&db_path).await
                     {
                         if current.as_deref().is_some_and(|id| id != device_id) {
                             let _ = loomabase::client::SqliteClient::set_device_id(
@@ -123,7 +131,6 @@ pub async fn run() {
                     app_handle.manage(state);
                     app_handle.manage(AlarmState::new());
                     app_handle.manage(SchedulerState::new());
-                   
                 })
             });
 
