@@ -1,8 +1,0 @@
--- ============================================
--- 17886068422026082478860684220260824_100000_rename_workspace_preference_to_workspace_profile
--- ============================================
-
-ALTER TABLE "workspace_preferences" RENAME TO "workspace_profiles";
-
-ALTER TABLE "workspace_profiles" ADD COLUMN "profile_picture" varchar NULL;
-
