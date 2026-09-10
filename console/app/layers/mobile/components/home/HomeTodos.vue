@@ -44,7 +44,7 @@ function formatDate(iso: string) {
 
 <template>
   <div
-    class="mt-5 overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-white/15 dark:bg-gray-800/60"
+    class="mt-5 overflow-hidden rounded border border-gray-200 bg-white dark:border-white/15 dark:bg-gray-800/60"
   >
     <div
       class="flex items-center gap-3 border-b border-gray-100 px-4 py-3 dark:border-white/10"

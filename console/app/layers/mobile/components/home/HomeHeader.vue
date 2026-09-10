@@ -37,18 +37,18 @@ const firstName = computed(
 
 <template>
   <div
-    class="relative -mx-6 -mt-8 overflow-hidden bg-linear-to-br from-primary-500/10 via-violet-400/5 to-transparent px-6 pt-7 pb-5 dark:from-primary-500/12 dark:via-violet-500/6 dark:to-transparent"
+   
   >
     <div
       class="pointer-events-none absolute -top-10 right-0 size-52 rounded-full bg-primary-300/20 blur-3xl dark:bg-primary-500/10"
     />
     <div
-      class="pointer-events-none absolute bottom-0 left-1/2 size-36 -translate-y-1/2 rounded-full bg-violet-300/15 blur-2xl dark:bg-violet-500/8"
+     
     />
 
     <div class="relative">
       <span
-        class="mb-2 inline-block rounded-full bg-gray-100/80 px-2.5 py-0.5 text-[11px] font-medium text-gray-500 dark:bg-white/10 dark:text-gray-400"
+        class="mb-2 inline-block rounded-full bg-gray-100/80  py-0.5 text-[11px] font-medium text-gray-500 dark:bg-white/10 dark:text-gray-400"
       >
         {{ today }}
       </span>

@@ -13,7 +13,7 @@ const statPills = computed(() => [
     value: noteStore.notes.length,
     icon: "heroicons:document-text-solid",
     color: "text-violet-500",
-    bg: "bg-violet-50 dark:bg-violet-950/40",
+   
     href: "/notes",
   },
   {
@@ -21,7 +21,7 @@ const statPills = computed(() => [
     value: bookmarkStore.bookmarks.length,
     icon: "heroicons:bookmark-solid",
     color: "text-primary-500",
-    bg: "bg-primary-50 dark:bg-primary-950/40",
+   
     href: "/bookmarks",
   },
   {
@@ -29,7 +29,7 @@ const statPills = computed(() => [
     value: todoStore.activeTodos.length,
     icon: "heroicons:check-circle-solid",
     color: "text-emerald-500",
-    bg: "bg-emerald-50 dark:bg-emerald-950/40",
+
     href: "/todo",
   },
 ]);

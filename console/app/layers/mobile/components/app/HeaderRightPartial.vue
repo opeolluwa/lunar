@@ -6,7 +6,7 @@
       variant="ghost"
       icon="heroicons:magnifying-glass"
       aria-label="Notifications"
-      @click="navigateTo('/notifications')"
+      @click="navigateTo('/search')"
     />
 
     <UButton

@@ -11,6 +11,7 @@ export default withNuxt({
           "pricing",
           "login",
           "signup",
+          "card",
           "header",
           "Fab",
           "viewport",
