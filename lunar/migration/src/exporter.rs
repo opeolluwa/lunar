@@ -64,16 +64,16 @@ pub async fn generate_syncular_migrations(
 ) -> Result<(), DbErr> {
     for migration in Migrator::migrations() {
         sleep(Duration::from_millis(70)).await;
-        let name = migration.name().to_string();
-        let name = name.substring_remove(0, 1);
+        let name = migration.name().to_string().substring_remove(0, 1);
 
         let start = SystemTime::now();
         let since_the_epoch = start
             .duration_since(UNIX_EPOCH)
             .expect("Time went backward");
 
-        let timestamp_secs = since_the_epoch.as_secs();
-        let name = format!("{timestamp_secs}{name}");
+        let mut timestamp_secs = since_the_epoch.as_secs();
+        timestamp_secs = timestamp_secs + 50;
+        let name = format!("{timestamp_secs}{name}", ).substring_remove(18, 1);
         println!("Generating {name}");
 
         let db = MockDatabase::new(backend)

@@ -13,8 +13,6 @@ use lunar::{
     sea_orm::DatabaseConnection,
 };
 
-use crate::state::sync::SyncManager;
-
 pub struct AppState {
     pub bookmark_repository: BookmarkRepository,
     pub conn: Arc<DatabaseConnection>,
@@ -28,11 +26,10 @@ pub struct AppState {
     pub user_preference_repository: UserPreferencesRepository,
     pub workspace_profile_repository: WorkspaceProfileRepository,
     pub workspace_repository: WorkspaceRepository,
-    pub sync_manager: SyncManager,
 }
 
 impl AppState {
-    pub async fn new(conn: Arc<DatabaseConnection>, sync_manager: SyncManager) -> Self {
+    pub async fn new(conn: Arc<DatabaseConnection>) -> Self {
         let bookmark_repository = BookmarkRepository::new(conn.clone());
         let notes_repository = NotesRepository::new(conn.clone());
         let notification_repository = NotificationRepository::new(conn.clone());
@@ -58,7 +55,6 @@ impl AppState {
             user_preference_repository,
             workspace_repository,
             workspace_profile_repository,
-            sync_manager,
         }
     }
 }

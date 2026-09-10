@@ -8,9 +8,7 @@ use std::sync::Arc;
 use tauri_plugin_syncular::SyncularConfig;
 use crate::state::alarm::AlarmState;
 use crate::state::app::AppState;
-use crate::state::mirror::backfill_missing;
 use crate::state::scheduler::SchedulerState;
-use crate::state::sync::{os_device_id, SyncManager};
 use lunar::{adapters::notifications::CreateNotification, DataEngine};
 use tauri::Listener;
 use tauri::Manager;
@@ -71,8 +69,6 @@ pub async fn run() {
                         Err(_) => app_data_dir.join("almonds.db"),
                     };
 
-                    let device_id = os_device_id();
-
                     //syncular client
                     let database_path_for_syncular = db_path.clone().into_os_string().into_string().unwrap();
                     let config = SyncularConfig {
@@ -82,30 +78,6 @@ pub async fn run() {
                         ..Default::default()
                     };
                     app.handle().plugin(tauri_plugin_syncular::init(config)).unwrap();
-                    
-                    // Reconcile the database's recorded identity with the
-                    // OS-derived device id so a database recovered from a
-                    // backup or copied between installs does not hard-block
-                    // startup.
-                    if let Ok(current) =
-                        loomabase::client::SqliteClient::current_device_id(&db_path).await
-                    {
-                        if current.as_deref().is_some_and(|id| id != device_id) {
-                            let _ = loomabase::client::SqliteClient::set_device_id(
-                                &db_path,
-                                device_id.clone(),
-                            )
-                            .await;
-                        }
-                    }
-
-                    let sync_manager = match SyncManager::open_store(&db_path, device_id).await {
-                        Ok(manager) => manager,
-                        Err(e) => {
-                            eprintln!("Failed to open offline-first sync store: {e}");
-                            return;
-                        }
-                    };
 
                     let db_url = format!("sqlite://{}?mode=rwc", db_path.display());
                     dbg!("Database URL: {:?}", &db_url);
@@ -120,13 +92,7 @@ pub async fn run() {
 
                     let conn = Arc::new(kernel.connection().clone());
 
-                    match backfill_missing(&sync_manager, conn.as_ref()).await {
-                        Ok(0) => {}
-                        Ok(seeded) => println!("Seeded {seeded} rows into the offline store"),
-                        Err(e) => eprintln!("Failed to backfill offline store: {e}"),
-                    }
-
-                    let state = AppState::new(conn, sync_manager).await;
+                    let state = AppState::new(conn).await;
 
                     app_handle.manage(state);
                     app_handle.manage(AlarmState::new());
@@ -197,9 +163,6 @@ pub async fn run() {
             commands::snippets::clear_synced_snippets,
             commands::snippets::transfer_snippet,
             commands::snippets::update_snippet,
-            commands::sync::sync_all,
-            commands::sync::current_device_id,
-            commands::sync::update_device_id,
             commands::sync_queue::add_sync_queue_entry,
             commands::sync_queue::count_sync_queue_entries,
             commands::sync_queue::remove_sync_queue_entry,

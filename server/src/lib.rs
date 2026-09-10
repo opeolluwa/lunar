@@ -3,7 +3,6 @@ pub mod config;
 pub mod dto;
 pub mod errors;
 pub mod handlers;
-pub mod loomabase;
 pub mod middlewares;
 mod mutations;
 mod queries;

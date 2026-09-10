@@ -23,7 +23,7 @@ async fn main() -> Result<(), sea_orm_migration::prelude::DbErr> {
         }
     };
 
-    migration::exporter::generate_syncular_migrations(backend, Path::new("generated/syncular")).await?;
+    migration::exporter::generate_syncular_migrations(backend, Path::new("generated/migrations")).await?;
 
     migration::exporter::export_sql(output, backend).await?;
 

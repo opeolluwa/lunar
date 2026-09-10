@@ -18,7 +18,6 @@ use lunar::{data_engine, error::LunarError};
 use orchard_lib::{
     config::{AppConfig, Environment},
     errors::app_error::AppError,
-    loomabase::{build_pool, initialize_schema, DEVICE_ID_HEADER},
     routes::router::load_routes,
     shutdown::shutdown_signal,
     states::GraphQlState,
@@ -79,7 +78,7 @@ async fn main() -> Result<(), AppError> {
             .allow_headers([
                 header::CONTENT_TYPE,
                 header::AUTHORIZATION,
-                HeaderName::from_static(DEVICE_ID_HEADER),
+                HeaderName::from_static("x-device-id"),
             ])
     } else {
         CorsLayer::new()
@@ -110,10 +109,7 @@ async fn main() -> Result<(), AppError> {
         endpoint: app_config.graphql_endpoint.clone(),
     };
 
-    let sync_pool = build_pool(&app_config.database_url, app_config.max_db_connections).await?;
-    initialize_schema(&sync_pool).await?;
-
-    let http_routes = load_routes(&db_conn, sync_pool);
+    let http_routes = load_routes(&db_conn);
 
     let graphql_router = Router::new()
         .route(
