@@ -18,7 +18,7 @@
        <color name="primary_900">#0C4A6E</color>
        <color name="primary_950">#082F49</color>
 
-           <color name="background">#082F49</color>
+      <color name="background">#0EA5E9</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 </resources>

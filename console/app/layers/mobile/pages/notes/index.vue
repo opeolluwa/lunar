@@ -67,10 +67,7 @@ const filteredNotes = computed(() => {
 
       <template v-else>
         <!-- Empty state: no notes at all -->
-        <div
-          v-if="noteStore.notes.length === 0"
-          class="flex flex-col items-center justify-center py-20 text-center"
-        >
+        <div v-if="noteStore.notes.length === 0">
           <EmptyState
             title="No notes yet"
             description="Create your first note to get started."
