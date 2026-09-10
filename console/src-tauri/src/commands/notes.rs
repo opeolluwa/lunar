@@ -11,7 +11,6 @@ use crate::{
     adapters::notes::{CreateNote, UpdateNote},
     errors::AppError,
     state::app::AppState,
-    state::mirror,
 };
 
 #[tauri::command]
@@ -21,7 +20,6 @@ pub async fn create_note(
     meta: Option<RequestMeta>,
 ) -> Result<notes::Model, AppError> {
     let created = state.notes_repository.create(&note.into(), &meta).await?;
-    mirror::mirror_notes(&state.sync_manager, &created).await;
     Ok(created)
 }
 
@@ -56,9 +54,7 @@ pub async fn delete_note(
     identifier: Uuid,
     meta: Option<RequestMeta>,
 ) -> Result<(), AppError> {
-    let bin = state.notes_repository.delete(&identifier, &meta).await?;
-    mirror::mirror_recycle_bin(&state.sync_manager, &bin).await;
-    mirror::tombstone(&state.sync_manager, mirror::TABLE_NOTES, &identifier).await;
+    state.notes_repository.delete(&identifier, &meta).await?;
     Ok(())
 }
 
@@ -73,7 +69,6 @@ pub async fn update_note(
         .notes_repository
         .update(&identifier, &note.into(), &meta)
         .await?;
-    mirror::mirror_notes(&state.sync_manager, &updated).await;
     Ok(updated)
 }
 
@@ -109,14 +104,11 @@ pub async fn duplicate_note(
     let meta = RequestMeta {
         workspace_identifier: target_workspace_identifier,
     };
-    if let Some(model) = state
+    let _ = state
         .notes_repository
         .find_by_id(&new_identifier, &Some(meta))
         .await
-        .map_err(AppError::from)?
-    {
-        mirror::mirror_notes(&state.sync_manager, &model).await;
-    }
+        .map_err(AppError::from)?;
     Ok(())
 }
 
@@ -137,13 +129,6 @@ pub async fn transfer_note(
         )
         .await
         .map_err(AppError::from)?;
-    mirror::transfer(
-        &state.sync_manager,
-        mirror::TABLE_NOTES,
-        &record_identifier,
-        &target_workspace_identifier,
-    )
-    .await;
     Ok(())
 }
 

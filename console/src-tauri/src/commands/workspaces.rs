@@ -7,7 +7,7 @@ use lunar::{
 };
 use tauri::State;
 
-use crate::{errors::AppError, state::app::AppState, state::mirror};
+use crate::{errors::AppError, state::app::AppState};
 
 #[tauri::command]
 pub async fn create_workspace(
@@ -18,7 +18,6 @@ pub async fn create_workspace(
         .workspace_repository
         .create_workspace(workspace)
         .await?;
-    mirror::mirror_workspace(&state.sync_manager, &workspace).await;
     Ok(workspace)
 }
 
@@ -53,7 +52,6 @@ pub async fn update_workspace(
         .workspace_repository
         .update_workspace(&uuid, workspace)
         .await?;
-    mirror::mirror_workspace(&state.sync_manager, &updated).await;
     Ok(updated)
 }
 
@@ -85,7 +83,6 @@ pub async fn delete_workspace(
         .workspace_repository
         .delete_workspace(&uuid, &meta)
         .await?;
-    mirror::tombstone(&state.sync_manager, mirror::TABLE_WORKSPACES, &uuid).await;
 
     Ok(())
 }

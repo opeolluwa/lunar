@@ -8,7 +8,6 @@
 # Allow the two crates
 !server/**
 !lunar/**
-!loomabase/**
 
 # Allow the console web app (docker/prod/Dockerfile.web)
 !console/**

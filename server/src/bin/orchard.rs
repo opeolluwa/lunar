@@ -18,7 +18,6 @@ use lunar::{data_engine, error::LunarError};
 use orchard_lib::{
     config::{AppConfig, Environment},
     errors::app_error::AppError,
-    loomabase::{build_pool, initialize_schema, DEVICE_ID_HEADER},
     routes::router::load_routes,
     shutdown::shutdown_signal,
     states::GraphQlState,
@@ -79,7 +78,7 @@ async fn main() -> Result<(), AppError> {
             .allow_headers([
                 header::CONTENT_TYPE,
                 header::AUTHORIZATION,
-                HeaderName::from_static(DEVICE_ID_HEADER),
+                HeaderName::from_static("x-device-id"),
             ])
     } else {
         CorsLayer::new()
@@ -102,28 +101,25 @@ async fn main() -> Result<(), AppError> {
         .await
         .map_err(|e| LunarError::DbConnectError(e.to_string()))?;
 
-    let schema = orchard_lib::query_root::schema(db, Some(100), app_config.complexity_limit)
-        .map_err(|err| AppError::GraphQLError(err.to_string()))?;
+    // let schema = orchard_lib::query_root::schema(db, Some(100), app_config.complexity_limit)
+        // .map_err(|err| AppError::GraphQLError(err.to_string()))?;
 
-    let graphql_state = GraphQlState {
-        schema,
-        endpoint: app_config.graphql_endpoint.clone(),
-    };
+    // let graphql_state = GraphQlState {
+    //     schema,
+    //     endpoint: app_config.graphql_endpoint.clone(),
+    // };
 
-    let sync_pool = build_pool(&app_config.database_url, app_config.max_db_connections).await?;
-    initialize_schema(&sync_pool).await?;
+    let http_routes = load_routes(&db_conn);
 
-    let http_routes = load_routes(&db_conn, sync_pool);
-
-    let graphql_router = Router::new()
-        .route(
-            &app_config.graphql_endpoint,
-            get(graphql_playground).post(graphql_handler),
-        )
-        .with_state(graphql_state);
+    // let graphql_router = Router::new()
+    //     .route(
+    //         &app_config.graphql_endpoint,
+    //         get(graphql_playground).post(graphql_handler),
+    //     )
+    //     .with_state(graphql_state);
 
     let app = Router::new()
-        .merge(graphql_router)
+        // .merge(graphql_router)
         .merge(http_routes)
         .layer(cors)
         .layer(

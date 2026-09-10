@@ -20,7 +20,6 @@ crate-type = ["staticlib", "cdylib", "rlib"]
 base64 = "0.22"
 chrono = { version = "0.4.43", features = ["serde"] }
 log = "0.4"
-loomabase = { version = "0.1.0", path = "../../loomabase" ,  }
 lunar = { version = "0.1.0", path = "../../lunar", features = ["markdown2pdf"] }
 reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
 sanitizer = { version = "1.0.0", features = ["derive"] }
@@ -33,6 +32,7 @@ tauri-plugin-notification = "2"
 tauri-plugin-opener = "2"
 tauri-plugin-os = "2"
 tauri-plugin-stronghold = "2"
+tauri-plugin-syncular = { version = "0.15.48", features = ["native-transport"] }
 thiserror = "2"
 tokio = { version = "1", features = ["time"] }
 tokio-stream = "0.1.18"

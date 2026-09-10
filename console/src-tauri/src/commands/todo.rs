@@ -12,7 +12,6 @@ use crate::{
     adapters::todo::{CreateTodo, UpdateTodo},
     errors::AppError,
     state::app::AppState,
-    state::mirror,
 };
 
 #[tauri::command]
@@ -26,7 +25,6 @@ pub async fn create_todo(
         .create_todo(&todo.into(), &meta)
         .await
         .map_err(AppError::from)?;
-    mirror::mirror_todo(&state.sync_manager, &model).await;
     Ok(model)
 }
 
@@ -67,7 +65,6 @@ pub async fn update_todo(
         .update(&identifier, &todo.into(), &meta)
         .await
         .map_err(AppError::from)?;
-    mirror::mirror_todo(&state.sync_manager, &model).await;
     Ok(model)
 }
 
@@ -77,13 +74,11 @@ pub async fn delete_todo(
     identifier: Uuid,
     meta: Option<RequestMeta>,
 ) -> Result<(), AppError> {
-    let bin = state
+    state
         .todo_repository
         .delete(&identifier, &meta)
         .await
         .map_err(AppError::from)?;
-    mirror::mirror_recycle_bin(&state.sync_manager, &bin).await;
-    mirror::tombstone(&state.sync_manager, mirror::TABLE_TODOS, &identifier).await;
     Ok(())
 }
 
@@ -99,7 +94,6 @@ pub async fn mark_todo_done(
         .mark_done(&identifier, done, &meta)
         .await
         .map_err(AppError::from)?;
-    mirror::mirror_todo(&state.sync_manager, &model).await;
     Ok(model)
 }
 
@@ -120,7 +114,6 @@ pub async fn change_todo_priority(
         .change_priority(&identifier, &priority, &meta)
         .await
         .map_err(AppError::from)?;
-    mirror::mirror_todo(&state.sync_manager, &model).await;
     Ok(model)
 }
 
@@ -142,7 +135,6 @@ pub async fn update_todo_due_date(
         .update_due_date(&identifier, date, &meta)
         .await
         .map_err(AppError::from)?;
-    mirror::mirror_todo(&state.sync_manager, &model).await;
     Ok(model)
 }
 
@@ -163,13 +155,6 @@ pub async fn transfer_todo(
         )
         .await
         .map_err(AppError::from)?;
-    mirror::transfer(
-        &state.sync_manager,
-        mirror::TABLE_TODOS,
-        &record_identifier,
-        &target_workspace_identifier,
-    )
-    .await;
     Ok(())
 }
 
@@ -193,14 +178,11 @@ pub async fn duplicate_todo(
     let meta = RequestMeta {
         workspace_identifier: target_workspace_identifier,
     };
-    if let Some(model) = state
+    let _ = state
         .todo_repository
         .find_by_id(&new_identifier, &Some(meta))
         .await
-        .map_err(AppError::from)?
-    {
-        mirror::mirror_todo(&state.sync_manager, &model).await;
-    }
+        .map_err(AppError::from)?;
     Ok(())
 }
 

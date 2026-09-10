@@ -25,43 +25,14 @@ impl MigrationTrait for Migration {
         // copies every existing value across, converging both drifted and fresh
         // databases onto the same shape.
         if backend == DbBackend::Sqlite {
-            // The source `todo` table may have drifted and be missing columns
-            // such as `due_time` (see the comment above). Detect which columns
-            // actually exist so the copy below does not fail with
-            // "no such column", and NULL the missing ones out. Every column in
-            // the destination `todo_new` is either copied or defaulted to NULL,
-            // so the rebuilt table converges onto the correct shape.
-            let existing: Vec<String> = db
-                .query_all_raw(sea_orm::Statement::from_string(
-                    sea_orm::DatabaseBackend::Sqlite,
-                    "PRAGMA table_info(todo)",
-                ))
-                .await
-                .map(|rows| {
-                    rows.iter()
-                        .filter_map(|row| row.try_get_by_index::<String>(1).ok())
-                        .collect()
-                })?;
-
-            let has_workspace_identifier = existing
-                .iter()
-                .any(|c| c.eq_ignore_ascii_case("workspace_identifier"));
-            let has_due_time = existing.iter().any(|c| c.eq_ignore_ascii_case("due_time"));
-
-            let workspace_src = if has_workspace_identifier {
-                "workspace_identifier".to_string()
-            } else {
-                "NULL AS workspace_identifier".to_string()
-            };
-            let due_time_src = if has_due_time {
-                "due_time".to_string()
-            } else {
-                "NULL AS due_time".to_string()
-            };
-
-            let copy_columns =
-                "identifier, title, description, due_date, priority, done, created_at, updated_at";
-            let sql = format!(
+            // After m20260224_221334 the SQLite `todo` table already carries the
+            // full canonical column set (identifier, title, description, due_date,
+            // priority, done, created_at, updated_at, due_time, workspace_identifier),
+            // so we rebuild it statically without introspecting the schema. This
+            // keeps the export pipeline deterministic (it runs against a mock DB
+            // with no query results) and converges both drifted and fresh databases
+            // onto the same shape.
+            db.execute_unprepared(
                 r#"
                 PRAGMA foreign_keys = OFF;
 
@@ -78,8 +49,8 @@ impl MigrationTrait for Migration {
                     workspace_identifier uuid_text NULL
                 );
 
-                INSERT INTO todo_new ({copy_columns}, due_time, workspace_identifier)
-                SELECT {copy_columns}, {due_time_src}, {workspace_src} FROM todo;
+                INSERT INTO todo_new (identifier, title, description, due_date, priority, done, created_at, updated_at, due_time, workspace_identifier)
+                SELECT identifier, title, description, due_date, priority, done, created_at, updated_at, due_time, workspace_identifier FROM todo;
 
                 DROP TABLE todo;
 
@@ -112,9 +83,8 @@ impl MigrationTrait for Migration {
                 VALUES (randomblob(16), 'todo', lower(hex(OLD.identifier)), 'DELETE', datetime('now'));
                 END;
                 "#,
-            );
-
-            db.execute_unprepared(&sql).await?;
+            )
+            .await?;
         } else if backend == DbBackend::MySql {
             if !manager.has_column("todo", "due_time").await? {
                 db.execute_unprepared("ALTER TABLE todo ADD COLUMN due_time TIME NULL")
