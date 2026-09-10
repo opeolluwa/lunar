@@ -2,8 +2,10 @@
 definePageMeta({ layout: "walkthrough", name: "Walkthrough" });
 
 const walkthroughSeen = useLocalStorage("walkthroughSeen", false);
-
 const currentSlide = ref(0);
+
+const setCurrentSlide = (index: number) => (currentSlide.value = index);
+const skip = () => complete();
 
 const slides = [
   {
@@ -41,9 +43,6 @@ function next() {
   }
 }
 
-function skip() {
-  complete();
-}
 </script>
 
 <template>
@@ -55,9 +54,9 @@ function skip() {
       class="shrink-0 flex items-center justify-end px-6 pt-safe-top pt-6"
     >
       <button
-        v-if="!isLastSlide"
         type="button"
         class="text-sm font-medium text-gray-400 dark:text-gray-500"
+        :class="{ 'text-transparent transition-all duration-75': isLastSlide }"
         @click.stop="skip"
       >
         Skip
@@ -78,6 +77,7 @@ function skip() {
         item: 'basis-full h-full',
       }"
       class="w-full min-h-0"
+      @select="(u) => setCurrentSlide(u)"
     >
       <section
         class="h-full w-full flex flex-col items-center justify-center px-8"
