@@ -5,13 +5,15 @@ mod state;
 mod utils;
 
 use std::sync::Arc;
+
+use lunar::{DataEngine, adapters::notifications::CreateNotification};
+use tauri::Listener;
+use tauri::Manager;
 use tauri_plugin_syncular::SyncularConfig;
+
 use crate::state::alarm::AlarmState;
 use crate::state::app::AppState;
 use crate::state::scheduler::SchedulerState;
-use lunar::{adapters::notifications::CreateNotification, DataEngine};
-use tauri::Listener;
-use tauri::Manager;
 
 const EVENT_NOTIFICATION_RECEIVED: &str = "notification:received";
 
@@ -70,14 +72,17 @@ pub async fn run() {
                     };
 
                     //syncular client
-                    let database_path_for_syncular = db_path.clone().into_os_string().into_string().unwrap();
+                    let database_path_for_syncular =
+                        db_path.clone().into_os_string().into_string().unwrap();
                     let config = SyncularConfig {
                         base_url: Some("https://your.server".into()),
                         db_path: Some(database_path_for_syncular),
                         auto_sync: true,
                         ..Default::default()
                     };
-                    app.handle().plugin(tauri_plugin_syncular::init(config)).unwrap();
+                    app.handle()
+                        .plugin(tauri_plugin_syncular::init(config))
+                        .unwrap();
 
                     let db_url = format!("sqlite://{}?mode=rwc", db_path.display());
                     dbg!("Database URL: {:?}", &db_url);

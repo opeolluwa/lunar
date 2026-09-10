@@ -6,9 +6,7 @@ use lunar::{
 use tauri::State;
 use uuid::Uuid;
 
-use crate::{
-    adapters::recycle_bin::CreateRecycleBinEntry, errors::AppError, state::app::AppState,
-};
+use crate::{adapters::recycle_bin::CreateRecycleBinEntry, errors::AppError, state::app::AppState};
 
 #[tauri::command]
 pub async fn create_recycle_bin_entry(
