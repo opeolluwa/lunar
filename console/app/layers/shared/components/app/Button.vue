@@ -23,6 +23,7 @@ withDefaults(
     error?: boolean;
     size?: ButtonSize;
     variant?: ButtonVariant;
+    full?: boolean;
   }>(),
   {
     type: "button",
@@ -32,6 +33,7 @@ withDefaults(
     error: false,
     size: "md",
     variant: "solid",
+    full: true,
   },
 );
 </script>
@@ -44,7 +46,8 @@ withDefaults(
     :variant="variant"
     :size="size"
     :disabled="disabled || loading"
-    class="w-full cursor-pointer bg-primary-500 py-3 text-center font-medium text-white hover:bg-primary-600 disabled:opacity-50"
+    :class="full ? 'w-full' : 'w-auto'"
+    class="cursor-pointer bg-primary-500 py-3 text-center font-medium text-white hover:bg-primary-600 disabled:opacity-50"
   >
     <slot />
   </UButton>

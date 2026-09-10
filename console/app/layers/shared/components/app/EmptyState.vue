@@ -37,7 +37,8 @@ const emit = defineEmits<{
       v-if="actionLabel"
       size="md"
       variant="outline"
-      class="mt-4 md:mt-6 text-center items-center justify-center"
+      :full="false"
+      class="mt-4 md:mt-6 w-40 text-center items-center justify-center"
       @click="emit('action')"
     >
       {{ actionLabel }}
