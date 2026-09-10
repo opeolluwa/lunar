@@ -10,6 +10,14 @@ const topLevelPaths = [...primaryRoutes, ...secondaryRoutes].map(
   (item) => item.path,
 );
 const isTopLevel = computed(() => topLevelPaths.includes(route.path));
+const pageTitle = computed(() => {
+  const raw = route.name?.toString().replaceAll("-", " ") ?? "";
+  return raw
+    .split(" ")
+    .map((w) => _.capitalize(w))
+    .join(" ");
+});
+
 </script>
 
 <template>
@@ -41,7 +49,8 @@ const isTopLevel = computed(() => topLevelPaths.includes(route.path));
         <slot />
       </AppViewport>
       <AppBottonNav />
-      <AppSideNav />
+      <!-- <NavigationApp/> -->
+       <AppSideNav /> 
     </main>
   </kPage>
 </template>

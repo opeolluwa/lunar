@@ -44,7 +44,6 @@ function isActive(path: string) {
     :default-size="18"
     :min-size="4"
     :max-size="42"
-    resizable
     :ui="{
       root: [
         'bg-white dark:bg-gray-950',
@@ -57,36 +56,6 @@ function isActive(path: string) {
       handle: 'cursor-ew-resize',
     }"
   >
-    <!-- HEADER -->
-    <template #header>
-      <div
-        class="flex items-center h-[76px]"
-        :class="
-          sidebarStore.collapsed
-            ? 'justify-center'
-            : 'justify-start pl-5'
-        "
-      >
-        <UDashboardSidebarCollapse
-          :icon="
-            sidebarStore.collapsed
-              ? 'i-lucide-panel-left-open'
-              : 'i-lucide-panel-left-close'
-          "
-          class="text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white"
-        />
-      </div>
-    </template>
-
-    <!-- RESIZE HANDLE -->
-    <template #resize-handle="{ onMouseDown, onTouchStart, onDoubleClick }">
-      <UDashboardResizeHandle
-        class="after:absolute after:inset-y-0 after:right-0 after:w-px hover:after:bg-(--ui-border-primary) after:transition"
-        @mousedown="onMouseDown"
-        @touchstart="onTouchStart"
-        @dblclick="onDoubleClick"
-      />
-    </template>
 
     <!-- BODY -->
     <template #default>
