@@ -9,8 +9,6 @@
       @click="navigateTo('/notifications')"
     />
 
-    <UColorModeButton />
-
     <UButton
       size="md"
       color="neutral"

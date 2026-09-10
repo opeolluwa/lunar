@@ -162,10 +162,8 @@ onMounted(async () => {
       <kFab
         component="button"
         aria-label="Save note"
-        class="absolute right-7  md:hidden"
-        :style="
-          'bottom: calc(var(--kb-inset, 0px) + env(safe-area-inset-bottom) + 4.5rem);'
-        "
+        class="absolute right-7 md:hidden"
+        :style="'bottom: calc(var(--kb-inset, 0px) + 6rem);'"
         :colors="{
           bgIos: 'bg-primary-500 dark:bg-primary-600',
           bgMaterial: 'bg-primary-500 dark:bg-primary-600',
