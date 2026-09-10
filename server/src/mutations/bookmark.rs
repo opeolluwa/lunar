@@ -3,7 +3,6 @@ use std::sync::Arc;
 use lunar::{
     entities,
     repositories::bookmarks::{BookmarkRepository, BookmarkRepositoryExt},
-    sync_engine::EntitySyncResult,
 };
 use seaography::{
     async_graphql::{self, Context},
@@ -29,7 +28,10 @@ impl SyncBookmark {
     ) -> async_graphql::Result<Vec<EntitySyncResult>> {
         ensure_workspace_access(
             ctx,
-            input.iter().filter_map(|item| item.workspace_identifier).collect(),
+            input
+                .iter()
+                .filter_map(|item| item.workspace_identifier)
+                .collect(),
         )
         .await?;
 
