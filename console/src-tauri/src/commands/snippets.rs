@@ -11,7 +11,6 @@ use crate::{
     adapters::snippets::{CreateSnippet, UpdateSnippet},
     errors::AppError,
     state::app::AppState,
-    state::mirror,
 };
 
 #[tauri::command]
@@ -24,7 +23,6 @@ pub async fn create_snippet(
         .snippet_repository
         .create(&snippet.into(), &meta)
         .await?;
-    mirror::mirror_snippet(&state.sync_manager, &created).await;
     Ok(created)
 }
 
@@ -59,9 +57,7 @@ pub async fn delete_snippet(
     identifier: Uuid,
     meta: Option<RequestMeta>,
 ) -> Result<(), AppError> {
-    let bin = state.snippet_repository.delete(&identifier, &meta).await?;
-    mirror::mirror_recycle_bin(&state.sync_manager, &bin).await;
-    mirror::tombstone(&state.sync_manager, mirror::TABLE_SNIPPETS, &identifier).await;
+    state.snippet_repository.delete(&identifier, &meta).await?;
     Ok(())
 }
 
@@ -76,7 +72,6 @@ pub async fn update_snippet(
         .snippet_repository
         .update(&identifier, &snippet.into(), &meta)
         .await?;
-    mirror::mirror_snippet(&state.sync_manager, &updated).await;
     Ok(updated)
 }
 
@@ -109,14 +104,11 @@ pub async fn duplicate_snippet(
     let meta = RequestMeta {
         workspace_identifier: target_workspace_identifier,
     };
-    if let Some(model) = state
+    let _ = state
         .snippet_repository
         .find_by_id(&new_identifier, &Some(meta))
         .await
-        .map_err(AppError::from)?
-    {
-        mirror::mirror_snippet(&state.sync_manager, &model).await;
-    }
+        .map_err(AppError::from)?;
     Ok(())
 }
 
@@ -137,13 +129,6 @@ pub async fn transfer_snippet(
         )
         .await
         .map_err(AppError::from)?;
-    mirror::transfer(
-        &state.sync_manager,
-        mirror::TABLE_SNIPPETS,
-        &record_identifier,
-        &target_workspace_identifier,
-    )
-    .await;
     Ok(())
 }
 

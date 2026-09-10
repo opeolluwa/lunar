@@ -11,7 +11,6 @@ use crate::{
     adapters::reminder::{CreateReminder, UpdateReminder},
     errors::AppError,
     state::app::AppState,
-    state::mirror,
 };
 
 #[tauri::command]
@@ -24,7 +23,6 @@ pub async fn create_reminder(
         .reminder_repository
         .create(&reminder.into(), &meta)
         .await?;
-    mirror::mirror_reminder(&state.sync_manager, &created).await;
     Ok(created)
 }
 
@@ -64,7 +62,6 @@ pub async fn update_reminder(
         .reminder_repository
         .update(&identifier, &reminder.into(), &meta)
         .await?;
-    mirror::mirror_reminder(&state.sync_manager, &updated).await;
     Ok(updated)
 }
 
@@ -74,9 +71,7 @@ pub async fn delete_reminder(
     identifier: Uuid,
     meta: Option<RequestMeta>,
 ) -> Result<(), AppError> {
-    let bin = state.reminder_repository.delete(&identifier, &meta).await?;
-    mirror::mirror_recycle_bin(&state.sync_manager, &bin).await;
-    mirror::tombstone(&state.sync_manager, mirror::TABLE_REMINDERS, &identifier).await;
+    state.reminder_repository.delete(&identifier, &meta).await?;
     Ok(())
 }
 
@@ -100,14 +95,11 @@ pub async fn duplicate_reminder(
     let meta = RequestMeta {
         workspace_identifier: target_workspace_identifier,
     };
-    if let Some(model) = state
+    let _ = state
         .reminder_repository
         .find_by_id(&new_identifier, &Some(meta))
         .await
-        .map_err(AppError::from)?
-    {
-        mirror::mirror_reminder(&state.sync_manager, &model).await;
-    }
+        .map_err(AppError::from)?;
     Ok(())
 }
 
@@ -128,13 +120,6 @@ pub async fn transfer_reminder(
         )
         .await
         .map_err(AppError::from)?;
-    mirror::transfer(
-        &state.sync_manager,
-        mirror::TABLE_REMINDERS,
-        &record_identifier,
-        &target_workspace_identifier,
-    )
-    .await;
     Ok(())
 }
 
