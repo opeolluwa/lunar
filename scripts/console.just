@@ -38,7 +38,7 @@ build-console:
 [working-directory('console')]
 build-mobile:
     ./src-tauri/gen/android/gradlew --stop
-    NUXT_APP_TARGET=mobile npm run tauri android build
+    NUXT_APP_TARGET=mobile npm run tauri android build  -- --apk
 
 [working-directory('console')]
 install-frontend-dependencies:
