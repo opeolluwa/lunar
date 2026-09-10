@@ -54,10 +54,7 @@ function handleCreated() {
       </div>
 
       <!-- Empty state: no bookmarks at all -->
-      <div
-        v-else-if="bookmarkStore.bookmarks.length === 0"
-        class="flex flex-col items-center justify-center py-20 text-center"
-      >
+      <div v-else-if="bookmarkStore.bookmarks.length === 0">
         <EmptyState
           title="No bookmarks yet"
           description="Create your first bookmark to get started."

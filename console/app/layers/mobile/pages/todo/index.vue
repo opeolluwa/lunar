@@ -49,10 +49,7 @@ function handleCreated() {
       </div>
 
       <!-- Empty state: no todos at all -->
-      <div
-        v-else-if="todoStore.todos.length === 0"
-        class="flex flex-col items-center justify-center py-20 text-center"
-      >
+      <div v-else-if="todoStore.todos.length === 0">
         <EmptyState
           title="No task yet"
           description="Create your first task to get started."

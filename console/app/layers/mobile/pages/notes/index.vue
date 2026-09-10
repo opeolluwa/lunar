@@ -67,10 +67,7 @@ const filteredNotes = computed(() => {
 
       <template v-else>
         <!-- Empty state: no notes at all -->
-        <div
-          v-if="noteStore.notes.length === 0"
-          class="flex flex-col items-center justify-center py-20 text-center"
-        >
+        <div v-if="noteStore.notes.length === 0">
           <EmptyState
             title="No notes yet"
             description="Create your first note to get started."
@@ -81,22 +78,7 @@ const filteredNotes = computed(() => {
         </div>
 
         <template v-else>
-          <!-- Search + sort controls -->
-          <div class="mb-3">
-            <AppInput
-              v-model="searchQuery"
-              name="search"
-              icon="heroicons:magnifying-glass"
-              placeholder="Search notes..."
-              size="sm"
-            />
-            <AppSortMenu
-              v-if="filteredNotes.length > 0"
-              v-model="sortBy"
-              :options="NOTE_SORT_OPTIONS"
-              class="mt-2"
-            />
-          </div>
+
 
           <!-- Empty state: search has no results -->
           <EmptyState

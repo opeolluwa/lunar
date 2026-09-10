@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import _ from "lodash";
 
-import { primaryRoutes, secondaryRoutes } from "@shared/data/routes";
 import { useUserPreferenceStore } from "@shared/stores/workspace-profile";
 import { useWorkspacesStore } from "@shared/stores/workspaces";
 
@@ -9,27 +8,6 @@ const preferenceStore = useUserPreferenceStore();
 const workspaceStore = useWorkspacesStore();
 
 const route = useRoute();
-const colorMode = useColorMode();
-
-const isDark = computed({
-  get: () => colorMode.value === "dark",
-  set: (v) => (colorMode.preference = v ? "dark" : "light"),
-});
-
-function toggleTheme() {
-  isDark.value = !isDark.value;
-}
-
-const themeIcon = computed(() =>
-  isDark.value ? "heroicons:sun" : "heroicons:moon",
-);
-
-const themeLabel = computed(() => (isDark.value ? "Light mode" : "Dark mode"));
-
-function isActive(path: string): boolean {
-  if (path === "/") return route.path === "/";
-  return route.path.startsWith(path);
-}
 
 const asideOpen = ref(false);
 const { mobileNavOpen } = useMobileNav();
@@ -169,58 +147,7 @@ const pageTitle = computed(() => {
           </div>
 
           <!-- Primary nav -->
-          <nav
-            class="flex flex-col gap-0.5 px-2 py-2 flex-1 overflow-y-scroll scrollbar-config"
-          >
-            <NuxtLink
-              v-for="r in primaryRoutes"
-              :key="r.name"
-              :to="r.path"
-              class="flex items-center gap-3 py-2 px-3 text-sm cursor-pointer rounded-lg transition-colors"
-              :class="
-                isActive(r.path)
-                  ? 'bg-primary-50 dark:bg-primary-950 text-primary-700 dark:text-primary-300 font-medium'
-                  : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'
-              "
-              @click="mobileNavOpen = false"
-            >
-              <UIcon
-                :name="isActive(r.path) ? r.activeIcon : r.icon"
-                class="size-4 shrink-0"
-              />
-              {{ r.name }}
-            </NuxtLink>
-          </nav>
-
-          <!-- Footer -->
-          <div class="flex flex-col gap-0.5 px-2 pb-4 shrink-0">
-            <USeparator class="mx-1 mb-2" />
-            <button
-              class="flex items-center gap-3 py-2 px-3 text-sm cursor-pointer rounded-lg transition-colors text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 w-full"
-              @click="toggleTheme"
-            >
-              <UIcon :name="themeIcon" class="size-4 shrink-0" />
-              {{ themeLabel }}
-            </button>
-            <NuxtLink
-              v-for="r in secondaryRoutes"
-              :key="r.name"
-              :to="r.path"
-              class="flex items-center gap-3 py-2 px-3 text-sm cursor-pointer rounded-lg transition-colors"
-              :class="
-                isActive(r.path)
-                  ? 'bg-primary-50 dark:bg-primary-950 text-primary-700 dark:text-primary-300 font-medium'
-                  : 'text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800'
-              "
-              @click="mobileNavOpen = false"
-            >
-              <UIcon
-                :name="isActive(r.path) ? r.activeIcon : r.icon"
-                class="size-4 shrink-0"
-              />
-              {{ r.name }}
-            </NuxtLink>
-          </div>
+          <NavigationSideNavContent @navigate="mobileNavOpen = false" />
         </div>
       </template>
     </USlideover>

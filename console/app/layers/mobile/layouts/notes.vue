@@ -1,10 +1,20 @@
 <script lang="ts" setup>
 import { primaryRoutes, secondaryRoutes } from "@shared/data/routes";
 import { kPage, kNavbar } from "konsta/vue";
+import _ from "lodash";
 
 const route = useRoute();
 const router = useRouter();
-const { mobileNavOpen, toggleMobileNav } = useMobileNav();
+const { toggleMobileNav } = useMobileNav();
+const pageTitle = computed(() => {
+  const raw = route.name?.toString().replaceAll("-", " ") ?? "";
+  return raw
+    .split(" ")
+    .map((w) => _.capitalize(w))
+    .join(" ");
+});
+
+useKeyboardInset();
 
 const topLevelPaths = [...primaryRoutes, ...secondaryRoutes].map(
   (item) => item.path,
@@ -16,11 +26,7 @@ const showEditorToolBar = computed(() => {
     route.path.includes("/create-notes") || route.path.includes("/edit-notes")
   );
 });
-const editorHeaderTitle = computed(() =>
-  route.path.includes("/create-notes") ? "New note" : "Edit notes",
-);
 
-const pageTitle = computed(() => route.meta.name);
 useHead({ title: () => pageTitle.value as string });
 </script>
 
@@ -32,6 +38,8 @@ useHead({ title: () => pageTitle.value as string });
     >
       <kNavbar
         v-if="!showEditorToolBar"
+        :title="isTopLevel ? undefined : pageTitle"
+        title-class="truncate text-md pl-4 font-medium"
         bg-class="bg-white dark:bg-app-dark-800"
         class="shrink-0 px-2"
       >
@@ -63,7 +71,8 @@ useHead({ title: () => pageTitle.value as string });
       <kNavbar
         v-else
         :center-title="false"
-        title-class="truncate text-sm font-medium"
+        :title="isTopLevel ? undefined : pageTitle"
+        title-class="truncate text-md pl-4 font-medium"
         bg-class="bg-white dark:bg-app-dark-800"
         class="shrink-0 px-2"
       >
@@ -72,8 +81,6 @@ useHead({ title: () => pageTitle.value as string });
             <UIcon name="lucide:arrow-left" class="size-5" />
           </NuxtLink>
         </template>
-
-        <template #title>{{ editorHeaderTitle }}</template>
       </kNavbar>
 
       <AppViewport :hide-header-and-nav="showEditorToolBar">
@@ -81,7 +88,7 @@ useHead({ title: () => pageTitle.value as string });
       </AppViewport>
 
       <AppBottonNav v-if="!showEditorToolBar" />
-      <AppSideNav :mobile-nav-open="mobileNavOpen" />
+      <AppSideNav />
     </main>
   </kPage>
 </template>

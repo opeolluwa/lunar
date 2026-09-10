@@ -141,39 +141,6 @@ onUnmounted(() => clearSearch());
     </div>
 
     <template v-else>
-      <!-- Search + type filter -->
-      <div class="mb-3">
-        <AppInput
-          v-model="searchQuery"
-          name="search"
-          icon="heroicons:magnifying-glass"
-          placeholder="Search recycle bin..."
-          size="sm"
-        />
-
-        <div class="flex gap-1 overflow-x-auto mt-2 -mx-1 px-1">
-          <button
-            v-for="opt in itemTypeOptions"
-            :key="opt.value"
-            class="shrink-0 px-3 py-1.5 rounded-lg text-xs font-medium transition-colors capitalize"
-            :class="
-              typeFilter === opt.value
-                ? 'bg-gray-800 dark:bg-gray-100 text-white dark:text-gray-900'
-                : 'bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400'
-            "
-            @click="typeFilter = opt.value"
-          >
-            {{ opt.label }}
-            <span
-              v-if="opt.value !== 'all' && recycleBinStore.typeCounts[opt.value]"
-              class="ml-1 opacity-60"
-            >
-              {{ recycleBinStore.typeCounts[opt.value] }}
-            </span>
-          </button>
-        </div>
-      </div>
-
       <!-- Summary bar -->
       <div class="flex items-center justify-between mb-3 px-1">
         <p class="text-xs text-gray-400 dark:text-gray-500">

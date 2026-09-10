@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { primaryRoutes, secondaryRoutes } from "@shared/data/routes";
 import { kNavbar, kPage } from "konsta/vue";
-
+import _ from "lodash";
 const route = useRoute();
 const router = useRouter();
 const { toggleMobileNav } = useMobileNav();
@@ -10,11 +10,25 @@ const topLevelPaths = [...primaryRoutes, ...secondaryRoutes].map(
   (item) => item.path,
 );
 const isTopLevel = computed(() => topLevelPaths.includes(route.path));
+const pageTitle = computed(() => {
+  const raw = route.name?.toString().replaceAll("-", " ") ?? "";
+  return raw
+    .split(" ")
+    .map((w) => _.capitalize(w))
+    .join(" ");
+});
+
 </script>
 
 <template>
   <kPage class="h-dvh overflow-hidden flex flex-col">
-    <kNavbar bg-class="bg-white dark:bg-app-dark-800" class="shrink-0 px-2">
+    <kNavbar
+      :title="isTopLevel ? undefined : pageTitle"
+      :center-title="false"
+      title-class="truncate text-md pl-4 font-medium"
+      bg-class="bg-white dark:bg-app-dark-800"
+      class="shrink-0 px-2"
+    >
       <template #left>
         <UButton
           v-if="isTopLevel"
@@ -38,10 +52,11 @@ const isTopLevel = computed(() => topLevelPaths.includes(route.path));
 
     <main class="flex min-h-0 flex-1 flex-col overflow-hidden">
       <AppViewport class="bg-white/90 dark:bg-app-dark-800">
+          
         <slot />
       </AppViewport>
       <AppBottonNav />
-      <AppSideNav />
+       <AppSideNav /> 
     </main>
   </kPage>
 </template>
