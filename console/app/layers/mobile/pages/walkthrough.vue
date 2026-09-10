@@ -44,95 +44,76 @@ function next() {
 function skip() {
   complete();
 }
-
-let touchStartX = 0;
-
-function onTouchStart(event: TouchEvent) {
-  touchStartX = event.touches[0]?.clientX ?? 0;
-}
-
-function onTouchEnd(event: TouchEvent) {
-  const touchEndX = event.changedTouches[0]?.clientX ?? 0;
-  const distance = touchEndX - touchStartX;
-
-  if (Math.abs(distance) < 50) {
-    return;
-  }
-
-  next();
-}
 </script>
 
 <template>
   <main
-    class="h-dvh w-full flex flex-col bg-white dark:bg-gray-950 select-none"
+    class="h-dvh w-full flex flex-col overflow-hidden bg-white dark:bg-gray-950 select-none"
   >
     <!-- Top bar -->
     <header
-      class="shrink-0 flex items-center justify-between px-6 pt-safe-top pt-6"
+      class="shrink-0 flex items-center justify-end px-6 pt-safe-top pt-6"
     >
-      <div class="flex ml-auto">
-        <button
-          v-if="!isLastSlide"
-          type="button"
-          class="text-sm font-medium text-gray-400 dark:text-gray-500"
-          @click.stop="skip"
-        >
-          Skip
-        </button>
-      </div>
+      <button
+        v-if="!isLastSlide"
+        type="button"
+        class="text-sm font-medium text-gray-400 dark:text-gray-500"
+        @click.stop="skip"
+      >
+        Skip
+      </button>
     </header>
 
-    <!-- Scrollable slides -->
-    <div
-      class="flex-1 min-h-0 overflow-y-auto touch-pan-y scrollbar-config"
-      @touchstart="onTouchStart"
-      @touchend="onTouchEnd"
+    <!-- Full-screen carousel -->
+    <UCarousel
+      v-slot="{ item }"
+      v-model="currentSlide"
+      :items="slides"
+      :loop="false"
+      :watch-drag="true"
+      :ui="{
+        root: 'flex-1 min-h-0',
+        viewport: 'h-full',
+        container: 'h-full',
+        item: 'basis-full h-full',
+      }"
+      class="w-full min-h-0"
     >
-      <div class="min-h-full flex items-center justify-center">
-        <UCarousel
-          v-slot="{ item, index }"
-          v-model="currentSlide"
-          :items="slides"
-          :ui="{ item: 'basis-full' }"
-          class="w-full"
-        >
-          <section class="flex flex-col items-center justify-center px-8 py-10">
-            <div class="relative mb-10">
-              <div
-                class="absolute inset-0 -m-10 rounded-full bg-primary-500/10 blur-3xl"
-              />
+      <section
+        class="h-full w-full flex flex-col items-center justify-center px-8"
+      >
+        <!-- Illustration -->
+        <div class="relative mb-10">
+          <div
+            class="absolute inset-0 -m-10 rounded-full bg-primary-500/10 blur-3xl"
+          />
 
-              <div
-                class="relative w-52 md:w-60 aspect-square flex items-center justify-center"
-              >
-                <img
-                  :src="`/${item.image}.svg`"
-                  :alt="item.title"
-                  class="w-full h-full object-contain"
-                  draggable="false"
-                />
-              </div>
-            </div>
+          <div
+            class="relative w-52 md:w-60 aspect-square flex items-center justify-center"
+          >
+            <img
+              :src="`/${item.image}.svg`"
+              :alt="item.title"
+              class="w-full h-full object-contain"
+              draggable="false"
+            />
+          </div>
+        </div>
 
-            <div class="max-w-sm text-center">
-   
-              <h1
-                class="text-3xl font-bold tracking-tight text-gray-950 dark:text-white"
-              >
-                {{ item.title }}
-              </h1>
+        <!-- Content -->
+        <div class="max-w-sm text-center">
+          <h1
+            class="text-3xl font-bold tracking-tight text-gray-950 dark:text-white"
+          >
+            {{ item.title }}
+          </h1>
 
-              <p
-                class="mt-4 text-base leading-7 text-gray-500 dark:text-gray-400"
-              >
-                {{ item.description }}
-              </p>
-            </div>
-          </section>
-        </UCarousel>
-      </div>
-    </div>
+          <p class="mt-4 text-base leading-7 text-gray-500 dark:text-gray-400">
+            {{ item.description }}
+          </p>
+        </div>
+      </section>
+    </UCarousel>
 
     <!-- Bottom controls -->
     <footer class="shrink-0 px-6 pb-safe-bottom pb-8">
@@ -160,14 +141,7 @@ function onTouchEnd(event: TouchEvent) {
         @click.stop="next"
       >
         {{ isLastSlide ? "Get started" : "Continue" }}
-        <UIcon
-          v-if="!isLastSlide"
-          name="heroicons:arrow-right"
-          class="size-4"
-        />
       </button>
-
-
     </footer>
   </main>
 </template>

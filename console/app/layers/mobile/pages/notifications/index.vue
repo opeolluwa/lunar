@@ -3,10 +3,8 @@ definePageMeta({ name: "Notifications" });
 </script>
 
 <template>
-  <div>
-
-      <NuxtLink href="/walkthrough">walk through</NuxtLink>
-      <NuxtLink href="/auth/login">walk through</NuxtLink>
-      
+  <div class="flex flex-col">
+    <NuxtLink href="/walkthrough">walk through</NuxtLink>
+    <NuxtLink href="/auth/login">login</NuxtLink>
   </div>
 </template>
