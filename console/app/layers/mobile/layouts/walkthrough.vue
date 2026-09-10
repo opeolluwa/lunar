@@ -4,7 +4,7 @@ import { kPage } from "konsta/vue";
 
 <template>
   <kPage
-    class="h-dvh overflow-hidden flex flex-col bg-white dark:bg-app-dark-800"
+    class="h-dvh overflow-hidden flex flex-col bg-white dark:bg-gray-950"
   >
     <slot />
   </kPage>

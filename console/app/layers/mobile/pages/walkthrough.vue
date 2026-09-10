@@ -7,20 +7,22 @@ const currentSlide = ref(0);
 
 const slides = [
   {
-    icon: "heroicons:home",
-    title: "Welcome to Lunar",
-    description: "Your personal space for notes, tasks, and bookmarks.",
-  },
-  {
-    icon: "heroicons:briefcase",
-    title: "Organize with Workspaces",
+    image: "everything-one-place",
+    title: "Everything in one place",
     description:
-      "Group related items into workspaces for different projects or contexts.",
+      "Keep notes, tasks, and bookmarks together in your personal workspace.",
   },
   {
-    icon: "heroicons:rocket-launch",
-    title: "Get Started",
-    description: "Create your first workspace and start capturing your ideas.",
+    image: "find-anything",
+    title: "Find anything instantly",
+    description:
+      "Search across everything at once — no more digging through folders.",
+  },
+  {
+    image: "ideas-captured",
+    title: "Ideas, captured",
+    description:
+      "Turn thoughts into notes and reminders, and access it all anywhere.",
   },
 ];
 
@@ -38,64 +40,134 @@ function next() {
     currentSlide.value++;
   }
 }
+
+function skip() {
+  complete();
+}
+
+let touchStartX = 0;
+
+function onTouchStart(event: TouchEvent) {
+  touchStartX = event.touches[0]?.clientX ?? 0;
+}
+
+function onTouchEnd(event: TouchEvent) {
+  const touchEndX = event.changedTouches[0]?.clientX ?? 0;
+  const distance = touchEndX - touchStartX;
+
+  if (Math.abs(distance) < 50) {
+    return;
+  }
+
+  next();
+}
 </script>
 
 <template>
-  <div class="h-dvh flex flex-col">
-    <UCarousel
-      v-slot="{ item }"
-      v-model="currentSlide"
-      :items="slides"
-      :ui="{ item: 'basis-full' }"
-      class="w-full flex-1 flex items-center"
+  <main
+    class="h-dvh w-full flex flex-col bg-white dark:bg-gray-950 select-none"
+  >
+    <!-- Top bar -->
+    <header
+      class="shrink-0 flex items-center justify-between px-6 pt-safe-top pt-6"
     >
-      <div class="flex flex-col items-center text-center gap-6 px-4">
-        <div
-          class="size-20 rounded-full bg-primary-50 dark:bg-primary-950 flex items-center justify-center"
+      <div class="flex ml-auto">
+        <button
+          v-if="!isLastSlide"
+          type="button"
+          class="text-sm font-medium text-gray-400 dark:text-gray-500"
+          @click.stop="skip"
         >
-          <UIcon :name="item.icon" class="size-10 text-primary-500" />
-        </div>
-        <div class="flex flex-col gap-2">
-          <h2 class="text-xl font-semibold text-gray-900 dark:text-white">
-            {{ item.title }}
-          </h2>
-          <p class="text-sm text-gray-500 dark:text-gray-400">
-            {{ item.description }}
-          </p>
-        </div>
+          Skip
+        </button>
       </div>
-    </UCarousel>
+    </header>
 
-    <div class="flex justify-center gap-2 pb-12">
+    <!-- Scrollable slides -->
+    <div
+      class="flex-1 min-h-0 overflow-y-auto touch-pan-y scrollbar-config"
+      @touchstart="onTouchStart"
+      @touchend="onTouchEnd"
+    >
+      <div class="min-h-full flex items-center justify-center">
+        <UCarousel
+          v-slot="{ item, index }"
+          v-model="currentSlide"
+          :items="slides"
+          :ui="{ item: 'basis-full' }"
+          class="w-full"
+        >
+          <section class="flex flex-col items-center justify-center px-8 py-10">
+            <div class="relative mb-10">
+              <div
+                class="absolute inset-0 -m-10 rounded-full bg-primary-500/10 blur-3xl"
+              />
+
+              <div
+                class="relative w-52 md:w-60 aspect-square flex items-center justify-center"
+              >
+                <img
+                  :src="`/${item.image}.svg`"
+                  :alt="item.title"
+                  class="w-full h-full object-contain"
+                  draggable="false"
+                />
+              </div>
+            </div>
+
+            <div class="max-w-sm text-center">
+   
+              <h1
+                class="text-3xl font-bold tracking-tight text-gray-950 dark:text-white"
+              >
+                {{ item.title }}
+              </h1>
+
+              <p
+                class="mt-4 text-base leading-7 text-gray-500 dark:text-gray-400"
+              >
+                {{ item.description }}
+              </p>
+            </div>
+          </section>
+        </UCarousel>
+      </div>
+    </div>
+
+    <!-- Bottom controls -->
+    <footer class="shrink-0 px-6 pb-safe-bottom pb-8">
+      <!-- Progress -->
+      <div class="flex items-center justify-center gap-2 mb-7">
+        <button
+          v-for="(_, index) in slides"
+          :key="index"
+          type="button"
+          class="h-1.5 rounded-full transition-all duration-300"
+          :class="
+            currentSlide === index
+              ? 'w-7 bg-primary-500'
+              : 'w-1.5 bg-gray-200 dark:bg-gray-700'
+          "
+          :aria-label="`Go to slide ${index + 1}`"
+          @click.stop="currentSlide = index"
+        />
+      </div>
+
+      <!-- Action -->
       <button
-        v-for="(_, index) in slides"
-        :key="index"
         type="button"
-        class="size-4 rounded-full transition-colors"
-        :class="
-          currentSlide === index
-            ? 'bg-primary-500'
-            : 'bg-gray-300 dark:bg-gray-600'
-        "
-        @click="currentSlide = index"
-      />
-    </div>
-
-    <div class="flex justify-between gap-3 px-6 pb-12 w-full">
-      <UButton
-        v-if="!isLastSlide"
-        type="button"
-        color="neutral"
-        variant="outline"
-        class="text-sm text-gray-400 dark:text-gray-500 text-center"
-        @click="complete"
+        class="w-full h-14 rounded-2xl bg-primary-600 hover:bg-primary-700 active:bg-primary-800 text-white font-semibold transition-colors flex items-center justify-center gap-2"
+        @click.stop="next"
       >
-        Skip
-      </UButton>
+        {{ isLastSlide ? "Get started" : "Continue" }}
+        <UIcon
+          v-if="!isLastSlide"
+          name="heroicons:arrow-right"
+          class="size-4"
+        />
+      </button>
 
-      <UButton @click="next">
-        {{ isLastSlide ? "Get started" : "Next" }}
-      </UButton>
-    </div>
-  </div>
+
+    </footer>
+  </main>
 </template>
