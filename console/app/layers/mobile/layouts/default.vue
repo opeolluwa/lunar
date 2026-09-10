@@ -46,6 +46,7 @@ const pageTitle = computed(() => {
 
     <main class="flex min-h-0 flex-1 flex-col overflow-hidden">
       <AppViewport class="bg-white/90 dark:bg-app-dark-800">
+          
         <slot />
       </AppViewport>
       <AppBottonNav />

@@ -4,7 +4,7 @@ import { kPage, kNavbar } from "konsta/vue";
 
 const route = useRoute();
 const router = useRouter();
-const { mobileNavOpen, toggleMobileNav } = useMobileNav();
+const { toggleMobileNav } = useMobileNav();
 
 const topLevelPaths = [...primaryRoutes, ...secondaryRoutes].map(
   (item) => item.path,
@@ -81,7 +81,7 @@ useHead({ title: () => pageTitle.value as string });
       </AppViewport>
 
       <AppBottonNav v-if="!showEditorToolBar" />
-      <AppSideNav :mobile-nav-open="mobileNavOpen" />
+      <AppSideNav />
     </main>
   </kPage>
 </template>

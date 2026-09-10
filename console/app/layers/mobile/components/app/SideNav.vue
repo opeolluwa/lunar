@@ -1,32 +1,9 @@
 <script setup lang="ts">
-import { primaryRoutes, secondaryRoutes } from "@shared/data/routes";
-import { useAuthStore } from "@shared/stores/auth";
 import { useUserPreferenceStore } from "@shared/stores/workspace-profile";
-import NavigationApp from "@desktop/components/navigation/app.vue"
-const route = useRoute();
-const colorMode = useColorMode();
 
-const { mobileNavOpen, closeMobileNav } = useMobileNav();
-
-const authStore = useAuthStore();
 const preferenceStore = useUserPreferenceStore();
 
-function logout() {
-  closeMobileNav();
-
-  authStore.clearSession();
-  authStore.exitGuestMode();
-
-  navigateTo("/auth/login");
-}
-
-function isActive(path: string): boolean {
-  if (path === "/") {
-    return route.path === "/";
-  }
-
-  return route.path === path || route.path.startsWith(`${path}/`);
-}
+const { mobileNavOpen } = useMobileNav();
 </script>
 
 <template>
@@ -36,7 +13,35 @@ function isActive(path: string): boolean {
     :ui="{ content: 'max-w-64' }"
   >
     <template #content>
-     <NavigationApp/>
+      <div class="flex flex-col h-full bg-white dark:bg-app-dark-800">
+        <!-- Safe-area spacer -->
+        <div class="shrink-0" style="height: env(safe-area-inset-top)" />
+
+        <!-- Header -->
+        <div
+          class="flex items-center justify-between px-4 py-4 border-b border-gray-200 dark:border-gray-800 shrink-0"
+        >
+          <UUser
+            :name="preferenceStore.fullName || 'Lunar User'"
+            :description="preferenceStore.preference?.email"
+            :avatar="{ icon: 'i-lucide-user' }"
+            class="min-w-0 flex-1 truncate"
+          />
+          <UButton
+            size="sm"
+            color="neutral"
+            variant="ghost"
+            icon="heroicons:x-mark"
+            aria-label="Close menu"
+            @click="mobileNavOpen = false"
+          />
+        </div>
+
+        <NavigationSideNavContent @navigate="mobileNavOpen = false" />
+
+        <!-- Safe-area spacer -->
+        <div class="shrink-0" style="height: env(safe-area-inset-bottom)" />
+      </div>
     </template>
   </USlideover>
 </template>

@@ -81,22 +81,7 @@ const filteredNotes = computed(() => {
         </div>
 
         <template v-else>
-          <!-- Search + sort controls -->
-          <div class="mb-3">
-            <AppInput
-              v-model="searchQuery"
-              name="search"
-              icon="heroicons:magnifying-glass"
-              placeholder="Search notes..."
-              size="sm"
-            />
-            <AppSortMenu
-              v-if="filteredNotes.length > 0"
-              v-model="sortBy"
-              :options="NOTE_SORT_OPTIONS"
-              class="mt-2"
-            />
-          </div>
+
 
           <!-- Empty state: search has no results -->
           <EmptyState
