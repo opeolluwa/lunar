@@ -3,18 +3,6 @@
 @import "tailwind-animations";
 @import "konsta/vue/theme.css";
 
-
-html, body {
-  width: 100%; height: 100%;
-  background: var(--app-primary-600);
-}
-
-@media (prefers-color-scheme: dark) {
-  html, body {
-   background: var(--app-primary-600);
-  }
-}
-
 @plugin 'tailwind-scrollbar' {
   nocompatible: true;
 }
@@ -213,6 +201,3 @@ h6.notes_heading {
 .dm-floating-menu {
   height: 12rem;
 }
-
-
-

@@ -1,0 +1,62 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Sparkles -->
+  <g fill="#0ea5e9" stroke="#075985" stroke-width="1">
+    <path d="M 30 120 L 31.5 126 L 37.5 127.5 L 31.5 129 L 30 135 L 28.5 129 L 22.5 127.5 L 28.5 126 Z"/>
+    <path d="M 180 30 L 181.5 36 L 187.5 37.5 L 181.5 39 L 180 45 L 178.5 39 L 172.5 37.5 L 178.5 36 Z"/>
+  </g>
+
+  <!-- Reminder bell -->
+  <g transform="translate(40 36)">
+    <circle cx="17" cy="-2" r="4" fill="#0369a1" stroke="#075985" stroke-width="1.5"/>
+    <path d="M 17 4 C 7 4 3 12 3 22 L 31 22 C 31 12 27 4 17 4 Z" fill="#38bdf8" stroke="#075985" stroke-width="2"/>
+    <circle cx="17" cy="27" r="4" fill="#0284c7" stroke="#075985" stroke-width="1.5"/>
+    <g stroke="#075985" stroke-width="1.5" fill="none" stroke-linecap="round">
+      <path d="M 38 12 q 3 3 0 6"/>
+      <path d="M 42 8 q 5 5 0 10"/>
+    </g>
+  </g>
+
+  <!-- Lightbulb -->
+  <g transform="translate(58 2) scale(0.9)">
+    <g stroke="#0ea5e9" stroke-width="2" fill="none" stroke-linecap="round">
+      <line x1="100" y1="30" x2="100" y2="40"/>
+      <line x1="130" y1="50" x2="122" y2="58"/>
+      <line x1="140" y1="80" x2="130" y2="80"/>
+      <line x1="70" y1="50" x2="78" y2="58"/>
+      <line x1="60" y1="80" x2="70" y2="80"/>
+    </g>
+    <path d="M 85 60 Q 75 75 75 90 Q 75 105 85 110 L 115 110 Q 125 105 125 90 Q 125 75 115 60 Q 100 50 100 50 Q 100 50 85 60 Z" fill="#7dd3fc" stroke="#0369a1" stroke-width="2"/>
+    <ellipse cx="100" cy="85" rx="18" ry="20" fill="#38bdf8" opacity="0.6"/>
+    <rect x="92" y="110" width="16" height="8" fill="#0284c7" stroke="#0369a1" stroke-width="1.5"/>
+    <g stroke="#0284c7" stroke-width="1.5" fill="none">
+      <path d="M 97 118 Q 100 122 103 118"/>
+      <path d="M 96 122 Q 100 126 104 122"/>
+    </g>
+  </g>
+
+  <!-- Notepad -->
+  <g transform="translate(48 108)">
+    <rect x="0" y="0" width="92" height="80" rx="12" fill="#ffffff" stroke="#075985" stroke-width="2"/>
+    <g fill="none" stroke="#075985" stroke-width="1.5">
+      <circle cx="14" cy="8" r="3"/>
+      <circle cx="30" cy="8" r="3"/>
+      <circle cx="46" cy="8" r="3"/>
+      <circle cx="62" cy="8" r="3"/>
+      <circle cx="78" cy="8" r="3"/>
+    </g>
+    <g stroke="#7dd3fc" stroke-width="3" stroke-linecap="round">
+      <line x1="18" y1="28" x2="76" y2="28"/>
+      <line x1="18" y1="42" x2="60" y2="42"/>
+      <line x1="18" y1="56" x2="74" y2="56"/>
+    </g>
+    <circle cx="66" cy="66" r="7" fill="#38bdf8" stroke="#075985" stroke-width="1.5"/>
+    <path d="M 62.5 66 L 65 68.5 L 69.5 63.5" fill="none" stroke="#082f49" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <!-- Pencil -->
+  <g transform="translate(148 118) rotate(22)">
+    <rect x="0" y="-30" width="7" height="58" rx="3" fill="#0ea5e9" stroke="#075985" stroke-width="1.5"/>
+    <polygon points="3.5,-40 0,-30 7,-30" fill="#082f49"/>
+    <path d="M 0 -9 L 7 -9 L 7 -13 L 0 -13 Z" fill="#0369a1"/>
+  </g>
+</svg>

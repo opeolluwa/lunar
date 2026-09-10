@@ -1,0 +1,49 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="drop" x="-20%" y="-20%" width="140%" height="150%">
+      <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#082f49" flood-opacity="0.14"/>
+    </filter>
+  </defs>
+
+  <!-- Sparkles -->
+  <g fill="#0ea5e9" stroke="#075985" stroke-width="1">
+    <path d="M 30 116 L 31.5 122 L 37.5 123.5 L 31.5 125 L 30 131 L 28.5 125 L 22.5 123.5 L 28.5 122 Z"/>
+    <path d="M 150 24 L 151.5 30 L 157.5 31.5 L 151.5 33 L 150 39 L 148.5 33 L 142.5 31.5 L 148.5 30 Z"/>
+    <path d="M 172 88 L 173.5 94 L 179.5 95.5 L 173.5 97 L 172 103 L 170.5 97 L 164.5 95.5 L 170.5 94 Z"/>
+  </g>
+
+  <!-- Back card: notes (rotated) -->
+  <g transform="translate(84 18) rotate(8 48 52)" filter="url(#drop)">
+    <rect x="0" y="0" width="92" height="104" rx="12" fill="#f0f9ff" stroke="#075985" stroke-width="2"/>
+    <path d="M 64 0 L 92 28 L 92 0 Z" fill="#bae6fd" stroke="#075985" stroke-width="2" stroke-linejoin="round"/>
+    <g stroke="#7dd3fc" stroke-width="3" stroke-linecap="round">
+      <line x1="14" y1="46" x2="54" y2="46"/>
+      <line x1="14" y1="62" x2="78" y2="62"/>
+      <line x1="14" y1="78" x2="62" y2="78"/>
+    </g>
+  </g>
+
+  <!-- Middle card: bookmark (rotated) -->
+  <g transform="translate(44 28) rotate(-9 46 52)" filter="url(#drop)">
+    <rect x="4" y="0" width="78" height="96" rx="12" fill="#7dd3fc" stroke="#075985" stroke-width="2"/>
+    <path d="M 78 56 L 78 88 L 58 78 Z" fill="#0284c7" stroke="#075985" stroke-width="2" stroke-linejoin="round"/>
+    <g stroke="#ffffff" stroke-width="3" stroke-linecap="round">
+      <line x1="18" y1="26" x2="64" y2="26"/>
+      <line x1="18" y1="40" x2="52" y2="40"/>
+      <line x1="18" y1="54" x2="62" y2="54"/>
+    </g>
+  </g>
+
+  <!-- Front card: tasks (checklist) -->
+  <g transform="translate(70 56)" filter="url(#drop)">
+    <rect x="0" y="0" width="84" height="96" rx="14" fill="#0284c7" stroke="#082f49" stroke-width="2"/>
+    <circle cx="20" cy="26" r="9" fill="#ffffff" stroke="#0369a1" stroke-width="2.5"/>
+    <path d="M 15 26 L 18.5 30 L 25.5 22.5" fill="none" stroke="#0369a1" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <line x1="36" y1="22" x2="72" y2="22" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round"/>
+    <line x1="36" y1="30" x2="58" y2="30" stroke="#bae6fd" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="20" cy="60" r="9" fill="none" stroke="#ffffff" stroke-width="2.5"/>
+    <line x1="36" y1="56" x2="62" y2="56" stroke="#f0f9ff" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="20" cy="82" r="9" fill="none" stroke="#bae6fd" stroke-width="2.5"/>
+    <line x1="36" y1="78" x2="68" y2="78" stroke="#f0f9ff" stroke-width="3" stroke-linecap="round"/>
+  </g>
+</svg>

@@ -14,6 +14,7 @@ export default withNuxt({
           "header",
           "Fab",
           "viewport",
+          "walkthrough",
         ],
       },
     ],

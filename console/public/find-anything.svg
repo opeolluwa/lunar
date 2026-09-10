@@ -1,0 +1,48 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Sparkles -->
+  <g fill="#0ea5e9" stroke="#075985" stroke-width="1">
+    <path d="M 28 44 L 29.5 50 L 35.5 51.5 L 29.5 53 L 28 59 L 26.5 53 L 20.5 51.5 L 26.5 50 Z"/>
+    <path d="M 92 22 L 93.5 28 L 99.5 29.5 L 93.5 31 L 92 37 L 90.5 31 L 84.5 29.5 L 90.5 28 Z"/>
+    <path d="M 166 34 L 167.5 40 L 173.5 41.5 L 167.5 43 L 166 49 L 164.5 43 L 158.5 41.5 L 164.5 40 Z"/>
+  </g>
+
+  <!-- Document stack -->
+  <g transform="translate(26 66) rotate(-10 46 55)">
+    <rect x="0" y="0" width="92" height="112" rx="12" fill="#bae6fd" stroke="#075985" stroke-width="2"/>
+    <g stroke="#7dd3fc" stroke-width="3" stroke-linecap="round">
+      <line x1="16" y1="34" x2="76" y2="34"/>
+      <line x1="16" y1="52" x2="60" y2="52"/>
+      <line x1="16" y1="70" x2="74" y2="70"/>
+      <line x1="16" y1="88" x2="56" y2="88"/>
+    </g>
+  </g>
+
+  <g transform="translate(38 58) rotate(-3 44 52)">
+    <rect x="0" y="0" width="90" height="110" rx="12" fill="#7dd3fc" stroke="#075985" stroke-width="2"/>
+    <g stroke="#ffffff" stroke-width="3" stroke-linecap="round">
+      <line x1="16" y1="34" x2="74" y2="34"/>
+      <line x1="16" y1="58" x2="60" y2="58"/>
+      <line x1="16" y1="82" x2="72" y2="82"/>
+    </g>
+  </g>
+
+  <!-- Front document with a highlighted match -->
+  <g transform="translate(52 50)">
+    <rect x="0" y="0" width="86" height="108" rx="12" fill="#ffffff" stroke="#075985" stroke-width="2"/>
+    <rect x="14" y="14" width="58" height="10" rx="5" fill="#7dd3fc"/>
+    <g stroke="#bae6fd" stroke-width="3" stroke-linecap="round">
+      <line x1="14" y1="38" x2="68" y2="38"/>
+      <line x1="14" y1="52" x2="56" y2="52"/>
+      <line x1="14" y1="66" x2="64" y2="66"/>
+    </g>
+    <rect x="14" y="78" width="58" height="12" rx="6" fill="#38bdf8"/>
+    <line x1="24" y1="82" x2="34" y2="82" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+    <line x1="44" y1="86" x2="62" y2="86" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+  </g>
+
+  <!-- Magnifying glass -->
+  <circle cx="132" cy="64" r="40" fill="#38bdf8" fill-opacity="0.4" stroke="#082f49" stroke-width="3.5"/>
+  <circle cx="116" cy="48" r="8" fill="#ffffff" fill-opacity="0.75"/>
+  <line x1="162" y1="94" x2="188" y2="120" stroke="#082f49" stroke-width="8" stroke-linecap="round"/>
+  <line x1="160" y1="92" x2="186" y2="118" stroke="#0ea5e9" stroke-width="4" stroke-linecap="round"/>
+</svg>
