@@ -1,7 +1,3 @@
-<script setup lang="ts">
-const { openSearch } = useMobileSearch();
-</script>
-
 <template>
   <div class="flex gap-x-1.5">
     <UButton
@@ -10,7 +6,7 @@ const { openSearch } = useMobileSearch();
       variant="ghost"
       icon="heroicons:magnifying-glass"
       aria-label="Search"
-      @click="openSearch"
+      @click="navigateTo('/search')"
     />
 
     <UButton

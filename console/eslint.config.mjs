@@ -8,6 +8,7 @@ export default withNuxt({
       {
         ignores: [
           "index",
+          "search",
           "pricing",
           "login",
           "signup",
