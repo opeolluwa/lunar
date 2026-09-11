@@ -86,7 +86,7 @@ async function handleSubmit() {
         name="confirmPassword"
         label="Confirm password"
         placeholder="Repeat your password"
-        size="lg"
+        size="xl"
         :disabled="loading"
         :enable-password-toggle="false"
       />

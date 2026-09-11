@@ -64,6 +64,7 @@ async function handleAccept() {
     <div v-if="token" class="flex flex-col gap-3">
       <AppButton
         color="primary"
+        size="xl"
         class="w-full py-3 bg-primary-500 hover:bg-primary-600 rounded-lg text-white font-medium disabled:opacity-50 text-center"
         :loading="loading"
         :disabled="loading"
