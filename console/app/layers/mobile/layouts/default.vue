@@ -17,7 +17,6 @@ const pageTitle = computed(() => {
     .map((w) => _.capitalize(w))
     .join(" ");
 });
-
 </script>
 
 <template>
@@ -46,17 +45,16 @@ const pageTitle = computed(() => {
       </template>
 
       <template #right>
-      <AppHeaderRightPartial/>
+        <AppHeaderRightPartial />
       </template>
     </kNavbar>
 
     <main class="flex min-h-0 flex-1 flex-col overflow-hidden">
       <AppViewport class="bg-white/90 dark:bg-app-dark-800">
-          
         <slot />
       </AppViewport>
       <AppBottonNav />
-       <AppSideNav /> 
+      <AppSideNav />
     </main>
   </kPage>
 </template>

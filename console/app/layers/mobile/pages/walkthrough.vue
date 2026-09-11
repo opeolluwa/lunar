@@ -2,8 +2,10 @@
 definePageMeta({ layout: "walkthrough", name: "Walkthrough" });
 
 const walkthroughSeen = useLocalStorage("walkthroughSeen", false);
-
 const currentSlide = ref(0);
+
+const setCurrentSlide = (index: number) => (currentSlide.value = index);
+const skip = () => complete();
 
 const slides = [
   {
@@ -40,10 +42,6 @@ function next() {
     currentSlide.value++;
   }
 }
-
-function skip() {
-  complete();
-}
 </script>
 
 <template>
@@ -55,9 +53,9 @@ function skip() {
       class="shrink-0 flex items-center justify-end px-6 pt-safe-top pt-6"
     >
       <button
-        v-if="!isLastSlide"
         type="button"
         class="text-sm font-medium text-gray-400 dark:text-gray-500"
+        :class="{ 'text-transparent transition-all duration-75': isLastSlide }"
         @click.stop="skip"
       >
         Skip
@@ -78,6 +76,7 @@ function skip() {
         item: 'basis-full h-full',
       }"
       class="w-full min-h-0"
+      @select="(u) => setCurrentSlide(u)"
     >
       <section
         class="h-full w-full flex flex-col items-center justify-center px-8"
@@ -96,7 +95,7 @@ function skip() {
               :alt="item.title"
               class="w-full h-full object-contain"
               draggable="false"
-            />
+            >
           </div>
         </div>
 
@@ -139,7 +138,7 @@ function skip() {
         type="button"
         class="w-full h-14 rounded-2xl bg-primary-600 hover:bg-primary-700 active:bg-primary-800 text-white font-semibold transition-colors flex items-center justify-center gap-2"
         @click.stop="next"
-      >
+        >
         {{ isLastSlide ? "Get started" : "Continue" }}
       </button>
     </footer>

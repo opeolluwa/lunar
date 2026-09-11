@@ -4,21 +4,21 @@ const actions = [
     label: "New Note",
     icon: "heroicons:document-text-solid",
     href: "/notes/create-notes",
-    bg: "bg-violet-50 dark:bg-violet-950/60",
+
     iconColor: "text-violet-500",
   },
   {
     label: "New Task",
     icon: "heroicons:check-circle-solid",
     href: "/todo",
-    bg: "bg-emerald-50 dark:bg-emerald-950/60",
+
     iconColor: "text-emerald-500",
   },
   {
     label: "New Bookmark",
     icon: "heroicons:bookmark-solid",
     href: "/bookmarks",
-    bg: "bg-primary-50 dark:bg-primary-950/60",
+
     iconColor: "text-primary-500",
   },
 ];

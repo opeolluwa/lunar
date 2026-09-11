@@ -37,7 +37,7 @@ onMounted(refreshAll);
 <template>
   <PullToRefresh @refresh="refreshAll">
     <HomeHeader />
-    <HomeStats />
+    <!-- <HomeStats />  -->
     <HomeTodos />
     <HomeNotes />
     <HomeBookmarks />

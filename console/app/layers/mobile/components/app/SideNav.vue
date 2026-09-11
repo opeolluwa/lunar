@@ -1,9 +1,18 @@
 <script setup lang="ts">
 import { useUserPreferenceStore } from "@shared/stores/workspace-profile";
+import { useAuthStore } from "@shared/stores/auth";
 
 const preferenceStore = useUserPreferenceStore();
+const authStore = useAuthStore();
 
 const { mobileNavOpen } = useMobileNav();
+
+function handleLogout() {
+  authStore.clearSession();
+  authStore.exitGuestMode();
+  mobileNavOpen.value = false;
+  navigateTo("/auth/login");
+}
 </script>
 
 <template>
@@ -38,6 +47,24 @@ const { mobileNavOpen } = useMobileNav();
         </div>
 
         <NavigationSideNavContent @navigate="mobileNavOpen = false" />
+
+        <!-- Footer: logout -->
+        <div class="shrink-0 px-3 pt-1 pb-4">
+          <USeparator class="mb-3" />
+          <button
+            type="button"
+            class="flex items-center w-full h-11 gap-2 px-2 rounded-xl text-red-500 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-500/10 hover:text-red-600 dark:hover:text-red-300 transition-colors"
+            @click="handleLogout"
+          >
+            <UIcon
+              name="heroicons:arrow-right-start-on-rectangle"
+              class="size-5 shrink-0"
+            />
+            <span class="text-sm font-medium">
+              {{ authStore.isGuest ? "Exit" : "Logout" }}
+            </span>
+          </button>
+        </div>
 
         <!-- Safe-area spacer -->
         <div class="shrink-0" style="height: env(safe-area-inset-bottom)" />

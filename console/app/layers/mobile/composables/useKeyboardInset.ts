@@ -18,6 +18,8 @@ export function useKeyboardInset() {
     };
     useEventListener(vv, "resize", update);
     useEventListener(vv, "scroll", update);
+    useEventListener(window, "resize", update);
+    useEventListener(window, "orientationchange", update);
     update();
   }
   return inset;

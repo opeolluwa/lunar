@@ -5,8 +5,8 @@
       color="neutral"
       variant="ghost"
       icon="heroicons:magnifying-glass"
-      aria-label="Notifications"
-      @click="navigateTo('/notifications')"
+      aria-label="Search"
+      @click="navigateTo('/search')"
     />
 
     <UButton
