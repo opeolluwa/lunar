@@ -8,10 +8,17 @@ const recentBookmarks = computed(() => bookmarkStore.bookmarks.slice(0, 3));
 </script>
 
 <template>
+  <USkeleton
+    v-if="bookmarkStore.loading"
+    class="mt-4 h-40 rounded-2xl"
+  />
+
   <div
+    v-else
     class="mt-4 overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-white/15 dark:bg-gray-800/60"
   >
     <div
+      v-if="recentBookmarks.length > 0"
       class="flex items-center justify-between border-b border-gray-100 px-4 py-3 dark:border-white/10"
     >
       <h2
@@ -29,15 +36,7 @@ const recentBookmarks = computed(() => bookmarkStore.bookmarks.slice(0, 3));
     </div>
 
     <div
-      v-if="bookmarkStore.loading"
-      class="flex items-center gap-2 p-4 text-xs text-gray-400"
-    >
-      <UIcon name="heroicons:arrow-path" class="size-3.5 animate-spin" />
-      Loading…
-    </div>
-
-    <div
-      v-else-if="recentBookmarks.length === 0"
+      v-if="recentBookmarks.length === 0"
       class="flex flex-col items-center justify-center py-8 text-center"
     >
       <div

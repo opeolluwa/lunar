@@ -29,9 +29,9 @@ const ringOffset = computed(
 );
 
 const priorityDot: Record<string, string> = {
-  high: "bg-red-400",
-  medium: "bg-amber-400",
-  low: "bg-emerald-400",
+  high: "bg-primary-400",
+  medium: "bg-gray-300 dark:bg-gray-600",
+  low: "bg-gray-300 dark:bg-gray-600",
 };
 
 function formatDate(iso: string) {
@@ -43,10 +43,14 @@ function formatDate(iso: string) {
 </script>
 
 <template>
+  <USkeleton v-if="todoStore.loading" class="mt-5 h-32 rounded-2xl" />
+
   <div
-    class="mt-5 overflow-hidden rounded border border-gray-200 bg-white dark:border-white/15 dark:bg-gray-800/60"
+    v-else
+    class="mt-5 overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-white/15 dark:bg-gray-800/60"
   >
     <div
+      v-if="activeTodos.length > 0"
       class="flex items-center gap-3 border-b border-gray-100 px-4 py-3 dark:border-white/10"
     >
       <div class="relative size-12 shrink-0">
@@ -99,15 +103,7 @@ function formatDate(iso: string) {
     </div>
 
     <div
-      v-if="todoStore.loading"
-      class="flex items-center gap-2 px-4 py-6 text-sm text-gray-400"
-    >
-      <UIcon name="heroicons:arrow-path" class="size-4 animate-spin" />
-      Loading…
-    </div>
-
-    <div
-      v-else-if="activeTodos.length === 0"
+      v-if="activeTodos.length === 0"
       class="flex flex-col items-center justify-center py-8 text-center"
     >
       <div

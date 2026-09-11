@@ -21,16 +21,20 @@ function formatDate(iso: string) {
 </script>
 
 <template>
+  <USkeleton v-if="noteStore.loading" class="mt-4 h-40 rounded-2xl" />
+
   <div
+    v-else
     class="mt-4 overflow-hidden rounded-2xl border border-gray-200 bg-white dark:border-white/15 dark:bg-gray-800/60"
   >
     <div
+      v-if="recentNotes.length > 0"
       class="flex items-center justify-between border-b border-gray-100 px-4 py-3 dark:border-white/10"
     >
       <h2
         class="flex items-center gap-1.5 text-sm font-semibold text-gray-700 dark:text-gray-300/70"
       >
-        <UIcon name="heroicons:document-text" class="size-4 text-violet-400" />
+        <UIcon name="heroicons:document-text" class="size-4 text-primary-400" />
         Recent notes
       </h2>
       <NuxtLink
@@ -42,15 +46,7 @@ function formatDate(iso: string) {
     </div>
 
     <div
-      v-if="noteStore.loading"
-      class="flex items-center gap-2 p-4 text-xs text-gray-400"
-    >
-      <UIcon name="heroicons:arrow-path" class="size-3.5 animate-spin" />
-      Loading…
-    </div>
-
-    <div
-      v-else-if="recentNotes.length === 0"
+      v-if="recentNotes.length === 0"
       class="flex flex-col items-center justify-center py-8 text-center"
     >
       <div
@@ -80,11 +76,11 @@ function formatDate(iso: string) {
         class="flex items-start gap-2.5 px-4 py-3 transition-colors active:bg-gray-50 dark:active:bg-white/5"
       >
         <div
-          class="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-md bg-violet-50 dark:bg-violet-950/60"
+          class="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-md bg-primary-50 dark:bg-primary-950/60"
         >
           <UIcon
             name="heroicons:document-text"
-            class="size-3 text-violet-400"
+            class="size-3 text-primary-400"
           />
         </div>
         <div class="min-w-0 flex-1">

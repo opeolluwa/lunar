@@ -9,47 +9,38 @@ const todoStore = useTodoStore();
 
 const statPills = computed(() => [
   {
-    label: "Notes",
+    // label: "Notes",
     value: noteStore.notes.length,
     icon: "heroicons:document-text-solid",
-    color: "text-violet-500",
-   
     href: "/notes",
   },
   {
-    label: "Bookmarks",
+    // label: "Bookmarks",
     value: bookmarkStore.bookmarks.length,
     icon: "heroicons:bookmark-solid",
-    color: "text-primary-500",
-   
     href: "/bookmarks",
   },
   {
-    label: "Active",
+    // label: "Active",
     value: todoStore.activeTodos.length,
     icon: "heroicons:check-circle-solid",
-    color: "text-emerald-500",
-
     href: "/todo",
   },
 ]);
 </script>
 
 <template>
-  <div
-    class="no-scrollbar -mx-6 mt-4 flex snap-x snap-mandatory gap-2.5 overflow-x-auto px-6"
-  >
+  <div class="mt-4 flex gap-2.5">
     <NuxtLink
       v-for="s in statPills"
       :key="s.label"
       :to="s.href"
-      class="flex min-w-[110px] flex-1 snap-start items-center gap-2.5 rounded-xl border border-gray-200/80 bg-white px-3.5 py-2.5 backdrop-blur-sm transition-colors active:scale-[0.97] dark:border-gray-700/60 dark:bg-gray-900/60"
+      class="flex min-w-0 flex-1 items-center gap-2.5 rounded-xl border border-gray-200/80 bg-white px-3.5 py-2.5 backdrop-blur-sm transition-colors active:scale-[0.97] dark:border-gray-700/60 dark:bg-gray-900/60"
     >
       <div
-        class="flex size-8 shrink-0 items-center justify-center rounded-lg"
-        :class="s.bg"
+        class="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary-50 dark:bg-primary-950/40"
       >
-        <UIcon :name="s.icon" class="size-4" :class="s.color" />
+        <UIcon :name="s.icon" class="size-4 text-primary-500" />
       </div>
       <div class="min-w-0">
         <p

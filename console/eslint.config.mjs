@@ -13,6 +13,7 @@ export default withNuxt({
           "signup",
           "card",
           "header",
+          "default",
           "Fab",
           "viewport",
           "walkthrough",

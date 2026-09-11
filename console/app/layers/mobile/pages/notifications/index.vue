@@ -1,26 +1,42 @@
 <script setup lang="ts">
-import { useNotificationStore } from '@shared/stores/notifications';
+import { useNotificationStore } from "@shared/stores/notifications";
+import EmptyState from "@shared/components/app/EmptyState.vue";
 
 definePageMeta({ name: "Notifications" });
 
 const notificationStore = useNotificationStore();
-const notifications = computed(() => notificationStore.notifications);
 
 onMounted(() => notificationStore.fetchNotifications());
+
+function handleRead(identifier: string) {
+  notificationStore.markAsRead(identifier);
+}
+
+function handleDismiss(identifier: string) {
+  notificationStore.deleteNotification(identifier);
+}
 </script>
 
 <template>
   <div class="flex flex-col">
-    <NuxtLink href="/walkthrough">walk through</NuxtLink>
-    <NuxtLink href="/auth/login">login</NuxtLink>
+    <div v-if="notificationStore.loading" class="mt-3 flex flex-col gap-2">
+      <USkeleton v-for="i in 4" :key="i" class="h-16 rounded-xl" />
+    </div>
 
-    <div class="space-y-3">
+    <EmptyState
+      v-else-if="notificationStore.notifications.length === 0"
+      title="You're all caught up"
+      description="New notifications will appear here."
+      icon="heroicons:bell-slash"
+    />
+
+    <div v-else class="mt-3 flex flex-col gap-2">
       <NotificationsCard
-        v-for="notification in notifications"
+        v-for="notification in notificationStore.notifications"
         :key="notification.identifier"
         :notification="notification"
-        @read="(identifier) => notificationStore.markAsRead(identifier)"
-        @dismiss="(identifier) => notificationStore.deleteNotification(identifier)"
+        @read="handleRead"
+        @dismiss="handleDismiss"
       />
     </div>
   </div>
