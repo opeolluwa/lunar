@@ -71,18 +71,28 @@ export const useWorkspacesStore = defineStore("workspaces_store", {
       return created;
     },
 
-    async updateWorkspace(
-      identifier: string,
-      payload: UpdateWorkspacePayload,
-    ): Promise<Workspace> {
-      const updated = await invoke<Workspace>("update_workspace", {
-        identifier,
-        workspace: payload,
-      });
-      const idx = this.workspaces.findIndex((w) => w.identifier === identifier);
-      if (idx !== -1) this.workspaces[idx] = updated;
-      return updated;
-    },
+async updateWorkspace(
+        identifier: string,
+        payload: UpdateWorkspacePayload,
+      ): Promise<Workspace> {
+        const updated = await invoke<Workspace>("update_workspace", {
+          identifier,
+          workspace: payload,
+        });
+        if (payload.isDefault === true) {
+          for (const ws of this.workspaces) {
+            if (ws.identifier !== identifier && ws.isDefault) {
+              ws.isDefault = false;
+            }
+          }
+        }
+        const idx = this.workspaces.findIndex((w) => w.identifier === identifier);
+        if (idx !== -1) this.workspaces[idx] = updated;
+        if (payload.isDefault === true && identifier !== this.activeWorkspaceId) {
+          await this.setActiveWorkspace(identifier);
+        }
+        return updated;
+      },
 
     async deleteWorkspace(identifier: string): Promise<void> {
       const { notify } = useAppNotification();
