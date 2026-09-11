@@ -96,6 +96,7 @@ async function handleSubmit() {
         class="text-center align-center"
         :loading="loading"
         :disabled="loading"
+        size="xl"
       >
         Sign in
       </AppButton>
