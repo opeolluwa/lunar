@@ -192,56 +192,10 @@ function navigate(item: SearchResult) {
     router.push(item.href);
   }
 }
-
-function handleEscape() {
-  if (searchQuery.value) {
-    searchQuery.value = "";
-  } else {
-    router.back();
-  }
-}
-
-function handleTrailing() {
-  if (searchQuery.value) {
-    searchQuery.value = "";
-  } else {
-    router.back();
-  }
-}
 </script>
 
 <template>
-  <div class="flex flex-col px-6 pt-4 pb-10">
-    <UInput
-      v-model="searchQuery"
-      size="lg"
-      placeholder="Search everything..."
-      variant="soft"
-      autofocus
-      autocapitalize="off"
-      autocorrect="off"
-      spellcheck="false"
-      @keydown.escape="handleEscape"
-    >
-      <template #leading>
-        <UIcon
-          name="heroicons:magnifying-glass"
-          class="size-5 text-gray-400 dark:text-gray-500"
-        />
-      </template>
-
-      <template #trailing>
-        <UButton
-          color="neutral"
-          variant="link"
-          size="sm"
-          icon="i-lucide-circle-x"
-          :aria-label="searchQuery ? 'Clear input' : 'Close search'"
-          @click="handleTrailing"
-        />
-      </template>
-    </UInput>
-
+  <div class="flex flex-col px-6 pb-10">
     <div
       v-if="!hasQuery"
       class="flex flex-col items-center px-8 py-24 text-center"
