@@ -1,8 +1,8 @@
 use std::fmt::Display;
 use std::time::Duration;
 
-use lunar::utils::extract_env;
 use jsonwebtoken::{decode, encode, DecodingKey, EncodingKey, Header, Validation};
+use lunar::utils::extract_env;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 

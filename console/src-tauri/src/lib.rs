@@ -6,7 +6,7 @@ mod utils;
 
 use std::sync::Arc;
 
-use lunar::{DataEngine, adapters::notifications::CreateNotification};
+use lunar::{adapters::notifications::CreateNotification, DataEngine};
 use tauri::Listener;
 use tauri::Manager;
 use tauri_plugin_syncular::SyncularConfig;

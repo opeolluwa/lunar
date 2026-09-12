@@ -78,8 +78,6 @@ const filteredNotes = computed(() => {
         </div>
 
         <template v-else>
-
-
           <!-- Empty state: search has no results -->
           <EmptyState
             v-if="filteredNotes.length === 0"

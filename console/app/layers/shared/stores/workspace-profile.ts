@@ -1,7 +1,7 @@
 import type {
   CreateWorkspaceProfile,
   UpdateWorkspaceProfile,
-  WorkspaceProfiles
+  WorkspaceProfiles,
 } from "lunar";
 import { defineStore } from "pinia";
 import { invoke } from "../utils/invoke";

@@ -21,9 +21,7 @@ const activeTodos = computed(() =>
     .slice(0, 7),
 );
 
-const completedCount = computed(
-  () => props.todos.filter((t) => t.done).length,
-);
+const completedCount = computed(() => props.todos.filter((t) => t.done).length);
 
 const progress = computed(() => {
   const total = props.todos.length;
@@ -126,10 +124,7 @@ function formatDate(iso: string) {
         </p>
       </div>
 
-      <div
-        v-else
-        class="divide-y divide-gray-100 dark:divide-gray-700/60"
-      >
+      <div v-else class="divide-y divide-gray-100 dark:divide-gray-700/60">
         <div
           v-for="todo in activeTodos"
           :key="todo.identifier"

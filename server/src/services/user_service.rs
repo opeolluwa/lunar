@@ -2,6 +2,7 @@ use std::path::Path;
 use std::sync::Arc;
 
 use axum_typed_multipart::TypedMultipart;
+use lunar::entities::users;
 use sea_orm::DatabaseConnection;
 use uuid::Uuid;
 
@@ -9,7 +10,6 @@ use crate::adapters::authentication::SetNewPasswordRequest;
 use crate::adapters::profile::UploadProfilePictureRequest;
 use crate::adapters::users::PartialUserProfile;
 use crate::config::AppConfig;
-use lunar::entities::users;
 use crate::errors::database_error::DatabaseError;
 use crate::errors::service_error::ServiceError;
 use crate::repositories::user::{UserRepository, UserRepositoryTrait};

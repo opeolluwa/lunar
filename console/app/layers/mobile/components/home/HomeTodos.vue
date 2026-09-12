@@ -122,10 +122,7 @@ function formatDate(iso: string) {
       </p>
     </div>
 
-    <div
-      v-else
-      class="divide-y divide-gray-100 dark:divide-gray-700/60"
-    >
+    <div v-else class="divide-y divide-gray-100 dark:divide-gray-700/60">
       <div
         v-for="todo in activeTodos"
         :key="todo.identifier"

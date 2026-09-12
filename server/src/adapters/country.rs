@@ -1,7 +1,6 @@
+use lunar::entities::country;
 use serde::{Deserialize, Serialize};
 use ts_rs::TS;
-
-use lunar::entities::country;
 
 #[derive(Debug, Serialize, Deserialize, TS)]
 #[serde(rename_all = "camelCase")]

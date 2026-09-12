@@ -19,8 +19,13 @@ function pad(value: number): string {
 
 function displayValue(): string {
   if (!props.modelValue) return "";
-  return new Date(0, 0, 0, props.modelValue.hour, props.modelValue.minute)
-    .toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
+  return new Date(
+    0,
+    0,
+    0,
+    props.modelValue.hour,
+    props.modelValue.minute,
+  ).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
 }
 
 function selection(): { hour: number; minute: number; period: "AM" | "PM" } {
@@ -61,7 +66,11 @@ function setTime(hour12: number, minute: number, period: "AM" | "PM") {
       type="button"
       :disabled="disabled"
       class="w-full flex items-center gap-2 bg-white dark:bg-gray-800 rounded-lg px-4 py-2.5 text-sm border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-colors text-left disabled:opacity-50"
-      :class="modelValue ? 'text-gray-700 dark:text-gray-200' : 'text-gray-400 dark:text-gray-500'"
+      :class="
+        modelValue
+          ? 'text-gray-700 dark:text-gray-200'
+          : 'text-gray-400 dark:text-gray-500'
+      "
     >
       <UIcon name="heroicons:clock" class="size-4 shrink-0 text-gray-400" />
       {{ modelValue ? displayValue() : "Pick a time" }}
@@ -71,7 +80,9 @@ function setTime(hour12: number, minute: number, period: "AM" | "PM") {
       <div class="w-64 p-3 flex flex-col gap-3">
         <div class="grid grid-cols-2 gap-3">
           <div class="flex flex-col gap-1.5">
-            <span class="text-[11px] font-medium text-gray-400 uppercase tracking-wide">
+            <span
+              class="text-[11px] font-medium text-gray-400 uppercase tracking-wide"
+            >
               Hour
             </span>
             <div class="grid grid-cols-4 gap-1">
@@ -93,7 +104,9 @@ function setTime(hour12: number, minute: number, period: "AM" | "PM") {
           </div>
 
           <div class="flex flex-col gap-1.5">
-            <span class="text-[11px] font-medium text-gray-400 uppercase tracking-wide">
+            <span
+              class="text-[11px] font-medium text-gray-400 uppercase tracking-wide"
+            >
               Minute
             </span>
             <div class="grid grid-cols-4 gap-1">
@@ -116,12 +129,14 @@ function setTime(hour12: number, minute: number, period: "AM" | "PM") {
         </div>
 
         <div class="flex flex-col gap-1.5">
-          <span class="text-[11px] font-medium text-gray-400 uppercase tracking-wide">
+          <span
+            class="text-[11px] font-medium text-gray-400 uppercase tracking-wide"
+          >
             Period
           </span>
           <div class="grid grid-cols-2 gap-1">
             <button
-              v-for="p in (['AM', 'PM'] as const)"
+              v-for="p in ['AM', 'PM'] as const"
               :key="p"
               type="button"
               class="py-1.5 rounded-md text-xs font-medium transition-colors"

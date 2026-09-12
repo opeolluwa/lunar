@@ -235,7 +235,9 @@ function relativeTime(iso: string) {
           </p>
           <p class="text-[11px] text-gray-400 mt-0.5">Total</p>
         </div>
-        <div class="bg-primary-50 dark:bg-primary-950 rounded-lg p-3 text-center">
+        <div
+          class="bg-primary-50 dark:bg-primary-950 rounded-lg p-3 text-center"
+        >
           <p
             class="text-2xl font-semibold text-primary-600 dark:text-primary-300"
           >

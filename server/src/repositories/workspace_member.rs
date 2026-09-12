@@ -1,10 +1,8 @@
 use std::sync::Arc;
 
 use chrono::Utc;
-use lunar::entities::{workspaces, workspace_members};
-use sea_orm::{
-    ActiveModelTrait, ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter, Set,
-};
+use lunar::entities::{workspace_members, workspaces};
+use sea_orm::{ActiveModelTrait, ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter, Set};
 use uuid::Uuid;
 
 use crate::{errors::database_error::DatabaseError, repositories::base::Repository};
@@ -71,9 +69,7 @@ impl WorkspaceMemberRepositoryTrait for WorkspaceMemberRepository {
     ) -> Result<Option<workspace_members::Model>, DatabaseError> {
         workspace_members::Entity::find()
             .filter(workspace_members::Column::WorkspaceIdentifier.eq(workspace_identifier))
-            .filter(
-                workspace_members::Column::MemberEmail.eq(email.to_lowercase()),
-            )
+            .filter(workspace_members::Column::MemberEmail.eq(email.to_lowercase()))
             .one(self.db_conn.as_ref())
             .await
             .map_err(DatabaseError::from)

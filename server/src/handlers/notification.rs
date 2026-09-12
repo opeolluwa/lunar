@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use axum::{extract::{Path, Query, State}};
+use axum::extract::{Path, Query, State};
 use lunar::entities::notifications;
 use uuid::Uuid;
 

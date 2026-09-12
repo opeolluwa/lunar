@@ -1,5 +1,6 @@
 use std::sync::Arc;
 
+use chrono::Local;
 use chrono::Utc;
 use lunar::{
     entities::workspaces,
@@ -7,7 +8,7 @@ use lunar::{
 };
 use sea_orm::DatabaseConnection;
 use uuid::Uuid;
-use chrono::Local;
+
 use crate::{
     adapters::{
         invitation::{InviteWorkspaceMemberRequest, InviteWorkspaceMemberResponse},
@@ -18,9 +19,7 @@ use crate::{
         base::Repository,
         invitation::{InvitationRepository, InvitationRepositoryTrait},
     },
-    services::workspace_member_service::{
-        WorkspaceMemberService, ROLE_ADMIN, ROLE_OWNER,
-    },
+    services::workspace_member_service::{ROLE_ADMIN, ROLE_OWNER, WorkspaceMemberService},
 };
 
 #[derive(Clone)]
@@ -106,7 +105,11 @@ impl InvitationService {
 
     /// Accept a pending invitation as the authenticated account and add the
     /// account as a workspace member.
-    pub async fn accept(&self, token: &str, claims: &Claims) -> Result<workspaces::Model, AppError> {
+    pub async fn accept(
+        &self,
+        token: &str,
+        claims: &Claims,
+    ) -> Result<workspaces::Model, AppError> {
         let invitation = self
             .invitation_repository
             .find_by_token(token)
@@ -127,7 +130,9 @@ impl InvitationService {
                 .await
                 .map_err(|e| AppError::DatabaseError(e.to_string()))?;
 
-            return Err(AppError::OperationFailed("This invitation has expired".into()));
+            return Err(AppError::OperationFailed(
+                "This invitation has expired".into(),
+            ));
         }
 
         if !invitation.email.eq_ignore_ascii_case(&claims.email) {
@@ -154,7 +159,11 @@ impl InvitationService {
 
     /// Revoke a pending invitation. Only owners/admins of the target
     /// workspace may revoke.
-    pub async fn revoke(&self, invitation_identifier: Uuid, claims: &Claims) -> Result<(), AppError> {
+    pub async fn revoke(
+        &self,
+        invitation_identifier: Uuid,
+        claims: &Claims,
+    ) -> Result<(), AppError> {
         let invitation = self
             .invitation_repository
             .find_by_identifier(invitation_identifier)

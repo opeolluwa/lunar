@@ -7,8 +7,8 @@ use axum::{
 
 use crate::{
     handlers::invitation::{
-        accept_invitation, invite_workspace_member, list_workspace_members, remove_workspace_member,
-        revoke_invitation,
+        accept_invitation, invite_workspace_member, list_workspace_members,
+        remove_workspace_member, revoke_invitation,
     },
     states::AppState,
 };
@@ -20,10 +20,7 @@ pub(super) fn invitation_routes(state: Arc<AppState>) -> Router {
             post(invite_workspace_member),
         )
         .route("/invitations/accept", post(accept_invitation))
-        .route(
-            "/invitations/{invitation_id}",
-            delete(revoke_invitation),
-        )
+        .route("/invitations/{invitation_id}", delete(revoke_invitation))
         .route(
             "/workspaces/{workspace_id}/members",
             get(list_workspace_members),

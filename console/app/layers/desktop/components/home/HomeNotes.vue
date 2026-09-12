@@ -31,10 +31,7 @@ function formatDate(iso: string) {
       <h2
         class="text-sm font-semibold text-gray-700 dark:text-gray-300/70 flex items-center gap-1.5"
       >
-        <UIcon
-          name="heroicons:document-text"
-          class="size-4 text-violet-400"
-        />
+        <UIcon name="heroicons:document-text" class="size-4 text-violet-400" />
         Recent notes
       </h2>
     </div>
@@ -68,10 +65,7 @@ function formatDate(iso: string) {
         </p>
       </div>
 
-      <div
-        v-else
-        class="divide-y divide-gray-100 dark:divide-gray-700/60"
-      >
+      <div v-else class="divide-y divide-gray-100 dark:divide-gray-700/60">
         <NuxtLink
           v-for="note in notes"
           :key="note.identifier"

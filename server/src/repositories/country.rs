@@ -1,11 +1,10 @@
 use std::sync::Arc;
 
+use lunar::entities::{country, country::Column, prelude::Country};
 use sea_orm::{ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter};
 
-use lunar::entities::{country, country::Column, prelude::Country};
 use crate::errors::database_error::DatabaseError;
 use crate::repositories::base::Repository;
-
 
 #[derive(Clone)]
 pub struct CountryRepository {

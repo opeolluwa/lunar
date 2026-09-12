@@ -1,5 +1,5 @@
-use lunar::error::LunarError;
 use axum::{http::StatusCode, response::IntoResponse};
+use lunar::error::LunarError;
 
 use crate::errors::app_error::AppError;
 use crate::response::ApiResponseBuilder;

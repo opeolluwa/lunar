@@ -8,10 +8,7 @@ const recentBookmarks = computed(() => bookmarkStore.bookmarks.slice(0, 3));
 </script>
 
 <template>
-  <USkeleton
-    v-if="bookmarkStore.loading"
-    class="mt-4 h-40 rounded-2xl"
-  />
+  <USkeleton v-if="bookmarkStore.loading" class="mt-4 h-40 rounded-2xl" />
 
   <div
     v-else
@@ -55,10 +52,7 @@ const recentBookmarks = computed(() => bookmarkStore.bookmarks.slice(0, 3));
       </p>
     </div>
 
-    <div
-      v-else
-      class="divide-y divide-gray-100 dark:divide-gray-700/60"
-    >
+    <div v-else class="divide-y divide-gray-100 dark:divide-gray-700/60">
       <div
         v-for="bm in recentBookmarks"
         :key="bm.identifier"

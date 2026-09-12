@@ -502,7 +502,6 @@ const tableOps = computed(() => [
 
 <template>
   <ToolBarWrapper>
-
     <div
       v-if="s.inTable"
       class="no-scrollbar flex items-center gap-0.5 overflow-x-auto border-b border-gray-100 px-2 pb-1.5 pt-2 dark:border-gray-800"
