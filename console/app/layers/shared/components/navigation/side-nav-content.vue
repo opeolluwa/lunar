@@ -30,9 +30,7 @@ const themeIcon = computed(() =>
   isDark.value ? "heroicons:sun" : "heroicons:moon",
 );
 
-const themeLabel = computed(() =>
-  isDark.value ? "Light mode" : "Dark mode",
-);
+const themeLabel = computed(() => (isDark.value ? "Light mode" : "Dark mode"));
 
 function isActive(path: string): boolean {
   if (path === "/") {
@@ -50,9 +48,7 @@ function onNavigate() {
 <template>
   <div class="flex flex-col flex-1 min-h-0">
     <!-- Body -->
-    <div
-      class="flex flex-col min-h-0 overflow-y-auto px-3 pt-2 pb-1"
-    >
+    <div class="flex flex-col min-h-0 overflow-y-auto px-3 pt-2 pb-1">
       <template
         v-for="(item, index) in items"
         :key="item.type === 'label' ? `label-${index}` : item.path"
@@ -66,12 +62,7 @@ function onNavigate() {
         </div>
 
         <!-- LINK -->
-        <UTooltip
-          v-else
-          :text="item.name"
-          :disabled="!collapsed"
-          side="right"
-        >
+        <UTooltip v-else :text="item.name" :disabled="!collapsed" side="right">
           <NuxtLink
             :to="item.path"
             class="flex items-center w-full h-11 mt-1 gap-2 px-2 rounded-xl transition-colors"
@@ -93,10 +84,7 @@ function onNavigate() {
               "
             />
 
-            <span
-              v-if="!collapsed"
-              class="text-sm truncate"
-            >
+            <span v-if="!collapsed" class="text-sm truncate">
               {{ item.name }}
             </span>
           </NuxtLink>
@@ -109,11 +97,7 @@ function onNavigate() {
       <USeparator class="mb-3" />
 
       <!-- THEME -->
-      <UTooltip
-        :text="themeLabel"
-        :disabled="!collapsed"
-        side="right"
-      >
+      <UTooltip :text="themeLabel" :disabled="!collapsed" side="right">
         <button
           type="button"
           class="flex items-center w-full h-11 gap-2 px-2 rounded-xl text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/[0.05] hover:text-gray-900 dark:hover:text-white transition-colors"
@@ -125,10 +109,7 @@ function onNavigate() {
             class="size-5 shrink-0 text-gray-500 dark:text-gray-400"
           />
 
-          <span
-            v-if="!collapsed"
-            class="text-sm font-medium"
-          >
+          <span v-if="!collapsed" class="text-sm font-medium">
             {{ themeLabel }}
           </span>
         </button>
@@ -136,11 +117,7 @@ function onNavigate() {
 
       <!-- SECONDARY -->
       <template v-for="item in secondaryRoutes" :key="item.path">
-        <UTooltip
-          :text="item.name"
-          :disabled="!collapsed"
-          side="right"
-        >
+        <UTooltip :text="item.name" :disabled="!collapsed" side="right">
           <NuxtLink
             :to="item.path"
             class="flex items-center w-full h-11 mt-1 gap-2 px-2 rounded-xl transition-colors"
@@ -162,10 +139,7 @@ function onNavigate() {
               "
             />
 
-            <span
-              v-if="!collapsed"
-              class="text-sm truncate"
-            >
+            <span v-if="!collapsed" class="text-sm truncate">
               {{ item.name }}
             </span>
           </NuxtLink>

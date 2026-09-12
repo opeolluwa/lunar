@@ -38,9 +38,7 @@ const actions = [
       >
         <UIcon :name="action.icon" class="size-5" :class="action.iconColor" />
       </div>
-      <span
-        class="text-[11px] font-medium text-gray-500 dark:text-gray-400"
-      >
+      <span class="text-[11px] font-medium text-gray-500 dark:text-gray-400">
         {{ action.label }}
       </span>
     </NuxtLink>

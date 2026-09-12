@@ -74,7 +74,7 @@ const show = ref(false);
         </template>
       </UInput>
     </template>
-    
+
     <template v-else>
       <UInput
         v-model="model"

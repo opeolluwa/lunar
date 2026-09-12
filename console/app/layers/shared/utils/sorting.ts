@@ -128,7 +128,10 @@ export function sortNotes(list: Note[], sortBy: NoteSort): Note[] {
   });
 }
 
-export function sortBookmarks(list: Bookmark[], sortBy: BookmarkSort): Bookmark[] {
+export function sortBookmarks(
+  list: Bookmark[],
+  sortBy: BookmarkSort,
+): Bookmark[] {
   return [...list].sort((a, b) => {
     switch (sortBy) {
       case "name-asc":

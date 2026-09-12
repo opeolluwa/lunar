@@ -244,7 +244,9 @@ const workspaces = computed(() => [
         class="bg-white dark:bg-app-dark-800 rounded-t-2xl px-4 pb-8 pt-3"
         style="padding-bottom: env(safe-area-inset-bottom, 8px)"
       >
-        <div class="mx-auto mb-3 h-1 w-10 rounded-full bg-gray-300 dark:bg-gray-600" />
+        <div
+          class="mx-auto mb-3 h-1 w-10 rounded-full bg-gray-300 dark:bg-gray-600"
+        />
 
         <template v-for="(group, gi) in controls" :key="gi">
           <div v-if="group.length" class="py-1">
@@ -348,7 +350,11 @@ const workspaces = computed(() => [
           </div>
 
           <div class="flex justify-end gap-2">
-            <UButton size="sm" variant="ghost" @click="showDeleteConfirm = false">
+            <UButton
+              size="sm"
+              variant="ghost"
+              @click="showDeleteConfirm = false"
+            >
               Cancel
             </UButton>
             <UButton size="sm" color="error" @click="handleDelete">

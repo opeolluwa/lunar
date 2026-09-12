@@ -149,7 +149,5 @@ export const useNoteStore = defineStore("notes_store", {
         return [];
       }
     },
-
-  
   },
 });

@@ -27,19 +27,33 @@ const actionsTwoOpened = ref(false);
     <kButton rounded @click="actionsOneOpened = true">One group</kButton>
     <kButton rounded @click="actionsTwoOpened = true">Two groups</kButton>
   </kBlock>
-  <kActions :opened="actionsOneOpened" @backdropclick="actionsOneOpened = false">
+  <kActions
+    :opened="actionsOneOpened"
+    @backdropclick="actionsOneOpened = false"
+  >
     <kActionsGroup>
       <kActionsLabel>Do something</kActionsLabel>
-      <kActionsButton bold @click="actionsOneOpened = false">Button 1</kActionsButton>
-      <kActionsButton @click="actionsOneOpened = false">Button 2</kActionsButton>
+      <kActionsButton bold @click="actionsOneOpened = false"
+        >Button 1</kActionsButton
+      >
+      <kActionsButton @click="actionsOneOpened = false"
+        >Button 2</kActionsButton
+      >
       <kActionsButton @click="actionsOneOpened = false">Cancel</kActionsButton>
     </kActionsGroup>
   </kActions>
-  <kActions :opened="actionsTwoOpened" @backdropclick="actionsTwoOpened = false">
+  <kActions
+    :opened="actionsTwoOpened"
+    @backdropclick="actionsTwoOpened = false"
+  >
     <kActionsGroup>
       <kActionsLabel>Do something</kActionsLabel>
-      <kActionsButton bold @click="actionsTwoOpened = false">Button 1</kActionsButton>
-      <kActionsButton @click="actionsTwoOpened = false">Button 2</kActionsButton>
+      <kActionsButton bold @click="actionsTwoOpened = false"
+        >Button 1</kActionsButton
+      >
+      <kActionsButton @click="actionsTwoOpened = false"
+        >Button 2</kActionsButton
+      >
     </kActionsGroup>
     <kActionsGroup>
       <kActionsButton @click="actionsTwoOpened = false">Cancel</kActionsButton>

@@ -95,7 +95,7 @@ function next() {
               :alt="item.title"
               class="w-full h-full object-contain"
               draggable="false"
-            >
+            />
           </div>
         </div>
 
@@ -138,7 +138,7 @@ function next() {
         type="button"
         class="w-full h-14 rounded-2xl bg-primary-600 hover:bg-primary-700 active:bg-primary-800 text-white font-semibold transition-colors flex items-center justify-center gap-2"
         @click.stop="next"
-        >
+      >
         {{ isLastSlide ? "Get started" : "Continue" }}
       </button>
     </footer>

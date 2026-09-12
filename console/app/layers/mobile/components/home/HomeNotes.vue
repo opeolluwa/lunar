@@ -65,10 +65,7 @@ function formatDate(iso: string) {
       </p>
     </div>
 
-    <div
-      v-else
-      class="divide-y divide-gray-100 dark:divide-gray-700/60"
-    >
+    <div v-else class="divide-y divide-gray-100 dark:divide-gray-700/60">
       <NuxtLink
         v-for="note in recentNotes"
         :key="note.identifier"

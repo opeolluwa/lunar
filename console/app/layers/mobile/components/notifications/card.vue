@@ -54,7 +54,9 @@ function getCategory(type: NotificationType): NotificationCategory {
         : 'cursor-pointer border-primary-100 shadow-sm hover:border-primary-200 dark:border-primary-900 dark:hover:border-primary-800'
     "
     @click="!notification.isRead && emit('read', notification.identifier)"
-    @keydown.enter="!notification.isRead && emit('read', notification.identifier)"
+    @keydown.enter="
+      !notification.isRead && emit('read', notification.identifier)
+    "
   >
     <span
       v-if="!notification.isRead"
@@ -69,7 +71,9 @@ function getCategory(type: NotificationType): NotificationCategory {
       <UIcon
         :name="categoryConfig[getCategory(notification.notificationType)].icon"
         class="size-4"
-        :class="categoryConfig[getCategory(notification.notificationType)].color"
+        :class="
+          categoryConfig[getCategory(notification.notificationType)].color
+        "
       />
     </div>
 

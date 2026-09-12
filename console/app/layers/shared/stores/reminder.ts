@@ -117,6 +117,5 @@ export const useReminderStore = defineStore("reminder_store", {
         return [];
       }
     },
-
   },
 });

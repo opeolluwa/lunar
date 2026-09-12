@@ -181,7 +181,10 @@ async function handleSubmit() {
                   }}
                 </button>
                 <template #content="{ close }">
-                  <AppDatePicker v-model="form.dueDate" @update:model-value="close" />
+                  <AppDatePicker
+                    v-model="form.dueDate"
+                    @update:model-value="close"
+                  />
                 </template>
               </UPopover>
               <button
