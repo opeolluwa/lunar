@@ -16,11 +16,13 @@ use crate::{
     services::workspace_member_service::WorkspaceMemberService,
 };
 
+#[allow(unused)]
 pub struct RequestContext<'a> {
     pub db_conn: &'a DatabaseConnection,
     pub api_key: &'a str,
 }
 
+#[allow(dead_code)]
 pub fn extract_request_context<'a>(ctx: &'a Context<'_>) -> Result<RequestContext<'a>, AppError> {
     let db_conn = ctx
         .data::<DatabaseConnection>()
@@ -79,6 +81,7 @@ pub async fn extract_claims(ctx: &Context<'_>) -> Result<Claims, AppError> {
 
 /// Reject the mutation unless the caller is a member of every referenced
 /// workspace.
+#[allow(dead_code)]
 pub async fn ensure_workspace_access(
     ctx: &Context<'_>,
     workspace_identifiers: Vec<Uuid>,

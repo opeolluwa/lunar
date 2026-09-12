@@ -10,8 +10,8 @@ use axum::{
     extract::State,
     http::{header, HeaderName, Method, StatusCode},
     response::{self, IntoResponse},
-    routing::get,
     Router,
+        routing::get,
 };
 use dotenv::dotenv;
 use lunar::{data_engine, error::LunarError};
@@ -101,25 +101,25 @@ async fn main() -> Result<(), AppError> {
         .await
         .map_err(|e| LunarError::DbConnectError(e.to_string()))?;
 
-    // let schema = orchard_lib::query_root::schema(db, Some(100), app_config.complexity_limit)
-    // .map_err(|err| AppError::GraphQLError(err.to_string()))?;
+    let schema = orchard_lib::query_root::schema(db, Some(100), app_config.complexity_limit)
+    .map_err(|err| AppError::GraphQLError(err.to_string()))?;
 
-    // let graphql_state = GraphQlState {
-    //     schema,
-    //     endpoint: app_config.graphql_endpoint.clone(),
-    // };
+    let graphql_state = GraphQlState {
+        schema,
+        endpoint: app_config.graphql_endpoint.clone(),
+    };
 
     let http_routes = load_routes(&db_conn);
 
-    // let graphql_router = Router::new()
-    //     .route(
-    //         &app_config.graphql_endpoint,
-    //         get(graphql_playground).post(graphql_handler),
-    //     )
-    //     .with_state(graphql_state);
+    let graphql_router = Router::new()
+        .route(
+            &app_config.graphql_endpoint,
+            get(graphql_playground).post(graphql_handler),
+        )
+        .with_state(graphql_state);
 
     let app = Router::new()
-        // .merge(graphql_router)
+        .merge(graphql_router)
         .merge(http_routes)
         .layer(cors)
         .layer(

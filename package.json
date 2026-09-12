@@ -39,5 +39,8 @@
     "index.ts",
     "bindings",
     "pkg"
-  ]
+  ],
+  "devDependencies": {
+    "husky": "^9.1.7"
+  }
 }

@@ -51,21 +51,12 @@ pub fn schema_builder(
         ]
     );
 
-    seaography::register_custom_outputs!(builder, [lunar::sync_engine::EntitySyncResult,]);
+    // seaography::register_custom_outputs!(builder, []);
 
     seaography::register_custom_mutations!(
         builder,
         [
             mutations::preflight::Preflight,
-            mutations::sync_queue::SyncQueue,
-            mutations::bookmark::SyncBookmark,
-            mutations::notes::SyncNote,
-            mutations::snippets::SyncSnippet,
-            mutations::todo::SyncTodo,
-            mutations::reminder::SyncReminder,
-            mutations::workspace::SyncWorkspace,
-            mutations::recycle_bin::SyncRecycleBinItem,
-            mutations::workspace_preference::SyncUserPreference,
         ]
     );
 
