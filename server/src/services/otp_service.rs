@@ -66,9 +66,9 @@ impl OtpServiceExt for OtpService {
         {
             let now = Local::now();
 
-            let is_not_expired =
-                now.signed_duration_since(stored_otp.created_at.with_timezone(&Local))
-                    <= OTP_VALIDITY;
+            let is_not_expired = now
+                .signed_duration_since(stored_otp.created_at.with_timezone(&Local))
+                <= OTP_VALIDITY;
             let is_match = stored_otp.code == otp;
             Ok(is_match && is_not_expired)
         } else {

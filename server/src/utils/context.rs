@@ -1,5 +1,5 @@
-use std::sync::Arc;
 use std::collections::HashSet;
+use std::sync::Arc;
 
 use axum::http::HeaderMap;
 use sea_orm::DatabaseConnection;
@@ -58,7 +58,9 @@ pub async fn extract_claims(ctx: &Context<'_>) -> Result<Claims, AppError> {
         .and_then(|value| value.to_str().ok())
         .ok_or(AppError::InvalidToken)?;
 
-    let token = authorization.strip_prefix("Bearer ").unwrap_or(authorization);
+    let token = authorization
+        .strip_prefix("Bearer ")
+        .unwrap_or(authorization);
     let claims = Claims::from_token(token).map_err(|_| AppError::InvalidToken)?;
 
     if let Some(jti) = claims.jti {

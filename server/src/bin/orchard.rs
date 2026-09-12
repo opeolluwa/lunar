@@ -8,7 +8,7 @@ use async_graphql::http::{playground_source, GraphQLPlaygroundConfig};
 use async_graphql_axum::{GraphQLRequest, GraphQLResponse};
 use axum::{
     extract::State,
-    http::{HeaderName, header, Method, StatusCode},
+    http::{header, HeaderName, Method, StatusCode},
     response::{self, IntoResponse},
     routing::get,
     Router,
@@ -102,7 +102,7 @@ async fn main() -> Result<(), AppError> {
         .map_err(|e| LunarError::DbConnectError(e.to_string()))?;
 
     // let schema = orchard_lib::query_root::schema(db, Some(100), app_config.complexity_limit)
-        // .map_err(|err| AppError::GraphQLError(err.to_string()))?;
+    // .map_err(|err| AppError::GraphQLError(err.to_string()))?;
 
     // let graphql_state = GraphQlState {
     //     schema,

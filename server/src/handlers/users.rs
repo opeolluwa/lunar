@@ -2,6 +2,7 @@ use std::sync::Arc;
 
 use axum::extract::State;
 use axum_typed_multipart::TypedMultipart;
+use lunar::entities::users;
 
 use crate::services::user_service::UserServiceTrait;
 use crate::{
@@ -14,7 +15,6 @@ use crate::{
     response::{ApiResponse, ApiResponseBuilder},
     states::AppState,
 };
-use lunar::entities::users;
 
 pub async fn retrieve_information(
     State(state): State<Arc<AppState>>,

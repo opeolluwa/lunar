@@ -12,6 +12,7 @@ name = "orchard_lib"
 path = "src/lib.rs"
 
 [dependencies]
+askama = "0.15"
 async-graphql = { version = "7.0.17", features = ["apollo_tracing", "raw_value", "tracing", "uuid"] }
 async-graphql-axum = { version = "7.0" }
 async-trait = "0.1.89"
@@ -27,7 +28,6 @@ dialoguer = "0.12.0"
 dotenv = "0.15.0"
 ed25519-dalek = "2.2.0"
 jsonwebtoken = { version = "10.3.0", features = ["rust_crypto"] }
-askama = "0.15"
 lettre = { version = "0.11", default-features = false, features = ["tokio1-native-tls", "smtp-transport", "builder", "hostname"] }
 log = "0.4.29"
 lunar = { version = "0.1.0", path = "../lunar" }
@@ -49,11 +49,11 @@ tower-http = { version = "0.6.8", features = [
 ] }
 tracing = { version = "0.1.37" }
 tracing-subscriber = { version = "0.3.17", features = ["env-filter"] }
+
+ts-rs = { version = "12.0.1", features = ["uuid-impl", "chrono-impl", "serde-json-impl", "format"] }
 ulid = { version = "1.2.1", features = ["serde"] }
 uuid = { version = "1.22.0", features = ["v4"] }
 validator = { version = "0.20.0", features = ["derive"] }
-
-ts-rs = { version = "12.0.1", features = ["uuid-impl", "chrono-impl", "serde-json-impl", "format"] }
 [dependencies.sea-orm]
 version = "~2.0.0-rc"
 features = [

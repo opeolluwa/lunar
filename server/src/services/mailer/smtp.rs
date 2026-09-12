@@ -1,12 +1,11 @@
 use lettre::{
-    message::{header, MultiPart, SinglePart},
-    transport::smtp::authentication::Credentials,
     Message, SmtpTransport, Transport,
+    message::{MultiPart, SinglePart, header},
+    transport::smtp::authentication::Credentials,
 };
 
-use crate::errors::service_error::ServiceError;
-
 use super::email_sender::{EmailMessage, EmailSender};
+use crate::errors::service_error::ServiceError;
 
 #[derive(Clone)]
 pub struct SmtpEmailSender {

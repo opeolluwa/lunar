@@ -49,8 +49,11 @@ pub async fn verify_account(
     State(state): State<Arc<AppState>>,
     AuthenticatedRequest { data, claims }: AuthenticatedRequest<VerifyAccountRequest>,
 ) -> Result<ApiResponse<VerifyAccountResponse>, ServiceError> {
-    let verify_account_response =
-        state.services.auth_service.verify_account(&claims, &data).await?;
+    let verify_account_response = state
+        .services
+        .auth_service
+        .verify_account(&claims, &data)
+        .await?;
     Ok(ApiResponseBuilder::new()
         .status_code(StatusCode::OK)
         .data(verify_account_response)
@@ -61,8 +64,11 @@ pub async fn forgotten_password(
     State(state): State<Arc<AppState>>,
     ValidatedRequest(request): ValidatedRequest<ForgottenPasswordRequest>,
 ) -> Result<ApiResponse<ForgottenPasswordResponse>, ServiceError> {
-    let forgotten_password_response =
-        state.services.auth_service.forgotten_password(&request).await?;
+    let forgotten_password_response = state
+        .services
+        .auth_service
+        .forgotten_password(&request)
+        .await?;
 
     Ok(ApiResponseBuilder::new()
         .data(forgotten_password_response)

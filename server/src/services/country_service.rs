@@ -1,11 +1,10 @@
 use std::sync::Arc;
 
-use sea_orm::DatabaseConnection;
 use lunar::entities::country;
+use sea_orm::DatabaseConnection;
 
 use crate::{
     adapters::country::FetchCountriesResponse,
-    
     errors::service_error::ServiceError,
     repositories::{
         base::Repository,
@@ -20,9 +19,7 @@ pub struct CountryService {
 
 impl CountryService {
     pub fn new(country_repository: CountryRepository) -> Self {
-        Self {
-            country_repository,
-        }
+        Self { country_repository }
     }
 
     pub fn init(db_conn: &Arc<DatabaseConnection>) -> Self {

@@ -1,11 +1,11 @@
 use std::sync::Arc;
 
 use chrono::DateTime;
+use lunar::entities::revoked_token;
 use sea_orm::ActiveValue::Set;
 use sea_orm::{ActiveModelTrait, ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter};
 use uuid::Uuid;
 
-use lunar::entities::revoked_token;
 use crate::errors::database_error::DatabaseError;
 use crate::repositories::base::Repository;
 

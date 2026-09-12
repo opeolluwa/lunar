@@ -1,7 +1,8 @@
 use std::sync::Arc;
 
-use axum::{http::StatusCode, response::IntoResponse, Router};
+use axum::{Router, http::StatusCode, response::IntoResponse};
 use sea_orm::DatabaseConnection;
+
 use crate::{
     response::ApiResponseBuilder,
     routes::{

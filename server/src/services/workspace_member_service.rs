@@ -24,9 +24,7 @@ pub struct WorkspaceMemberService {
 
 impl WorkspaceMemberService {
     pub fn new(member_repository: WorkspaceMemberRepository) -> Self {
-        Self {
-            member_repository,
-        }
+        Self { member_repository }
     }
 
     pub fn init(db_conn: &Arc<DatabaseConnection>) -> Self {
@@ -38,7 +36,11 @@ impl WorkspaceMemberService {
     /// Ensure the given account holds a membership row for this workspace.
     /// The first account to claim a workspace becomes its owner; later claims
     /// by unknown accounts are rejected.
-    pub async fn ensure_owner(&self, workspace_identifier: Uuid, claims: &Claims) -> Result<(), AppError> {
+    pub async fn ensure_owner(
+        &self,
+        workspace_identifier: Uuid,
+        claims: &Claims,
+    ) -> Result<(), AppError> {
         let existing = self
             .member_repository
             .find_by_workspace_and_email(workspace_identifier, &claims.email)
@@ -92,7 +94,11 @@ impl WorkspaceMemberService {
     }
 
     /// Reject the request unless the account is a member of the workspace.
-    pub async fn assert_member(&self, workspace_identifier: Uuid, email: &str) -> Result<(), AppError> {
+    pub async fn assert_member(
+        &self,
+        workspace_identifier: Uuid,
+        email: &str,
+    ) -> Result<(), AppError> {
         let member = self
             .member_repository
             .find_by_workspace_and_email(workspace_identifier, email)
@@ -229,7 +235,11 @@ impl WorkspaceMemberService {
         requester_email: &str,
     ) -> Result<(), AppError> {
         let is_privileged = self
-            .has_any_role(workspace_identifier, requester_email, &[ROLE_OWNER, ROLE_ADMIN])
+            .has_any_role(
+                workspace_identifier,
+                requester_email,
+                &[ROLE_OWNER, ROLE_ADMIN],
+            )
             .await?;
 
         if !is_privileged {

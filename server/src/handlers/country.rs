@@ -1,16 +1,12 @@
 use std::sync::Arc;
 
 use axum::extract::{Path, State};
+use lunar::entities::country;
 
 use crate::{
-    adapters::country::FetchCountriesResponse,
-    errors::service_error::ServiceError,
-    response::ApiResponse,
-    services::country_service::CountryServiceExt,
-    states::AppState,
+    adapters::country::FetchCountriesResponse, errors::service_error::ServiceError,
+    response::ApiResponse, services::country_service::CountryServiceExt, states::AppState,
 };
-
-use lunar::entities::country;
 
 pub async fn fetch_all_countries(
     State(state): State<Arc<AppState>>,

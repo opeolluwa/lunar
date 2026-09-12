@@ -1,5 +1,6 @@
 use std::sync::Arc;
 
+use lunar::entities::users;
 use sea_orm::{
     ActiveModelTrait, ActiveValue::Set, ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter,
 };
@@ -14,9 +15,6 @@ use crate::{
     errors::database_error::DatabaseError,
     repositories::base::Repository,
 };
-
-
-use lunar::entities::users;
 
 #[derive(Clone)]
 pub struct UserRepository {

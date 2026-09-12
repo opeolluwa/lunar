@@ -123,7 +123,7 @@ async function handleDelete(filename: string) {
         multiple
         class="hidden"
         @change="handleFileChange"
-      />
+      >
     </template>
 
     <template #main_content>
@@ -177,7 +177,7 @@ async function handleDelete(filename: string) {
               :src="image.src"
               :alt="image.title"
               class="w-full object-cover"
-            />
+            >
             <div
               class="absolute inset-0 bg-black/0 group-hover:bg-black/30 transition-colors flex items-end justify-between"
             >

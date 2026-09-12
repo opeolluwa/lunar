@@ -136,8 +136,7 @@ impl AppConfig {
                 .unwrap_or(587),
             smtp_username: env::var("SMTP_AUTH_USERNAME").unwrap_or_default(),
             smtp_password: env::var("SMTP_AUTH_PASSWORD").unwrap_or_default(),
-            smtp_encryption: env::var("SMTP_ENCRYPTION")
-                .unwrap_or_else(|_| "starttls".into()),
+            smtp_encryption: env::var("SMTP_ENCRYPTION").unwrap_or_else(|_| "starttls".into()),
         })
     }
 }

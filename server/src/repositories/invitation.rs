@@ -1,16 +1,15 @@
 use std::sync::Arc;
 
+use chrono::Local;
 use chrono::Utc;
+use lunar::entities::invitation::{self, ActiveModel, Entity as InvitationEntity};
 use sea_orm::{ActiveModelTrait, ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter, Set};
 use uuid::Uuid;
-use chrono::Local;
-use crate::{
-    adapters::invitation::InviteWorkspaceMemberRequest,
 
-    errors::database_error::DatabaseError,
+use crate::{
+    adapters::invitation::InviteWorkspaceMemberRequest, errors::database_error::DatabaseError,
     repositories::base::Repository,
 };
-use lunar::entities::invitation::{self, ActiveModel, Entity as InvitationEntity};
 
 #[derive(Clone)]
 pub struct InvitationRepository {
