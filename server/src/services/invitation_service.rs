@@ -1,7 +1,6 @@
 use std::sync::Arc;
 
 use chrono::Local;
-use chrono::Utc;
 use lunar::{
     entities::workspaces,
     repositories::workspace::{WorkspaceRepository, WorkspaceRepositoryExt},

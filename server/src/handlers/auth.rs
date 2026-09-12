@@ -19,7 +19,7 @@ use crate::{
         LoginResponse, SetNewPasswordRequest, VerifyAccountResponse,
     },
     response::ApiResponse,
-    services::authentication_service::{AuthenticationService, AuthenticationServiceTrait},
+    services::authentication_service::AuthenticationServiceTrait,
 };
 
 pub async fn create_account(

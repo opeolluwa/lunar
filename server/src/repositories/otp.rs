@@ -32,11 +32,13 @@ pub(crate) trait OtpRepositoryExt {
         user_identifier: &Uuid,
     ) -> Result<Option<one_time_password::Model>, DatabaseError>;
 
+    #[allow(dead_code)]
     async fn find_by_identifier(
         &self,
         identifier: &Uuid,
     ) -> Result<Option<one_time_password::Model>, DatabaseError>;
 
+    #[allow(dead_code)]
     async fn delete_by_identifier(&self, identifier: &Uuid) -> Result<(), DatabaseError>;
 }
 
