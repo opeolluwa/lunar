@@ -101,7 +101,9 @@ const MarkdownPaste = Extension.create({
             const mdHtml = marked.parse(text) as string;
             const wrapper = document.createElement("div");
             wrapper.innerHTML = mdHtml;
-            const parsed = PMDOMParser.fromSchema(view.state.schema).parse(wrapper);
+            const parsed = PMDOMParser.fromSchema(view.state.schema).parse(
+              wrapper,
+            );
 
             const tr = view.state.tr.replaceSelectionWith(parsed);
             view.dispatch(tr.scrollIntoView());
@@ -223,24 +225,22 @@ function isLikelyMarkdown(text: string): boolean {
   const t = text.trim();
   if (!t) return false;
   const patterns = [
-    /^#{1,6}\s/m,          // ATX headings
-    /\*\*[^*]+\*\*/,       // **bold**
-    /_[^_]+_/,             // _italic_
-    /`[^`]+`/,             // inline code
-    /```/,                 // fenced code blocks
-    /^\s{4}.*$/m,          // indented code blocks
-    /^\s*[-*+]\s/m,        // unordered lists
-    /^\s*\d+\.\s/m,        // ordered lists
-    /\[[^[\]]*\]\([^)]+\)/,// [text](url)
-    /!\[[^[\]]*]\([^)]+\)/,// ![alt](url)
-    /^>\s/m,               // blockquotes
-    /^---+$/m,             // horizontal rule
+    /^#{1,6}\s/m, // ATX headings
+    /\*\*[^*]+\*\*/, // **bold**
+    /_[^_]+_/, // _italic_
+    /`[^`]+`/, // inline code
+    /```/, // fenced code blocks
+    /^\s{4}.*$/m, // indented code blocks
+    /^\s*[-*+]\s/m, // unordered lists
+    /^\s*\d+\.\s/m, // ordered lists
+    /\[[^[\]]*\]\([^)]+\)/, // [text](url)
+    /!\[[^[\]]*]\([^)]+\)/, // ![alt](url)
+    /^>\s/m, // blockquotes
+    /^---+$/m, // horizontal rule
     /^[-*_]\s*[-*_]\s*[-*_]/, // horizontal rule (variants)
   ];
   return patterns.some((p) => p.test(text));
 }
-
-
 </script>
 
 <template>
