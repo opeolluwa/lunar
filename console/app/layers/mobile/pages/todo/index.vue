@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { kFab } from "konsta/vue";
 import { useTodoStore } from "@shared/stores/todo";
 import EmptyState from "@shared/components/app/EmptyState.vue";
 
@@ -9,13 +8,6 @@ const todoStore = useTodoStore();
 const { notify } = useAppNotification();
 
 const showCreatePopup = ref(false);
-
-const fabColors = {
-  bgIos: "bg-primary-500 dark:bg-primary-600",
-  bgMaterial: "bg-primary-500 dark:bg-primary-600",
-  textIos: "text-white",
-  textMaterial: "text-white",
-};
 
 onMounted(() => {
   todoStore.fetchTodos();
@@ -30,19 +22,10 @@ function handleCreated() {
   <AppPullToRefresh @refresh="() => todoStore.fetchTodos()">
     <div>
       <!-- Create task FAB -->
-      <div v-if="todoStore.todos.length !== 0" class="fixed bottom-20 right-5">
-        <kFab
-          component="button"
-          aria-label="Add task"
-          :colors="fabColors"
-          @click="showCreatePopup = true"
-        >
-          <template #icon>
-            <UIcon name="heroicons:plus" class="size-6" />
-          </template>
-        </kFab>
-      </div>
-
+      <AppFab
+        v-if="todoStore.todos.length !== 0"
+        @click="showCreatePopup = true"
+      />
       <!-- Loading -->
       <div v-if="todoStore.loading" class="flex flex-col gap-2">
         <USkeleton v-for="i in 4" :key="i" class="h-16 rounded-lg" />

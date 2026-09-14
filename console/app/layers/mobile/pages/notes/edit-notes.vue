@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { kFab } from "konsta/vue";
 import { useNoteStore } from "@shared/stores/notes";
 import { onBeforeRouteLeave } from "vue-router";
 import EditorToolBar from "@mobile/components/notes/EditorToolBar.vue";
@@ -36,13 +35,6 @@ watch(
   },
   { immediate: true },
 );
-
-// ── word count ────────────────────────────────────────────────────────────────
-const wordCount = computed(() => {
-  const text = content.value.replace(/<[^>]*>/g, " ").trim();
-  if (!text) return 0;
-  return text.split(/\s+/).filter(Boolean).length;
-});
 
 const lastSaved = ref<Date | null>(null);
 const notesEditor = ref<InstanceType<typeof NotesEditor> | null>(null);
@@ -94,25 +86,6 @@ onBeforeRouteLeave(async () => {
   }
 });
 
-// ── downloads ─────────────────────────────────────────────────────────────────
-function downloadMarkdown() {
-  if (!original.value) return;
-  const filename = (title.value || "untitled").replace(/[^a-z0-9_\- ]/gi, "_");
-  const blob = new Blob([content.value], {
-    type: "text/markdown;charset=utf-8",
-  });
-  const url = URL.createObjectURL(blob);
-  const anchor = document.createElement("a");
-  anchor.href = url;
-  anchor.download = `${filename}.md`;
-  anchor.click();
-  URL.revokeObjectURL(url);
-}
-
-function downloadPdf() {
-  notesEditor.value?.editor?.commands.printDocument();
-}
-
 onMounted(async () => {
   if (noteStore.notes.length === 0) {
     await noteStore.fetchNotes();
@@ -159,23 +132,9 @@ onMounted(async () => {
 
       <p v-if="error" class="text-xs text-red-500 mt-4">{{ error }}</p>
 
-      <kFab
-        component="button"
-        aria-label="Save note"
-        class="absolute right-7 md:hidden"
-        :style="'bottom: calc(var(--kb-inset, 0px) + 6rem);'"
-        :colors="{
-          bgIos: 'bg-primary-500 dark:bg-primary-600',
-          bgMaterial: 'bg-primary-500 dark:bg-primary-600',
-          textIos: 'text-white',
-          textMaterial: 'text-white',
-        }"
-        @click="handleSave"
-      >
-        <template #icon>
-          <UIcon name="ri:save-line" class="size-6" />
-        </template>
-      </kFab>
+      <AppFab @click="handleSave">
+        <UIcon name="ri:save-line" class="size-6" />
+      </AppFab>
     </template>
   </div>
 </template>
