@@ -2,11 +2,7 @@
 import { kFab } from "konsta/vue";
 import EmptyState from "@shared/components/app/EmptyState.vue";
 import NotesCard from "@mobile/components/notes/card.vue";
-import {
-  NOTE_SORT_OPTIONS,
-  sortNotes,
-  type NoteSort,
-} from "@shared/utils/sorting";
+import { sortNotes, type NoteSort } from "@shared/utils/sorting";
 import { useNoteStore } from "@shared/stores/notes";
 const noteStore = useNoteStore();
 const { searchQuery, clearSearch } = useAppSearch();
@@ -38,7 +34,7 @@ const filteredNotes = computed(() => {
 </script>
 
 <template>
-  <PullToRefresh @refresh="() => noteStore.fetchNotes()">
+  <AppPullToRefresh @refresh="() => noteStore.fetchNotes()">
     <div>
       <!-- Create note FAB -->
       <div v-if="!noteStore.loading && filteredNotes.length > 0">
@@ -102,5 +98,5 @@ const filteredNotes = computed(() => {
         </template>
       </template>
     </div>
-  </PullToRefresh>
+  </AppPullToRefresh>
 </template>

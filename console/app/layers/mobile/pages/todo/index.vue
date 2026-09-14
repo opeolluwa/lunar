@@ -27,7 +27,7 @@ function handleCreated() {
 </script>
 
 <template>
-  <PullToRefresh @refresh="() => todoStore.fetchTodos()">
+  <AppPullToRefresh @refresh="() => todoStore.fetchTodos()">
     <div>
       <!-- Create task FAB -->
       <div v-if="todoStore.todos.length !== 0" class="fixed bottom-20 right-5">
@@ -76,5 +76,5 @@ function handleCreated() {
         @created="handleCreated"
       />
     </div>
-  </PullToRefresh>
+  </AppPullToRefresh>
 </template>
