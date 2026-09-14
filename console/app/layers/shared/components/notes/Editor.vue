@@ -4,6 +4,9 @@ import DOMPurify from "dompurify";
 import katex from "katex";
 import { Domternal } from "@domternal/vue";
 import type { Editor } from "@domternal/core";
+import { Extension } from "@domternal/core";
+import { Plugin, PluginKey } from "@domternal/pm/state";
+import { DOMParser as PMDOMParser } from "@domternal/pm/model";
 import { Details } from "@domternal/extension-details";
 import { CodeBlockLowlight } from "@domternal/extension-code-block-lowlight";
 import { createLowlight, all } from "lowlight";
@@ -75,6 +78,46 @@ const dmVars = computed(() =>
       },
 );
 
+// When raw markdown is pasted (plain text with no HTML counterpart),
+// convert it to rich content through the editor's schema.
+const MarkdownPaste = Extension.create({
+  name: "markdownPaste",
+
+  addProseMirrorPlugins() {
+    return [
+      new Plugin({
+        key: new PluginKey("markdownPaste"),
+        props: {
+          handlePaste(view, event, _slice) {
+            const clipboard = event.clipboardData;
+            if (!clipboard) return false;
+
+            // Pasting from a website/browser includes text/html; let PM default handle those.
+            if (clipboard.getData("text/html")) return false;
+
+            const text = clipboard.getData("text/plain");
+            if (!text || !isLikelyMarkdown(text)) return false;
+
+            const mdHtml = marked.parse(text) as string;
+            const wrapper = document.createElement("div");
+            wrapper.innerHTML = mdHtml;
+            const parsed = PMDOMParser.fromSchema(view.state.schema).parse(wrapper);
+
+            const tr = view.state.tr.replaceSelectionWith(parsed);
+            view.dispatch(tr.scrollIntoView());
+            return true;
+          },
+        },
+      }),
+    ];
+  },
+});
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function handleUpdate({ editor }: { editor: any }) {
+  model.value = DOMPurify.sanitize(editor.getHTML());
+}
+
 const extensions = [
   StarterKit,
   BubbleMenu,
@@ -105,6 +148,7 @@ const extensions = [
   BlockContextMenu,
   SlashCommand,
   SmartPaste,
+  MarkdownPaste,
   KeyboardReorder,
   Heading.configure({
     levels: [1, 2, 3, 4, 5, 6],
@@ -174,10 +218,29 @@ const initialContent = computed(() => {
   return marked.parse(raw) as string;
 });
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function handleUpdate({ editor }: { editor: any }) {
-  model.value = DOMPurify.sanitize(editor.getHTML());
+// Quick heuristic to detect raw markdown (vs plain prose) in pasted text.
+function isLikelyMarkdown(text: string): boolean {
+  const t = text.trim();
+  if (!t) return false;
+  const patterns = [
+    /^#{1,6}\s/m,          // ATX headings
+    /\*\*[^*]+\*\*/,       // **bold**
+    /_[^_]+_/,             // _italic_
+    /`[^`]+`/,             // inline code
+    /```/,                 // fenced code blocks
+    /^\s{4}.*$/m,          // indented code blocks
+    /^\s*[-*+]\s/m,        // unordered lists
+    /^\s*\d+\.\s/m,        // ordered lists
+    /\[[^[\]]*\]\([^)]+\)/,// [text](url)
+    /!\[[^[\]]*]\([^)]+\)/,// ![alt](url)
+    /^>\s/m,               // blockquotes
+    /^---+$/m,             // horizontal rule
+    /^[-*_]\s*[-*_]\s*[-*_]/, // horizontal rule (variants)
+  ];
+  return patterns.some((p) => p.test(text));
 }
+
+
 </script>
 
 <template>
