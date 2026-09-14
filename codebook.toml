@@ -8,6 +8,7 @@ words = [
     "getters",
     "lowlight",
     "lucide",
+    "moodboard",
     "pinia",
     "rustls",
     "seaography",

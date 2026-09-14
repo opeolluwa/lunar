@@ -37,16 +37,11 @@ const firstName = computed(
 
 <template>
   <div class="pt-1">
-    <span
-      class="mb-2 inline-block rounded-full bg-gray-100/80 py-0.5 text-[11px] font-medium text-gray-500 dark:bg-white/10 dark:text-gray-400"
-    >
-      {{ today }}
-    </span>
     <h1
       class="text-[26px] font-bold leading-tight tracking-tight text-gray-900 dark:text-white"
     >
       {{ greeting }},<br >
-      {{ firstName }}
+      {{ firstName }} 👋
     </h1>
     <p class="mt-1.5 text-[13px] text-gray-500 dark:text-gray-400">
       <template v-if="todoStore.activeTodos.length > 0">

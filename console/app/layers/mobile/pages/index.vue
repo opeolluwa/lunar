@@ -5,7 +5,6 @@ import { useTodoStore } from "@shared/stores/todo";
 import { useUserPreferenceStore } from "@shared/stores/workspace-profile";
 
 import HomeHeader from "@mobile/components/home/HomeHeader.vue";
-import HomeStats from "@mobile/components/home/HomeStats.vue";
 import HomeTodos from "@mobile/components/home/HomeTodos.vue";
 
 const HomeNotes = defineAsyncComponent(
@@ -35,11 +34,11 @@ onMounted(refreshAll);
 </script>
 
 <template>
-  <PullToRefresh @refresh="refreshAll">
+  <AppPullToRefresh @refresh="refreshAll">
     <HomeHeader />
     <!-- <HomeStats />  -->
     <HomeTodos />
     <HomeNotes />
     <HomeBookmarks />
-  </PullToRefresh>
+  </AppPullToRefresh>
 </template>

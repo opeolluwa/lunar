@@ -19,7 +19,7 @@ import type {
   UpdateTodo,
   UpdateWorkspace,
   UpdateWorkspaceProfile,
-} from "~/utils/lunar";
+} from "./lunar";
 
 type InvokeArgs = Record<string, unknown>;
 
@@ -246,10 +246,10 @@ async function dispatchBrowser(
   cmd: string,
   args: InvokeArgs,
 ): Promise<unknown> {
-  const api = window.lunar;
+  const api = window?.lunar;
   if (!api) {
     throw new Error(
-      `[invoke] "${cmd}" — the in-browser lunar data layer is not initialised`,
+      `[invoke] "${cmd}" — the in-browser lunar data layer is not initialized`,
     );
   }
 
@@ -277,7 +277,7 @@ async function dispatchBrowser(
  * plain browser.
  */
 export async function invoke<T>(cmd: string, args?: InvokeArgs): Promise<T> {
-  if (typeof window !== "undefined" && window.lunar) {
+  if (typeof window !== "undefined" && window?.lunar) {
     return (await dispatchBrowser(cmd, args ?? {})) as T;
   }
   return tauriInvoke<T>(cmd, args);

@@ -3,6 +3,7 @@ import { useTodoStore } from "@shared/stores/todo";
 import { useWorkspacesStore } from "@shared/stores/workspaces";
 import type { Todo } from "@shared/stores/todo";
 import MetaControls from "../meta/meta-controls.vue";
+import type { title } from "process";
 
 const { todo } = defineProps<{
   todo: Todo;
@@ -68,63 +69,21 @@ const handleTransfer = async (targetWorkspaceId: string) => {
   <div
     class="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-100 dark:border-gray-700 flex items-center gap-4 hover:shadow-sm transition-shadow group"
   >
-    <button @click="emit('toggle', todo.identifier, !todo.done)">
-      <UIcon
-        :name="todo.done ? 'heroicons:check-circle-solid' : 'heroicons:circle'"
-        class="size-5 transition-colors"
-        :class="
-          todo.done
-            ? 'text-primary-500'
-            : 'text-gray-300 dark:text-gray-600 hover:text-gray-400'
-        "
-      />
-    </button>
-
-    <div class="flex-1 min-w-0">
-      <p
-        class="text-sm transition-colors"
-        :class="
-          todo.done
-            ? 'line-through text-gray-400'
-            : 'text-gray-700 dark:text-gray-200'
-        "
-      >
-        {{ todo.title }}
-      </p>
-      <p v-if="todo.description" class="text-xs text-gray-400 truncate mt-0.5">
-        {{ todo.description }}
-      </p>
-    </div>
-
-    <UIcon
-      name="heroicons:flag"
-      class="size-4 shrink-0"
-      :class="priorityColor[todo.priority]"
+    <UCheckbox
+      :label="todo.title"
+      :description="String(todo.description)"
+      :v-model="todo.done"
+      :ui="{
+        label: todo.done ? 'line-through text-gray-400' : '',
+        description: todo.done ? 'line-through text-gray-400' : '',
+        root: 'w-full',
+      }"
+      @update:model-value="(e) => emit('toggle', todo.identifier, e)"
     />
-
-    <span
-      v-if="todo.dueDate"
-      class="text-xs shrink-0 px-1.5 py-0.5 rounded-md"
-      :class="
-        isToday(todo.dueDate)
-          ? 'bg-primary-100 dark:bg-primary-950 text-primary-600 dark:text-primary-300 font-medium'
-          : 'text-gray-400'
-      "
-    >
-      {{ formatDueDate(todo.dueDate) }}
-    </span>
 
     <div
       class="flex items-center gap-1 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity"
     >
-      <button
-        v-if="!todo.done"
-        class="flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950 transition-colors"
-        @click="emit('toggle', todo.identifier, true)"
-      >
-        <UIcon name="heroicons:check" class="size-3.5" />
-        Done
-      </button>
       <MetaControls
         item-name="todo"
         @edit-record="emit('edit', todo.identifier)"

@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use axum::{Router, http::StatusCode, response::IntoResponse};
+use axum::{http::StatusCode, response::IntoResponse, Router};
 use sea_orm::DatabaseConnection;
 
 use crate::{

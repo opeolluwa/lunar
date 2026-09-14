@@ -1,5 +1,5 @@
-use lunar::entities::{register_active_enums, register_entity_modules};
 use async_graphql::dynamic::*;
+use lunar::entities::{register_active_enums, register_entity_modules};
 use sea_orm::DatabaseConnection;
 use seaography::{
     async_graphql, lazy_static::lazy_static, Builder, BuilderContext, DecimalLibrary, TimeLibrary,
@@ -53,12 +53,7 @@ pub fn schema_builder(
 
     // seaography::register_custom_outputs!(builder, []);
 
-    seaography::register_custom_mutations!(
-        builder,
-        [
-            mutations::preflight::Preflight,
-        ]
-    );
+    seaography::register_custom_mutations!(builder, [mutations::preflight::Preflight,]);
 
     builder
         .set_depth_limit(depth)
