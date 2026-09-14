@@ -40,7 +40,7 @@ const firstName = computed(
     <h1
       class="text-[26px] font-bold leading-tight tracking-tight text-gray-900 dark:text-white"
     >
-      {{ greeting }},<br />
+      {{ greeting }},<br >
       {{ firstName }} 👋
     </h1>
     <p class="mt-1.5 text-[13px] text-gray-500 dark:text-gray-400">

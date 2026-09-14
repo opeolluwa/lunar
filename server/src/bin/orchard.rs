@@ -10,8 +10,8 @@ use axum::{
     extract::State,
     http::{header, HeaderName, Method, StatusCode},
     response::{self, IntoResponse},
+    routing::get,
     Router,
-        routing::get,
 };
 use dotenv::dotenv;
 use lunar::{data_engine, error::LunarError};
@@ -102,7 +102,7 @@ async fn main() -> Result<(), AppError> {
         .map_err(|e| LunarError::DbConnectError(e.to_string()))?;
 
     let schema = orchard_lib::query_root::schema(db, Some(100), app_config.complexity_limit)
-    .map_err(|err| AppError::GraphQLError(err.to_string()))?;
+        .map_err(|err| AppError::GraphQLError(err.to_string()))?;
 
     let graphql_state = GraphQlState {
         schema,

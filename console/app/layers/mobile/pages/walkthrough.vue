@@ -95,7 +95,7 @@ function next() {
               :alt="item.title"
               class="w-full h-full object-contain"
               draggable="false"
-            />
+            >
           </div>
         </div>
 

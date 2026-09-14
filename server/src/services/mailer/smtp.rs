@@ -1,7 +1,7 @@
 use lettre::{
-    Message, SmtpTransport, Transport,
-    message::{MultiPart, SinglePart, header},
+    message::{header, MultiPart, SinglePart},
     transport::smtp::authentication::Credentials,
+    Message, SmtpTransport, Transport,
 };
 
 use super::email_sender::{EmailMessage, EmailSender};

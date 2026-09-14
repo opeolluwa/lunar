@@ -18,7 +18,7 @@ use crate::{
         base::Repository,
         invitation::{InvitationRepository, InvitationRepositoryTrait},
     },
-    services::workspace_member_service::{ROLE_ADMIN, ROLE_OWNER, WorkspaceMemberService},
+    services::workspace_member_service::{WorkspaceMemberService, ROLE_ADMIN, ROLE_OWNER},
 };
 
 #[derive(Clone)]

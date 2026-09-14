@@ -4,13 +4,7 @@ import DOMPurify from "dompurify";
 import katex from "katex";
 import { Domternal } from "@domternal/vue";
 import type { Editor } from "@domternal/core";
-import { Extension } from "@domternal/core";
-import { Plugin, PluginKey } from "@domternal/pm/state";
-import { DOMParser as PMDOMParser } from "@domternal/pm/model";
-import { Details } from "@domternal/extension-details";
-import { CodeBlockLowlight } from "@domternal/extension-code-block-lowlight";
-import { createLowlight, all } from "lowlight";
-import {
+import { Extension,
   StarterKit,
   BubbleMenu,
   BaseKeymap,
@@ -30,8 +24,12 @@ import {
   UniqueID,
   BlockColor,
   ListIndent,
-  Print,
-} from "@domternal/core";
+  Print } from "@domternal/core";
+import { Plugin, PluginKey } from "@domternal/pm/state";
+import { DOMParser as PMDOMParser } from "@domternal/pm/model";
+import { Details } from "@domternal/extension-details";
+import { CodeBlockLowlight } from "@domternal/extension-code-block-lowlight";
+import { createLowlight, all } from "lowlight";
 import { Table } from "@domternal/extension-table";
 import { Image } from "@domternal/extension-image";
 import {
