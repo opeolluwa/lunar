@@ -105,147 +105,159 @@ async function handleSubmit() {
 
 <template>
   <kSheet :opened="open" @backdropclick="requestClose">
-    <div class="bg-gray-50 dark:bg-app-dark-800 rounded-t-2xl px-4 pb-8 pt-3">
+    <div
+      class="flex max-h-[85dvh] flex-col overflow-hidden rounded-t-[20px] bg-white pb-1 dark:bg-app-dark-800"
+      style="padding-bottom: env(safe-area-inset-bottom, 0px)"
+    >
       <div
-        class="mx-auto mb-3 h-1 w-10 rounded-full bg-gray-300 dark:bg-gray-600"
+        class="mx-auto my-3 h-1 w-9 shrink-0 rounded-full bg-gray-300 dark:bg-gray-600"
       />
 
-      <div class="mb-2 flex items-center justify-between">
-        <AppPageTitle>{{ title }}</AppPageTitle>
-        <UButton
-          size="md"
-          color="neutral"
-          variant="ghost"
-          icon="heroicons:x-mark"
-          aria-label="Close"
-          :disabled="loading"
-          class="-mr-2"
-          @click="requestClose"
-        />
+      <div class="shrink-0 px-4 pb-5">
+        <div class="flex items-center justify-between">
+          <h2 class="text-lg font-semibold leading-6 text-gray-900 dark:text-white">
+            {{ title }}
+          </h2>
+          <UButton
+            size="md"
+            color="neutral"
+            variant="ghost"
+            icon="heroicons:x-mark"
+            aria-label="Close"
+            :disabled="loading"
+            class="-mr-2"
+            @click="requestClose"
+          />
+        </div>
+        <p class="pt-1 text-sm text-gray-500 dark:text-gray-400">
+          {{ description }}
+        </p>
       </div>
 
-      <p class="mb-4 text-sm text-gray-500 dark:text-gray-400">
-        {{ description }}
-      </p>
-
-      <form class="flex flex-col gap-4" @submit.prevent="handleSubmit">
-        <AppInput
-          v-model="form.title"
-          label="Title"
-          type="text"
-          name="todo-title"
-          placeholder="What needs to be done?"
-          :disabled="loading"
-        />
-        <p v-if="errors.title" class="-mt-3 text-xs text-red-500">
-          {{ errors.title }}
-        </p>
-
-        <div class="flex flex-col gap-1.5">
-          <label class="text-xs font-medium text-gray-600 dark:text-gray-400">
-            Description
-          </label>
-          <textarea
-            v-model="form.description"
-            placeholder="Add more details..."
-            rows="3"
-            class="almond_input_box resize-none"
-            :disabled="loading"
-          />
-        </div>
-
-        <div class="flex flex-col gap-1.5">
-          <label class="text-xs font-medium text-gray-600 dark:text-gray-400">
-            Due date
-          </label>
-          <div class="flex items-center gap-2">
-            <UPopover class="flex-1">
-              <button
-                type="button"
-                class="w-full flex items-center gap-2 bg-white dark:bg-gray-800 rounded-lg px-4 py-2.5 text-sm border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-colors text-left disabled:opacity-50"
-                :class="
-                  form.dueDate
-                    ? 'text-gray-700 dark:text-gray-200'
-                    : 'text-gray-400 dark:text-gray-500'
-                "
-                :disabled="loading"
-              >
-                <UIcon
-                  name="heroicons:calendar"
-                  class="size-4 shrink-0 text-gray-400"
-                />
-                {{
-                  form.dueDate ? formatDisplayDate(form.dueDate) : "Pick a date"
-                }}
-              </button>
-              <template #content="{ close }">
-                <AppDatePicker
-                  v-model="form.dueDate"
-                  @update:model-value="close"
-                />
-              </template>
-            </UPopover>
-            <button
-              v-if="form.dueDate"
-              type="button"
-              class="p-2.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors"
-              aria-label="Clear due date"
-              @click="form.dueDate = null"
-            >
-              <UIcon name="heroicons:x-mark" class="size-4" />
-            </button>
-          </div>
-        </div>
-
-        <div class="flex flex-col gap-1.5">
-          <label class="text-xs font-medium text-gray-600 dark:text-gray-400">
-            Time
-          </label>
-          <div class="flex items-center gap-2">
-            <AppTimePicker
-              v-model="selectedTime"
-              class="flex-1"
+      <form
+        class="flex min-h-0 flex-1 flex-col"
+        @submit.prevent="handleSubmit"
+      >
+        <div
+          class="flex-1 overflow-y-auto px-4 pb-4"
+          style="-webkit-overflow-scrolling: touch"
+        >
+          <div class="flex flex-col gap-4">
+            <AppInput
+              v-model="form.title"
+              label="Title"
+              type="text"
+              name="todo-title"
+              placeholder="What needs to be done?"
               :disabled="loading"
             />
-            <button
-              v-if="selectedTime"
-              type="button"
-              class="p-2.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors"
-              aria-label="Clear time"
-              @click="selectedTime = undefined"
-            >
-              <UIcon name="heroicons:x-mark" class="size-4" />
-            </button>
+            <p v-if="errors.title" class="-mt-3 text-xs text-red-500">
+              {{ errors.title }}
+            </p>
+
+            <div class="flex flex-col gap-1.5">
+              <label class="text-xs font-medium text-gray-600 dark:text-gray-400">
+                Description
+              </label>
+              <textarea
+                v-model="form.description"
+                placeholder="Add more details..."
+                rows="3"
+                class="almond_input_box resize-none"
+                :disabled="loading"
+              />
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+              <label class="text-xs font-medium text-gray-600 dark:text-gray-400">
+                Due date
+              </label>
+              <div class="flex items-center gap-2">
+                <UPopover class="flex-1">
+                  <button
+                    type="button"
+                    class="w-full flex items-center gap-2 bg-white dark:bg-gray-800 rounded-lg px-4 py-2.5 text-sm border border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 transition-colors text-left disabled:opacity-50"
+                    :class="
+                      form.dueDate
+                        ? 'text-gray-700 dark:text-gray-200'
+                        : 'text-gray-400 dark:text-gray-500'
+                    "
+                    :disabled="loading"
+                  >
+                    <UIcon
+                      name="heroicons:calendar"
+                      class="size-4 shrink-0 text-gray-400"
+                    />
+                    {{
+                      form.dueDate
+                        ? formatDisplayDate(form.dueDate)
+                        : "Pick a date"
+                    }}
+                  </button>
+                  <template #content="{ close }">
+                    <AppDatePicker
+                      v-model="form.dueDate"
+                      @update:model-value="close"
+                    />
+                  </template>
+                </UPopover>
+                <button
+                  v-if="form.dueDate"
+                  type="button"
+                  class="p-2.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors"
+                  aria-label="Clear due date"
+                  @click="form.dueDate = null"
+                >
+                  <UIcon name="heroicons:x-mark" class="size-4" />
+                </button>
+              </div>
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+              <label class="text-xs font-medium text-gray-600 dark:text-gray-400">
+                Time
+              </label>
+              <div class="flex items-center gap-2">
+                <AppTimePicker
+                  v-model="selectedTime"
+                  class="flex-1"
+                  :disabled="loading"
+                />
+                <button
+                  v-if="selectedTime"
+                  type="button"
+                  class="p-2.5 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors"
+                  aria-label="Clear time"
+                  @click="selectedTime = undefined"
+                >
+                  <UIcon name="heroicons:x-mark" class="size-4" />
+                </button>
+              </div>
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+              <label class="text-xs font-medium text-gray-600 dark:text-gray-400">
+                Priority
+              </label>
+              <URadioGroup
+                v-model="form.priority"
+                :items="priorityOptions"
+                variant="card"
+                orientation="horizontal"
+                size="sm"
+                :disabled="loading"
+              />
+            </div>
+
+            <p v-if="submitError" class="text-sm text-red-500">
+              {{ submitError }}
+            </p>
           </div>
         </div>
 
-        <div class="flex flex-col gap-1.5">
-          <label class="text-xs font-medium text-gray-600 dark:text-gray-400">
-            Priority
-          </label>
-          <URadioGroup
-            v-model="form.priority"
-            :items="priorityOptions"
-            variant="card"
-            orientation="horizontal"
-            size="sm"
-            :disabled="loading"
-          />
-        </div>
-
-        <p v-if="submitError" class="text-sm text-red-500">
-          {{ submitError }}
-        </p>
-
-        <div class="flex gap-2 pt-2 justify-between">
-          <UButton
-            color="error"
-            variant="outline"
-            :disabled="loading"
-            @click="requestClose"
-          >
-            Cancel
-          </UButton>
+        <div
+          class="flex shrink-0 items-center justify-end gap-3 px-4 pb-2 pt-3"
+        >
           <UButton type="submit" :loading="loading">
             {{ submitLabel }}
           </UButton>

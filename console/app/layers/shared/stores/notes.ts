@@ -2,12 +2,6 @@ import type { CreateNote, Notes, UpdateNote } from "lunar";
 import { defineStore } from "pinia";
 import { invoke } from "../utils/invoke";
 
-type _SyncResult = {
-  success: boolean;
-  error_message: string | null;
-  identifier: string;
-};
-
 export type Note = Omit<Notes, "categories"> & { categories: string[] };
 
 export type CreateNotePayload = Partial<CreateNote> & {
@@ -140,7 +134,7 @@ export const useNoteStore = defineStore("notes_store", {
           meta: await getWorkspaceMeta(),
         });
       } catch (err) {
-        console.log(err.message);
+        console.log((err as unknown as Error).message);
       }
     },
 

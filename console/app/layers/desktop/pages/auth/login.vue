@@ -1,57 +1,17 @@
 <script setup lang="ts">
 import { useAuthStore } from "@shared/stores/auth";
-import type { LoginRequest } from "@shared/composables/useAuthApi";
 
 definePageMeta({ layout: false });
 
-const authApi = useAuthApi();
 const authStore = useAuthStore();
-const { notify } = useAppNotification();
-
-const form = reactive<LoginRequest>({ email: "", password: "" });
-const errors = reactive({ email: "", password: "" });
-const loading = ref(false);
-const submitError = ref("");
+const { form, errors, loading, submitError, handleSubmit, continueWithoutLogin } =
+  useLogin();
 
 onMounted(() => {
   if (authStore.isAuthenticated || authStore.isGuest) {
     navigateTo("/");
   }
 });
-
-function validate(): boolean {
-  errors.email = emailValidator(form.email) ? "" : "A valid email is required";
-  errors.password = form.password ? "" : "Password is required";
-  return !errors.email && !errors.password;
-}
-
-async function handleSubmit() {
-  if (!validate()) return;
-  loading.value = true;
-  submitError.value = "";
-  try {
-    const response = await authApi.login({
-      email: form.email.trim(),
-      password: form.password,
-    });
-    authStore.setSession(
-      response.accessToken,
-      response.refreshToken,
-      response.exp,
-    );
-    notify({ message: "Logged in successfully", type: "success" });
-    await navigateTo("/");
-  } catch (error) {
-    submitError.value = (error as Error).message;
-  } finally {
-    loading.value = false;
-  }
-}
-
-function continueWithoutLogin() {
-  authStore.enterGuestMode();
-  navigateTo("/");
-}
 </script>
 
 <template>
