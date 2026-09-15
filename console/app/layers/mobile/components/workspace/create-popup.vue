@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { kPage, kNavbar, kPopup, kBlock } from "konsta/vue";
+import { kSheet } from "konsta/vue";
 import { useUserPreferenceStore } from "@shared/stores/workspace-profile";
 import { useWorkspacesStore } from "@shared/stores/workspaces";
 import type { Workspace } from "@shared/stores/workspaces";
@@ -79,76 +79,73 @@ async function handleSubmit() {
 </script>
 
 <template>
-  <kPopup :opened="open" @backdropclick="requestClose">
-    <kPage class="bg-gray-50 dark:bg-app-dark-800">
-      <kNavbar bg-class="bg-white dark:bg-app-dark-800" class="px-3">
-        <template #title>
-          <AppPageTitle>{{ title }}</AppPageTitle>
-        </template>
-        <template #right>
-          <UButton
-            size="md"
-            color="neutral"
-            variant="ghost"
-            icon="heroicons:x-mark"
-            aria-label="Close"
-            :disabled="loading"
-            @click="requestClose"
-          />
-        </template>
-      </kNavbar>
+  <kSheet :opened="open" @backdropclick="requestClose">
+    <div class="bg-gray-50 dark:bg-app-dark-800 rounded-t-2xl px-4 pb-8 pt-3">
+      <div class="mx-auto mb-3 h-1 w-10 rounded-full bg-gray-300 dark:bg-gray-600" />
 
-      <kBlock inset class="mx-3 mt-6">
-        <p class="mb-4 mt-3 text-sm text-gray-500 dark:text-gray-400">
-          {{ description }}
+      <div class="mb-2 flex items-center justify-between">
+        <AppPageTitle>{{ title }}</AppPageTitle>
+        <UButton
+          size="md"
+          color="neutral"
+          variant="ghost"
+          icon="heroicons:x-mark"
+          aria-label="Close"
+          :disabled="loading"
+          class="-mr-2"
+          @click="requestClose"
+        />
+      </div>
+
+      <p class="mb-4 text-sm text-gray-500 dark:text-gray-400">
+        {{ description }}
+      </p>
+
+      <form class="flex flex-col gap-4" @submit.prevent="handleSubmit">
+        <AppInput
+          v-model="form.name"
+          label="Name"
+          type="text"
+          name="workspace-name"
+          placeholder="Lunar"
+          :disabled="loading"
+        />
+        <p v-if="errors.name" class="-mt-3 text-xs text-red-500">
+          {{ errors.name }}
         </p>
 
-        <form class="flex flex-col gap-4" @submit.prevent="handleSubmit">
-          <AppInput
-            v-model="form.name"
-            label="Name"
-            type="text"
-            name="workspace-name"
-            placeholder="Lunar"
+        <AppInput
+          v-model="form.description"
+          label="Description"
+          type="text"
+          size="sm"
+          name="workspace-description"
+          placeholder="Organize files and tasks"
+          :disabled="loading"
+        />
+        <p v-if="errors.description" class="-mt-3 text-xs text-red-500">
+          {{ errors.description }}
+        </p>
+
+        <p v-if="submitError" class="text-sm text-red-500">
+          {{ submitError }}
+        </p>
+
+        <div class="flex gap-2 pt-2 justify-between">
+          <UButton
+            color="error"
+            variant="outline"
             :disabled="loading"
-          />
-          <p v-if="errors.name" class="-mt-3 text-xs text-red-500">
-            {{ errors.name }}
-          </p>
+            class=""
+            @click="requestClose"
+            >Cancel</UButton
+          >
 
-          <AppInput
-            v-model="form.description"
-            label="Description"
-            type="text"
-            size="sm"
-            name="workspace-description"
-            placeholder="Organize files and tasks"
-            :disabled="loading"
-          />
-          <p v-if="errors.description" class="-mt-3 text-xs text-red-500">
-            {{ errors.description }}
-          </p>
-
-          <p v-if="submitError" class="text-sm text-red-500">
-            {{ submitError }}
-          </p>
-
-          <div class="flex gap-2 pt-2 justify-between">
-            <UButton
-              color="error"
-              variant="outline"
-              :disabled="loading"
-              class=""
-              @click="requestClose"
-              >Cancel</UButton
-            >
-
-            <UButton type="submit" :loading="loading">
-              {{ submitLabel }}
-            </UButton>
-          </div>
-        </form>
-      </kBlock>
-    </kPage>
-  </kPopup>
+          <UButton type="submit" :loading="loading">
+            {{ submitLabel }}
+          </UButton>
+        </div>
+      </form>
+    </div>
+  </kSheet>
 </template>

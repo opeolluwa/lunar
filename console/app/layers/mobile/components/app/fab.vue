@@ -5,6 +5,7 @@ withDefaults(defineProps<{ icon?: string }>(), { icon: "heroicons:plus" });
 <template>
   <kFab
     component="button"
+    class="fixed bottom-24 right-7 z-10"
     :colors="{
       bgIos: 'bg-primary-500 dark:bg-primary-600',
       bgMaterial: 'bg-primary-500 dark:bg-primary-600',

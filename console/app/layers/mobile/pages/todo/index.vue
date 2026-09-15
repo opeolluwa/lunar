@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import AppFab from "@mobile/components/app/fab.vue";
 import { useTodoStore } from "@shared/stores/todo";
 import EmptyState from "@shared/components/app/EmptyState.vue";
 
