@@ -81,8 +81,6 @@ onBeforeRouteLeave(async () => {
       {{ error }}
     </p>
 
-    <AppFab @click="handleSave">
-      <UIcon name="ri:save-line" class="size-6" />
-    </AppFab>
+    <AppFab icon="ri:save-line" @click="handleSave" />
   </div>
 </template>

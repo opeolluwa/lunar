@@ -132,9 +132,7 @@ onMounted(async () => {
 
       <p v-if="error" class="text-xs text-red-500 mt-4">{{ error }}</p>
 
-      <AppFab @click="handleSave">
-        <UIcon name="ri:save-line" class="size-6" />
-      </AppFab>
+      <AppFab icon="ri:save-line" @click="handleSave"  />
     </template>
   </div>
 </template>
