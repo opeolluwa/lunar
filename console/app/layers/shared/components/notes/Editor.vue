@@ -6,7 +6,7 @@ import { Domternal } from "@domternal/vue";
 import type { Editor } from "@domternal/core";
 import { Extension,
   StarterKit,
-  BubbleMenu,
+  // BubbleMenu,
   BaseKeymap,
   Superscript,
   Subscript,
@@ -120,7 +120,7 @@ function handleUpdate({ editor }: { editor: any }) {
 
 const extensions = [
   StarterKit,
-  BubbleMenu,
+  // BubbleMenu,
   UniqueID,
   BlockColor,
   ListIndent,
@@ -255,7 +255,7 @@ function isLikelyMarkdown(text: string): boolean {
       :on-destroy="handleDestroy"
     >
       <Domternal.Content class="bg-transparent -ml-12" />
-      <Domternal.BubbleMenu class="mb-5" />
+      <!-- <Domternal.BubbleMenu class="mb-5" /> -->
       <slot name="toolbar" />
     </Domternal>
   </div>

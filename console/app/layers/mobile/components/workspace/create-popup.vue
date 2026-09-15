@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { kPage, kNavbar, kPopup, kBlock } from "konsta/vue";
+import { kSheet } from "konsta/vue";
 import { useUserPreferenceStore } from "@shared/stores/workspace-profile";
 import { useWorkspacesStore } from "@shared/stores/workspaces";
 import type { Workspace } from "@shared/stores/workspaces";
@@ -31,13 +31,13 @@ const workspaceStore = useWorkspacesStore();
 const preferenceStore = useUserPreferenceStore();
 
 const form = reactive({ name: "", description: "" });
-const errors = reactive({ name: "", description: "" });
+const errors = reactive({ name: "" });
 const loading = ref(false);
 const submitError = ref("");
 
 function resetForm() {
   Object.assign(form, { name: "", description: "" });
-  Object.assign(errors, { name: "", description: "" });
+  Object.assign(errors, { name: "" });
   submitError.value = "";
 }
 
@@ -48,8 +48,7 @@ function requestClose() {
 
 function validate(): boolean {
   errors.name = form.name.trim() ? "" : "Name is required";
-  errors.description = form.description.trim() ? "" : "Description is required";
-  return !errors.name && !errors.description;
+  return !errors.name;
 }
 
 async function handleSubmit() {
@@ -79,13 +78,20 @@ async function handleSubmit() {
 </script>
 
 <template>
-  <kPopup :opened="open" @backdropclick="requestClose">
-    <kPage class="bg-gray-50 dark:bg-app-dark-800">
-      <kNavbar bg-class="bg-white dark:bg-app-dark-800" class="px-3">
-        <template #title>
-          <AppPageTitle>{{ title }}</AppPageTitle>
-        </template>
-        <template #right>
+  <kSheet :opened="open" @backdropclick="requestClose">
+    <div
+      class="flex max-h-[85dvh] flex-col overflow-hidden rounded-t-[20px] bg-white pb-1 dark:bg-app-dark-800"
+      style="padding-bottom: env(safe-area-inset-bottom, 0px)"
+    >
+      <div
+        class="mx-auto my-3 h-1 w-9 shrink-0 rounded-full bg-gray-300 dark:bg-gray-600"
+      />
+
+      <div class="shrink-0 px-4 pb-5">
+        <div class="flex items-center justify-between">
+          <h2 class="text-lg font-semibold leading-6 text-gray-900 dark:text-white">
+            {{ title }}
+          </h2>
           <UButton
             size="md"
             color="neutral"
@@ -93,62 +99,60 @@ async function handleSubmit() {
             icon="heroicons:x-mark"
             aria-label="Close"
             :disabled="loading"
+            class="-mr-2"
             @click="requestClose"
           />
-        </template>
-      </kNavbar>
-
-      <kBlock inset class="mx-3 mt-6">
-        <p class="mb-4 mt-3 text-sm text-gray-500 dark:text-gray-400">
+        </div>
+        <p class="pt-1 text-sm text-gray-500 dark:text-gray-400">
           {{ description }}
         </p>
+      </div>
 
-        <form class="flex flex-col gap-4" @submit.prevent="handleSubmit">
-          <AppInput
-            v-model="form.name"
-            label="Name"
-            type="text"
-            name="workspace-name"
-            placeholder="Lunar"
-            :disabled="loading"
-          />
-          <p v-if="errors.name" class="-mt-3 text-xs text-red-500">
-            {{ errors.name }}
-          </p>
-
-          <AppInput
-            v-model="form.description"
-            label="Description"
-            type="text"
-            size="sm"
-            name="workspace-description"
-            placeholder="Organize files and tasks"
-            :disabled="loading"
-          />
-          <p v-if="errors.description" class="-mt-3 text-xs text-red-500">
-            {{ errors.description }}
-          </p>
-
-          <p v-if="submitError" class="text-sm text-red-500">
-            {{ submitError }}
-          </p>
-
-          <div class="flex gap-2 pt-2 justify-between">
-            <UButton
-              color="error"
-              variant="outline"
+      <form
+        class="flex min-h-0 flex-1 flex-col"
+        @submit.prevent="handleSubmit"
+      >
+        <div
+          class="flex-1 overflow-y-auto px-4 pb-4"
+          style="-webkit-overflow-scrolling: touch"
+        >
+          <div class="flex flex-col gap-4">
+            <AppInput
+              v-model="form.name"
+              label="Name"
+              type="text"
+              name="workspace-name"
+              placeholder="Lunar"
               :disabled="loading"
-              class=""
-              @click="requestClose"
-              >Cancel</UButton
-            >
+            />
+            <p v-if="errors.name" class="-mt-3 text-xs text-red-500">
+              {{ errors.name }}
+            </p>
 
-            <UButton type="submit" :loading="loading">
-              {{ submitLabel }}
-            </UButton>
+            <AppInput
+              v-model="form.description"
+              label="Description (optional)"
+              type="text"
+              size="sm"
+              name="workspace-description"
+              placeholder="Organize files and tasks"
+              :disabled="loading"
+            />
+
+            <p v-if="submitError" class="text-sm text-red-500">
+              {{ submitError }}
+            </p>
           </div>
-        </form>
-      </kBlock>
-    </kPage>
-  </kPopup>
+        </div>
+
+        <div
+          class="flex shrink-0 items-center justify-end gap-3 px-4 pb-2 pt-3"
+        >
+          <UButton type="submit" :loading="loading">
+            {{ submitLabel }}
+          </UButton>
+        </div>
+      </form>
+    </div>
+  </kSheet>
 </template>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import EmptyState from "@shared/components/app/EmptyState.vue";
 import NotesCard from "@mobile/components/notes/card.vue";
+import AppFab from "@mobile/components/app/fab.vue";
 import { sortNotes, type NoteSort } from "@shared/utils/sorting";
 import { useNoteStore } from "@shared/stores/notes";
 const noteStore = useNoteStore();
