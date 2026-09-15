@@ -133,11 +133,15 @@ export const useNoteStore = defineStore("notes_store", {
       recordIdentifier: string,
       previousWorkspaceIdentifier: string,
     ) {
-      await invoke("export_notes_as_pdf", {
-        recordIdentifier,
-        previousWorkspaceIdentifier,
-        meta: await getWorkspaceMeta(),
-      });
+      try {
+        await invoke("export_notes_as_pdf", {
+          recordIdentifier,
+          previousWorkspaceIdentifier,
+          meta: await getWorkspaceMeta(),
+        });
+      } catch (err) {
+        console.log(err.message);
+      }
     },
 
     async fetchUnsynced() {
