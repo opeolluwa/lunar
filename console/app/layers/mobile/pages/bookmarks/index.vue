@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { kFab } from "konsta/vue";
 import { useBookmarkStore } from "@shared/stores/bookmarks";
 import { safeOpenUrl as openUrl } from "@shared/utils/safe-open-url";
 import BookmarkCard from "@mobile/components/bookmark/bookmark-card.vue";
@@ -12,13 +11,6 @@ const { notify } = useAppNotification();
 
 const showCreatePopup = ref(false);
 
-const fabColors = {
-  bgIos: "bg-primary-500 dark:bg-primary-600",
-  bgMaterial: "bg-primary-500 dark:bg-primary-600",
-  textIos: "text-white",
-  textMaterial: "text-white",
-};
-
 onMounted(() => {
   bookmarkStore.fetchBookmarks();
 });
@@ -29,24 +21,13 @@ function handleCreated() {
 </script>
 
 <template>
-  <PullToRefresh @refresh="() => bookmarkStore.fetchBookmarks()">
+  <AppPullToRefresh @refresh="() => bookmarkStore.fetchBookmarks()">
     <div>
       <!-- Create bookmark FAB -->
-      <div
+      <AppFab
         v-if="bookmarkStore.bookmarks.length !== 0"
-        class="fixed bottom-20 right-5"
-      >
-        <kFab
-          component="button"
-          aria-label="Add bookmark"
-          :colors="fabColors"
-          @click="showCreatePopup = true"
-        >
-          <template #icon>
-            <UIcon name="heroicons:plus" class="size-6" />
-          </template>
-        </kFab>
-      </div>
+        @click="showCreatePopup = true"
+      />
 
       <!-- Loading -->
       <div v-if="bookmarkStore.loading" class="flex flex-col gap-3">
@@ -81,5 +62,5 @@ function handleCreated() {
         @created="handleCreated"
       />
     </div>
-  </PullToRefresh>
+  </AppPullToRefresh>
 </template>

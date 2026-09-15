@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { kFab } from "konsta/vue";
 import { useWorkspacesStore } from "@shared/stores/workspaces";
 import WorkspaceCard from "@mobile/components/workspace/workspace-card.vue";
 definePageMeta({ name: "Workspaces" });
@@ -110,10 +109,6 @@ const workspaces = computed(() => workspaceStore.workspaces ?? []);
 
 <template>
   <div class="flex flex-col gap-4 mt-4">
-    <h2 class="text-sm font-semibold text-gray-700 dark:text-gray-200">
-      Workspaces
-    </h2>
-
     <AppEmptyState
       v-if="!workspaces.length && !workspaceStore.loading"
       icon="heroicons:briefcase"
@@ -198,22 +193,6 @@ const workspaces = computed(() => workspaceStore.workspaces ?? []);
       @created="handleCreated"
     />
 
-    <kFab
-      v-if="!showCreateModal"
-      component="button"
-      aria-label="New workspace"
-      class="absolute bottom-24 right-7 md:hidden"
-      :colors="{
-        bgIos: 'bg-primary-500 dark:bg-primary-600',
-        bgMaterial: 'bg-primary-500 dark:bg-primary-600',
-        textIos: 'text-white',
-        textMaterial: 'text-white',
-      }"
-      @click="showCreateModal = true"
-    >
-      <template #icon>
-        <UIcon name="heroicons:plus" class="size-6" />
-      </template>
-    </kFab>
+    <AppFab v-if="!showCreateModal" @click="showCreateModal = true" />
   </div>
 </template>

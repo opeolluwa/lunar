@@ -1,12 +1,7 @@
 <script setup lang="ts">
-import { kFab } from "konsta/vue";
 import EmptyState from "@shared/components/app/EmptyState.vue";
 import NotesCard from "@mobile/components/notes/card.vue";
-import {
-  NOTE_SORT_OPTIONS,
-  sortNotes,
-  type NoteSort,
-} from "@shared/utils/sorting";
+import { sortNotes, type NoteSort } from "@shared/utils/sorting";
 import { useNoteStore } from "@shared/stores/notes";
 const noteStore = useNoteStore();
 const { searchQuery, clearSearch } = useAppSearch();
@@ -38,27 +33,13 @@ const filteredNotes = computed(() => {
 </script>
 
 <template>
-  <PullToRefresh @refresh="() => noteStore.fetchNotes()">
+  <AppPullToRefresh @refresh="() => noteStore.fetchNotes()">
     <div>
       <!-- Create note FAB -->
-      <div v-if="!noteStore.loading && filteredNotes.length > 0">
-        <kFab
-          component="button"
-          aria-label="Add note"
-          class="absolute bottom-24 right-7 md:hidden"
-          :colors="{
-            bgIos: 'bg-primary-500 dark:bg-primary-600',
-            bgMaterial: 'bg-primary-500 dark:bg-primary-600',
-            textIos: 'text-white',
-            textMaterial: 'text-white',
-          }"
-          @click="navigateTo('/notes/create-notes')"
-        >
-          <template #icon>
-            <UIcon name="heroicons:plus" class="size-6" />
-          </template>
-        </kFab>
-      </div>
+      <AppFab
+        v-if="!noteStore.loading && filteredNotes.length > 0"
+        @click="navigateTo('/notes/create-notes')"
+      />
 
       <!-- Loading -->
       <div v-if="noteStore.loading" class="flex flex-col gap-3">
@@ -102,5 +83,5 @@ const filteredNotes = computed(() => {
         </template>
       </template>
     </div>
-  </PullToRefresh>
+  </AppPullToRefresh>
 </template>

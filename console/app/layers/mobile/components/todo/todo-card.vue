@@ -3,7 +3,6 @@ import { useTodoStore } from "@shared/stores/todo";
 import { useWorkspacesStore } from "@shared/stores/workspaces";
 import type { Todo } from "@shared/stores/todo";
 import MetaControls from "../meta/meta-controls.vue";
-import type { title } from "process";
 
 const { todo } = defineProps<{
   todo: Todo;
@@ -15,36 +14,6 @@ const emit = defineEmits<{
   delete: [identifier: string];
 }>();
 
-const priorityColor: Record<string, string> = {
-  high: "text-rose-500",
-  medium: "text-amber-500",
-  low: "text-emerald-500",
-};
-
-function formatDueDate(dateStr: string | null) {
-  if (!dateStr) return null;
-  const d = new Date(dateStr);
-  const datePart = d.toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-  });
-  const timePart = d.toLocaleTimeString("en-US", {
-    hour: "numeric",
-    minute: "2-digit",
-  });
-  return `${datePart} · ${timePart}`;
-}
-
-function isToday(dateStr: string | null) {
-  if (!dateStr) return false;
-  const d = new Date(dateStr);
-  const now = new Date();
-  return (
-    d.getFullYear() === now.getFullYear() &&
-    d.getMonth() === now.getMonth() &&
-    d.getDate() === now.getDate()
-  );
-}
 const workspaceStore = useWorkspacesStore();
 const currentWorkspaceId = computed(() => workspaceStore.activeWorkspaceId);
 const todoStore = useTodoStore();
