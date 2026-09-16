@@ -2,6 +2,7 @@ words = [
     "Glite",
     "NUXT",
     "TAURI",
+    "axios",
     "cdylib",
     "creds",
     "dompurify",

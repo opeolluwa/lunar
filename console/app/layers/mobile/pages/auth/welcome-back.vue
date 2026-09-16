@@ -1,52 +1,17 @@
 <script setup lang="ts">
-import { useAuthStore } from "@shared/stores/auth";
-
 definePageMeta({ layout: "auth" });
 
-const authApi = useAuthApi();
-const authStore = useAuthStore();
-const { notify } = useAppNotification();
 const { rememberedEmail } = useRememberedEmail();
+const { form, errors, loading, submitError, handleSubmit } = useLogin(
+  rememberedEmail,
+);
 
-const password = ref("");
-const error = ref("");
-const loading = ref(false);
-const submitError = ref("");
-
-onMounted(() => {
-  // if (!rememberedEmail.value) navigateTo("/auth/login");
-});
-
-function validate(): boolean {
-  error.value = password.value ? "" : "Password is required";
-  return !error.value;
-}
-
-async function handleSubmit() {
+function handleLogin() {
   if (!rememberedEmail.value) {
     navigateTo("/auth/login");
     return;
   }
-  if (!validate()) return;
-  loading.value = true;
-  submitError.value = "";
-  try {
-    const response = await authApi.login({
-      email: rememberedEmail.value,
-      password: password.value,
-    });
-    authStore.setSession(
-      response.accessToken,
-      response.refreshToken,
-      response.exp,
-    );
-    notify({ message: "Logged in successfully", type: "success" });
-    await navigateTo("/");
-  } catch (err) {
-    submitError.value = (err as Error).message;
-  } finally {
-    loading.value = false;
-  }
+  handleSubmit();
 }
 </script>
 
@@ -56,10 +21,10 @@ async function handleSubmit() {
       title="Welcome back, Adeoye"
       description="Enter your password to continue."
     />
-    <form @submit.prevent="handleSubmit">
+    <form @submit.prevent="handleLogin">
       <div>
         <AppInput
-          v-model="password"
+          v-model="form.password"
           type="password"
           name="password"
           label="Password"
@@ -76,8 +41,8 @@ async function handleSubmit() {
           </NuxtLink>
         </div>
       </div>
-      <p v-if="error" class="text-xs text-red-500 -mt-3">
-        {{ error }}
+      <p v-if="errors.password" class="text-xs text-red-500 -mt-3">
+        {{ errors.password }}
       </p>
 
       <p v-if="submitError" class="text-sm text-red-500">{{ submitError }}</p>

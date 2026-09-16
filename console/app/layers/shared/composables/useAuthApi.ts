@@ -1,52 +1,21 @@
 import { useAuthStore } from "@shared/stores/auth";
 import type { FetchError } from "ofetch";
 import { $fetch } from "ofetch";
-
-export interface SignupRequest {
-  email: string;
-  password: string;
-}
-
-export interface LoginRequest {
-  email: string;
-  password: string;
-}
-
-export interface ForgottenPasswordRequest {
-  email: string;
-}
-
-export interface SetNewPasswordRequest {
-  password: string;
-  confirmPassword: string;
-}
-
-export interface VerifyOtpRequest {
-  otp: string;
-}
-
-export interface AcceptInvitationRequest {
-  token: string;
-}
-
-export interface ResendOtpRequest {
-  flow: string;
-}
-
-export interface LoginResponse {
-  message?: string;
-  accessToken: string;
-  refreshToken: string;
-  iat: number;
-  exp: number;
-  refreshTokenExp: number;
-  refreshTokenIat: number;
-}
-
-export interface TokenResponse {
-  message?: string;
-  token: string;
-}
+import type {
+  AcceptInvitationRequest,
+  AcceptInvitationResponse,
+  CreateUserRequest,
+  CreateUserResponse,
+  ForgottenPasswordRequest,
+  ForgottenPasswordResponse,
+  LoginRequest,
+  LoginResponse,
+  ResendOtpRequest,
+  SetNewPasswordRequest,
+  SetNewPasswordResponse,
+  VerifyAccountRequest,
+  VerifyAccountResponse,
+} from "lunar";
 
 interface ApiErrorBody {
   message?: string;
@@ -57,7 +26,7 @@ export function useAuthApi() {
   const authStore = useAuthStore();
 
   const baseUrl = computed(() =>
-    (config.public.serverUrl as string)
+    String(config.public.apiBaseUrl)
       .replace(/\/+$/, "")
       .replace(/\/orchard$/, ""),
   );
@@ -81,27 +50,30 @@ export function useAuthApi() {
     } catch (error) {
       const err = error as FetchError;
       const message = (err.data as ApiErrorBody | undefined)?.message;
-      if (message) throw new Error(message);
-      throw new Error("Something went wrong. Please try again.");
+      if (message) throw new Error(message, { cause: error });
+      throw new Error("Something went wrong. Please try again.", {
+        cause: error,
+      });
     }
   }
 
   return {
     baseUrl,
     post,
-    signup: (req: SignupRequest) => post<TokenResponse>("/auth/signup", req),
+    signup: (req: CreateUserRequest) =>
+      post<CreateUserResponse>("/auth/signup", req),
     login: (req: LoginRequest) => post<LoginResponse>("/auth/login", req),
     forgottenPassword: (req: ForgottenPasswordRequest) =>
-      post<TokenResponse>("/auth/forgotten-password", req),
-    verifyAccount: (req: VerifyOtpRequest, token: string) =>
-      post<TokenResponse>("/auth/verify-account", req, { token }),
-    verifyResetOtp: (req: VerifyOtpRequest, token: string) =>
-      post<TokenResponse>("/auth/verify", req, { token }),
+      post<ForgottenPasswordResponse>("/auth/forgotten-password", req),
+    verifyAccount: (req: VerifyAccountRequest, token: string) =>
+      post<VerifyAccountResponse>("/auth/verify-account", req, { token }),
+    verifyResetOtp: (req: VerifyAccountRequest, token: string) =>
+      post<VerifyAccountResponse>("/auth/verify", req, { token }),
     setNewPassword: (req: SetNewPasswordRequest, token: string) =>
-      post<{ message?: string }>("/auth/reset-password", req, { token }),
+      post<SetNewPasswordResponse>("/auth/reset-password", req, { token }),
     acceptInvitation: (req: AcceptInvitationRequest) =>
-      post<{ message?: string }>("/invitations/accept", req),
+      post<AcceptInvitationResponse>("/invitations/accept", req),
     resendOtp: (req: ResendOtpRequest, token: string) =>
-      post<TokenResponse>("/auth/resend-otp", req, { token }),
+      post<ForgottenPasswordResponse>("/auth/resend-otp", req, { token }),
   };
 }

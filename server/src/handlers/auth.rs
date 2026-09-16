@@ -34,6 +34,7 @@ pub async fn create_account(
         .data(resp)
         .build())
 }
+
 pub async fn login(
     State(state): State<Arc<AppState>>,
     ValidatedRequest(request): ValidatedRequest<LoginRequest>,

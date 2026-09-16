@@ -20,6 +20,12 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   ssr: false,
 
+  runtimeConfig: {
+    public: {
+      apiBaseUrl: "http://localhost:8000",
+    },
+  },
+
   modules: [
     "@nuxt/eslint",
     "@nuxt/image",

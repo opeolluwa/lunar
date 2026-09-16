@@ -1,5 +1,6 @@
 use std::sync::Arc;
 
+use chrono::Local;
 use lunar::entities::users;
 use sea_orm::{
     ActiveModelTrait, ActiveValue::Set, ColumnTrait, DatabaseConnection, EntityTrait, QueryFilter,
@@ -79,6 +80,7 @@ impl UserRepositoryTrait for UserRepository {
             email: Set(normalized_email),
             password: Set(user.password.clone()),
             is_active: Set(false),
+            created_at: Set(Local::now().naive_utc()),
             ..Default::default()
         };
 

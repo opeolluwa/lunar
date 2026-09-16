@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useWorkspacesStore } from "@shared/stores/workspaces";
+import AppFab from "@mobile/components/app/fab.vue";
 import WorkspaceCard from "@mobile/components/workspace/workspace-card.vue";
 definePageMeta({ name: "Workspaces" });
 

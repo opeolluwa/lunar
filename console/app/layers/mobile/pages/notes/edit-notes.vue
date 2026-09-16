@@ -2,6 +2,7 @@
 import { useNoteStore } from "@shared/stores/notes";
 import { onBeforeRouteLeave } from "vue-router";
 import EditorToolBar from "@mobile/components/notes/EditorToolBar.vue";
+import AppFab from "@mobile/components/app/fab.vue";
 import NoteTitleInput from "@shared/components/notes/note-title-input.vue";
 
 definePageMeta({ keepalive: true, name: "Edit notes", layout: "notes" });
@@ -132,9 +133,7 @@ onMounted(async () => {
 
       <p v-if="error" class="text-xs text-red-500 mt-4">{{ error }}</p>
 
-      <AppFab @click="handleSave">
-        <UIcon name="ri:save-line" class="size-6" />
-      </AppFab>
+      <AppFab icon="ri:save-line" @click="handleSave"  />
     </template>
   </div>
 </template>
