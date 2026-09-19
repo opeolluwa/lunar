@@ -54,6 +54,7 @@ export type { SyncQueueInterface } from "./SyncQueueInterface";
 export type { SyncResult } from "./sync_result";
 export type { Tag } from "./Tag";
 export type { TodoInterface } from "./TodoInterface";
+export type { TtsConfigInterface } from "./TtsConfigInterface";
 export type { UpdateBookmark } from "./bookmarks";
 export type { UpdateNote } from "./notes";
 export type { UpdateReminder } from "./reminder";

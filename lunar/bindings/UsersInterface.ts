@@ -3,6 +3,7 @@
 export type UsersInterface = {
   identifier: string;
   firstName: string | null;
+  password: string;
   lastName: string | null;
   email: string;
   isActive: boolean;
@@ -10,5 +11,4 @@ export type UsersInterface = {
   username: string | null;
   createdAt: string;
   updatedAt: string | null;
-  password: string;
 };

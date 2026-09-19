@@ -16,6 +16,7 @@ pub mod sea_orm_active_enums;
 pub mod snippets;
 pub mod sync_queue;
 pub mod todo;
+pub mod tts_config;
 pub mod user_preferences;
 pub mod users;
 pub mod workspace_members;
@@ -36,6 +37,7 @@ seaography::register_entity_modules!([
     snippets,
     sync_queue,
     todo,
+    tts_config,
     user_preferences,
     users,
     workspace_members,

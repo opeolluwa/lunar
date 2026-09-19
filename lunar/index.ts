@@ -31,6 +31,8 @@ export type { SyncQueueInterface } from "./bindings/SyncQueueInterface";
 export type { SyncQueueInterface as SyncQueue } from "./bindings/SyncQueueInterface";
 export type { TodoInterface } from "./bindings/TodoInterface";
 export type { TodoInterface as Todo } from "./bindings/TodoInterface";
+export type { TtsConfigInterface } from "./bindings/TtsConfigInterface";
+export type { TtsConfigInterface as TtsConfig } from "./bindings/TtsConfigInterface";
 export type { UserPreferencesInterface } from "./bindings/UserPreferencesInterface";
 export type { UserPreferencesInterface as UserPreferences } from "./bindings/UserPreferencesInterface";
 export type { UsersInterface } from "./bindings/UsersInterface";

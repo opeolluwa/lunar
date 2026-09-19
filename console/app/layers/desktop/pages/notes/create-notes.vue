@@ -2,6 +2,7 @@
 import { useNoteStore } from "@shared/stores/notes";
 import { onBeforeRouteLeave } from "vue-router";
 import NoteTitleInput from "@shared/components/notes/note-title-input.vue";
+import { plainTextFromHtml } from "@shared/utils/text";
 definePageMeta({ layout: false, name: "New note", keepalive: true });
 
 const router = useRouter();
@@ -37,7 +38,7 @@ const charCount = computed(() => {
 const lastSaved = ref<Date | null>(null);
 
 const hasContent = computed(
-  () => !!title.value.trim() || !!content.value.trim(),
+  () => !!title.value.trim() || !!plainTextFromHtml(content.value).trim(),
 );
 
 // ── save ──────────────────────────────────────────────────────────────────────
