@@ -1,32 +1,60 @@
 <script lang="ts" setup>
-import { useNoteStore } from '@shared/stores/notes';
-import { useTTS, plainTextFromHtml } from '@shared/composables/useTts';
+import { useNoteStore } from "@shared/stores/notes";
+import { plainTextFromHtml } from "@shared/utils/text";
+import { speak, stop } from "tauri-plugin-tts-api";
 
+const route = useRoute();
 const noteStore = useNoteStore();
-const { isSpeaking, speakText, stopSpeaking } = useTTS();
 
-const noteHtml = computed(() => noteStore.currentNoteHtml);
+const isPlaying = ref(false);
+const text = ref("");
 
-function togglePlay() {
-  if (isSpeaking.value) {
-    stopSpeaking();
+const playIcon = "ri:play-circle-fill";
+const pauseIcon = "ri:pause-circle-fill";
+
+const currentIcon = computed(() => (isPlaying.value ? pauseIcon : playIcon));
+
+const noteId = computed(() => route.query.id as string);
+
+const loadNoteText = () => {
+  const note = noteStore.getNoteById(noteId.value);
+
+  text.value = note?.content ? plainTextFromHtml(note.content) : "";
+};
+
+const synthText = async () => {
+  if (isPlaying.value) {
+    await stop();
+    isPlaying.value = false;
     return;
   }
 
-  const text = plainTextFromHtml(noteHtml.value);
-  if (!text) return;
+  if (!text.value) {
+    return;
+  }
 
-  speakText(text);
-}
+  isPlaying.value = true;
 
-const playIcon = computed(() =>
-  isSpeaking.value ? "lucide:circle-stop" : "lucide:circle-play",
-);
+  try {
+    await speak({
+      text: text.value,
+    });
+  } finally {
+    isPlaying.value = false;
+  }
+};
+
+onMounted(loadNoteText);
+
+watch(noteId, loadNoteText);
 </script>
+
 <template>
   <div class="flex">
-    <button type="button" aria-label="Play note" @click="togglePlay">
-      <UIcon :name="playIcon" class="size-5" />
-    </button>
+    <UIcon
+      :name="currentIcon"
+      class="size-5 cursor-pointer"
+      @click="synthText"
+    />
   </div>
 </template>

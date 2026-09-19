@@ -2,6 +2,7 @@
 import { useNoteStore } from "@shared/stores/notes";
 import { onBeforeRouteLeave } from "vue-router";
 import NoteTitleInput from "@shared/components/notes/note-title-input.vue";
+import { plainTextFromHtml } from "@shared/utils/text";
 definePageMeta({ layout: false, keepalive: true, name: "Edit notes" });
 
 const route = useRoute();
@@ -51,6 +52,10 @@ const hasChanges = computed(() => {
   return title.value !== origTitle || content.value !== original.value.content;
 });
 
+const hasContent = computed(
+  () => !!title.value.trim() || !!plainTextFromHtml(content.value).trim(),
+);
+
 // ── save ──────────────────────────────────────────────────────────────────────
 async function handleSave() {
   if (!original.value) return;
@@ -81,6 +86,7 @@ useEventListener("keydown", (e: KeyboardEvent) => {
 onBeforeRouteLeave(async () => {
   if (submitting.value || saved.value) return;
   if (!hasChanges.value) return;
+  if (!hasContent.value) return;
   try {
     await noteStore.updateNote(original.value!.identifier, {
       title: title.value.trim() || "Untitled",

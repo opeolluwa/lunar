@@ -4,6 +4,7 @@ import { onBeforeRouteLeave } from "vue-router";
 import EditorToolBar from "@mobile/components/notes/EditorToolBar.vue";
 import AppFab from "@mobile/components/app/fab.vue";
 import NoteTitleInput from "@shared/components/notes/note-title-input.vue";
+import { plainTextFromHtml } from "@shared/composables/useTts";
 definePageMeta({ name: "New note", layout: "notes", keepalive: true });
 
 const router = useRouter();
@@ -35,7 +36,7 @@ onBeforeUnmount(() => {
 const lastSaved = ref<Date | null>(null);
 
 const hasContent = computed(
-  () => !!title.value.trim() || !!content.value.trim(),
+  () => !!title.value.trim() || !!plainTextFromHtml(content.value).trim(),
 );
 
 async function handleSave() {

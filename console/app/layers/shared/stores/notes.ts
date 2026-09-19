@@ -27,6 +27,13 @@ export const useNoteStore = defineStore("notes_store", {
       this.currentNoteHtml = html;
     },
 
+    getNoteById(identifier: string): Note | null {
+      if (!this.notes) return null;
+      return this.notes.filter(
+        (note) => note.identifier == identifier,
+      )[0] as Note;
+    },
+
     clearCurrentNote() {
       this.currentNoteId = null;
       this.currentNoteHtml = "";
