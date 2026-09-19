@@ -10,6 +10,7 @@ import { RecycleBinRepository } from "./repositories/recycle_bin";
 import { WorkspaceRepository } from "./repositories/workspace";
 import { WorkspaceProfileRepository } from "./repositories/workspace_profiles";
 import { UserPreferencesRepository } from "./repositories/user_preferences";
+import { TtsConfigRepository } from "./repositories/tts_config";
 import { SyncQueueRepository } from "./repositories/sync_queue";
 
 export interface LunarConsoleApi {
@@ -24,6 +25,7 @@ export interface LunarConsoleApi {
   workspaces: WorkspaceRepository;
   workspaceProfiles: WorkspaceProfileRepository;
   userPreferences: UserPreferencesRepository;
+  ttsConfig: TtsConfigRepository;
   syncQueue: SyncQueueRepository;
 }
 
@@ -42,6 +44,7 @@ export async function createLunarConsoleApi(): Promise<LunarConsoleApi> {
     workspaces: new WorkspaceRepository(),
     workspaceProfiles: new WorkspaceProfileRepository(),
     userPreferences: new UserPreferencesRepository(),
+    ttsConfig: new TtsConfigRepository(),
     syncQueue: new SyncQueueRepository(),
   };
 }
@@ -66,3 +69,7 @@ export type {
   CreateUserPreferences,
   UpdateUserPreferences,
 } from "./repositories/user_preferences";
+export type {
+  CreateTtsConfig,
+  UpdateTtsConfig,
+} from "./repositories/tts_config";

@@ -11,6 +11,7 @@ pub struct Model {
     #[sea_orm(primary_key, auto_increment = false)]
     pub identifier: Uuid,
     pub first_name: Option<String>,
+    pub password: String,
     pub last_name: Option<String>,
     #[sea_orm(unique)]
     pub email: String,
@@ -19,7 +20,6 @@ pub struct Model {
     pub username: Option<String>,
     pub created_at: DateTime,
     pub updated_at: Option<DateTime>,
-    pub password: String,
 }
 
 #[derive(Copy, Clone, Debug, EnumIter, DeriveRelation)]

@@ -13,7 +13,7 @@ watch-tauri:
 [working-directory('console')]
 watch-mobile:
     ./src-tauri/gen/android/gradlew --stop
-    NUXT_APP_TARGET=mobile npm run tauri android dev
+    NUXT_APP_TARGET=mobile npm run tauri android dev 
 
 [working-directory('console')]
 watch-mobile-device HOST:

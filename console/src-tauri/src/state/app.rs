@@ -6,6 +6,7 @@ use lunar::{
         notifications::NotificationRepository, prelude::*, recycle_bin::RecycleBinRepository,
         reminder::ReminderRepository, snippets::SnippetRepository, sync_queue::SyncQueueRepository,
         sync_queue::SyncQueueRepositoryExt, todo::TodoRepository,
+        tts_config::TtsConfigRepository, tts_config::TtsConfigRepositoryExt,
         user_preferences::UserPreferencesRepository,
         user_preferences::UserPreferencesRepositoryExt, workspace::WorkspaceRepository,
         workspace_profiles::WorkspaceProfileRepository,
@@ -23,6 +24,7 @@ pub struct AppState {
     pub snippet_repository: SnippetRepository,
     pub sync_queue_repository: SyncQueueRepository,
     pub todo_repository: TodoRepository,
+    pub tts_config_repository: TtsConfigRepository,
     pub user_preference_repository: UserPreferencesRepository,
     pub workspace_profile_repository: WorkspaceProfileRepository,
     pub workspace_repository: WorkspaceRepository,
@@ -38,6 +40,7 @@ impl AppState {
         let snippet_repository = SnippetRepository::new(conn.clone());
         let sync_queue_repository = SyncQueueRepository::new(conn.clone());
         let todo_repository = TodoRepository::new(conn.clone());
+        let tts_config_repository = TtsConfigRepository::new(conn.clone());
         let user_preference_repository = UserPreferencesRepository::new(conn.clone());
         let workspace_repository = WorkspaceRepository::new(conn.clone());
         let workspace_profile_repository = WorkspaceProfileRepository::new(conn.clone());
@@ -52,9 +55,10 @@ impl AppState {
             snippet_repository,
             sync_queue_repository,
             todo_repository,
+            tts_config_repository,
             user_preference_repository,
-            workspace_repository,
             workspace_profile_repository,
+            workspace_repository,
         }
     }
 }

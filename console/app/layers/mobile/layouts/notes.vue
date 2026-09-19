@@ -2,7 +2,7 @@
 import { primaryRoutes, secondaryRoutes } from "@shared/data/routes";
 import { kPage, kNavbar } from "konsta/vue";
 import _ from "lodash";
-
+import NotesRightPartialControls from "@mobile/components/notes/RightpartialControls.vue";
 const route = useRoute();
 const router = useRouter();
 const { toggleMobileNav } = useMobileNav();
@@ -80,6 +80,10 @@ useHead({ title: () => pageTitle.value as string });
           <NuxtLink class="inline-flex" @click="router.back()">
             <UIcon name="lucide:arrow-left" class="size-5" />
           </NuxtLink>
+        </template>
+
+        <template #right>
+          <NotesRightPartialControls />
         </template>
       </kNavbar>
 

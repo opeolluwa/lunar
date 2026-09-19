@@ -8,10 +8,12 @@ import type {
   CreateReminder,
   CreateSnippet,
   CreateTodo,
+  CreateTtsConfig,
   CreateWorkspace,
   CreateWorkspaceProfile,
   LunarConsoleApi,
   RequestMeta,
+  TtsConfig,
   UpdateBookmark,
   UpdateNote,
   UpdateReminder,
@@ -85,6 +87,22 @@ const COMMANDS: Record<string, CommandHandler> = {
     api.workspaceProfiles.update(
       asString(a, "identifier"),
       a.profile as UpdateWorkspaceProfile,
+      asMeta(a),
+    ),
+
+  get_tts_config: (api, a) =>
+    api.ttsConfig.getByUserIdentifier(
+      a.userIdentifier == null ? undefined : asString(a, "userIdentifier"),
+      asMeta(a),
+    ),
+  set_tts_config: (api, a) =>
+    api.ttsConfig.upsert(
+      a.config as CreateTtsConfig,
+      asMeta(a),
+    ),
+  update_tts_config: (api, a) =>
+    api.ttsConfig.upsert(
+      a.config as CreateTtsConfig,
       asMeta(a),
     ),
 

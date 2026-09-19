@@ -37,6 +37,14 @@ watch(
   { immediate: true },
 );
 
+watch(content, (html) => {
+  if (original.value) noteStore.setCurrentNote(id.value ?? null, html);
+});
+
+onBeforeUnmount(() => {
+  noteStore.clearCurrentNote();
+});
+
 const lastSaved = ref<Date | null>(null);
 const notesEditor = ref<InstanceType<typeof NotesEditor> | null>(null);
 

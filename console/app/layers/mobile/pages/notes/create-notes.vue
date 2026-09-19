@@ -21,6 +21,15 @@ onActivated(() => {
   error.value = null;
   submitting.value = false;
   saved.value = false;
+  noteStore.setCurrentNote(null, "");
+});
+
+watch(content, (html) => {
+  noteStore.setCurrentNote(null, html);
+});
+
+onBeforeUnmount(() => {
+  noteStore.clearCurrentNote();
 });
 
 const lastSaved = ref<Date | null>(null);

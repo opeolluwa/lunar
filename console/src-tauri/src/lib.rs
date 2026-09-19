@@ -38,6 +38,7 @@ pub async fn run() {
         .plugin(tauri_plugin_os::init())
         .plugin(tauri_plugin_notification::init())
         .plugin(tauri_plugin_clipboard_manager::init())
+        .plugin(tauri_plugin_tts::init())
         .setup(|app| {
             app.listen(EVENT_NOTIFICATION_RECEIVED, |event| {
                 if let Ok(payload) = serde_json::from_str::<CreateNotification>(event.payload()) {
@@ -184,6 +185,9 @@ pub async fn run() {
             commands::todo::transfer_todo,
             commands::todo::update_todo,
             commands::todo::update_todo_due_date,
+            commands::tts_config::get_tts_config,
+            commands::tts_config::set_tts_config,
+            commands::tts_config::update_tts_config,
             commands::workspace_profiles::create_workspace_profile,
             commands::workspace_profiles::duplicate_workspace_profile,
             commands::workspace_profiles::get_unsynced_workspace_profiles,
